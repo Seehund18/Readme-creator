@@ -10,6 +10,7 @@ import java.io.File;
 
 @RestController
 public class FileController {
+
     @Autowired
     private final FileGenerator fileGenerator;
 
