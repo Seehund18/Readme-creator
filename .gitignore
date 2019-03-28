@@ -1,0 +1,6 @@
+files
+*/files
+*/.idea
+*/target
+*/*.iml
+Desktop_client/*.rtf
