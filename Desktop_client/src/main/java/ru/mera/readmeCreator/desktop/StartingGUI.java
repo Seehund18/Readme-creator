@@ -31,7 +31,7 @@ public class StartingGUI extends Application {
         generateButton.setOnAction(event -> {
             try {
                 serverConnector.sendGetRequest("/files/HelloWorld.rtf");
-                Alert notify = new Alert(Alert.AlertType.INFORMATION, "Your file has been downloaded", ButtonType.OK);
+                Alert notify = new Alert(Alert.AlertType.INFORMATION, "Your file has been downloaded to this project path", ButtonType.OK);
                 notify.showAndWait();
             } catch (ServerConnectorException ex) {
                 Alert error = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
@@ -44,7 +44,6 @@ public class StartingGUI extends Application {
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
-
 
         stage.show();
         setStageAtCenter(stage);
