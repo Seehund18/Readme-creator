@@ -10,7 +10,7 @@
         <version>2.1.3.RELEASE</version>
     </parent>
 
-    <groupId>ru.merann.seehund</groupId>
+    <groupId>ru.mera.readmeCreator</groupId>
     <artifactId>Web_service</artifactId>
     <version>0.1.0</version>
 
