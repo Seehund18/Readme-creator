@@ -1,7 +1,8 @@
 package ru.mera.readmeCreator.server;
 
 class GeneratorException extends RuntimeException {
-    GeneratorException(Throwable cause) {
-        super("Generator exception occurred", cause);
+
+    GeneratorException(String message, Throwable cause) {
+        super(message, cause);
     }
 }
