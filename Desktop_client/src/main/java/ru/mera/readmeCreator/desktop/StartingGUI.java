@@ -1,10 +1,11 @@
 package ru.mera.readmeCreator.desktop;
 
 import javafx.application.Application;
-import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.control.ButtonType;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -23,17 +24,27 @@ public class StartingGUI extends Application {
     public void start(Stage stage) {
         stage.setHeight(500);
         stage.setWidth(500);
+        stage.setTitle("Readme generator");
 
         Button generateButton = new Button("Generate file");
         generateButton.setPrefSize(100, 100);
-        generateButton.setOnAction(event -> serverConnector.sendGetRequest("/getFile"));
+        generateButton.setOnAction(event -> {
+            try {
+                serverConnector.sendGetRequest("/files/HelloWorld.rtf");
+                Alert notify = new Alert(Alert.AlertType.INFORMATION, "Your file has been downloaded", ButtonType.OK);
+                notify.showAndWait();
+            } catch (ServerConnectorException ex) {
+                Alert error = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
+                error.showAndWait();
+            }
+        });
 
-        FlowPane root = new FlowPane(generateButton);
-        root.setAlignment(Pos.CENTER);
+        BorderPane root = new BorderPane(generateButton);
+        root.setCenter(generateButton);
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        stage.setTitle("Readme generator");
+
 
         stage.show();
         setStageAtCenter(stage);

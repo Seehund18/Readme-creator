@@ -25,8 +25,8 @@ public class ServerConnector {
 
             File helloWorldFile = new File("Hello World.rtf");
             readResponse(connection, helloWorldFile);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            throw new ServerConnectorException("There is a problem with connection to the server", ex);
         } finally {
             if (connection != null) {
                 connection.disconnect();
