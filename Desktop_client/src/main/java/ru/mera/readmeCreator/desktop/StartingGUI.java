@@ -1,22 +1,14 @@
-package ru.mera.yakimychev.readmeCreator.desktop;
+package ru.mera.readmeCreator.desktop;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.paint.Paint;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-import javafx.scene.Group;
-import javafx.scene.text.Text;
-import javafx.stage.StageStyle;
 
-import java.io.*;
-import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class StartingGUI extends Application {

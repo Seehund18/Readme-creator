@@ -1,4 +1,4 @@
-package ru.mera.yakimychev;
+package ru.mera.readmeCreator.server;
 
 import java.io.File;
 import java.io.IOException;

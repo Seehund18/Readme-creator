@@ -1,4 +1,4 @@
-package ru.mera.yakimychev.readmeCreator.desktop;
+package ru.mera.readmeCreator.desktop;
 
 import java.io.*;
 import java.net.HttpURLConnection;

@@ -1,4 +1,4 @@
-package ru.mera.yakimychev;
+package ru.mera.readmeCreator.server;
 
 class GeneratorException extends RuntimeException {
     GeneratorException(Throwable cause) {

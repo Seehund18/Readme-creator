@@ -1,4 +1,4 @@
-package ru.mera.yakimychev;
+package ru.mera.readmeCreator.server;
 
 import static com.tutego.jrtf.Rtf.rtf;
 import static com.tutego.jrtf.RtfPara.*;

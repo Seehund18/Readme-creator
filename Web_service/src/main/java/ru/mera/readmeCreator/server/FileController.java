@@ -1,4 +1,4 @@
-package ru.mera.yakimychev;
+package ru.mera.readmeCreator.server;
 
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
