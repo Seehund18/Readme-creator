@@ -27,7 +27,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>ru.mera.readmeCreator.desktop.StartingGUI</mainClass>
+                            <mainClass>ru.mera.readmeCreator.desktop.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

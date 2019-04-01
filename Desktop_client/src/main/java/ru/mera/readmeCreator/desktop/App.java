@@ -6,18 +6,20 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 
+import java.io.File;
 import java.net.URL;
 
-public class StartingGUI extends Application {
-    private ServerConnector serverConnector;
+public class App extends Application {
+    private WebServiceConnector webServiceConnector;
 
     @Override
     public void init() throws Exception {
-        serverConnector = new ServerConnector(new URL("http://localhost:8080"));
+        webServiceConnector = new WebServiceConnector(new URL("http://localhost:8080"));
     }
 
     @Override
@@ -30,10 +32,20 @@ public class StartingGUI extends Application {
         generateButton.setPrefSize(100, 100);
         generateButton.setOnAction(event -> {
             try {
-                serverConnector.sendGetRequest("/files/HelloWorld.rtf");
-                Alert notify = new Alert(Alert.AlertType.INFORMATION, "Your file has been downloaded to this project path", ButtonType.OK);
-                notify.showAndWait();
-            } catch (ServerConnectorException ex) {
+                FileChooser saveAs = new FileChooser();
+                saveAs.setTitle("Save file as");
+                saveAs.setInitialFileName("Hello World.rtf");
+
+                File helloWorldFile = saveAs.showSaveDialog(stage);
+                if (helloWorldFile != null) {
+                    webServiceConnector.sendGetRequest("/files/HelloWorld.rtf", helloWorldFile);
+                    Alert notify = new Alert(Alert.AlertType.INFORMATION, "Your file has been downloaded", ButtonType.OK);
+                    notify.showAndWait();
+                } else {
+                    Alert wrongFileName = new Alert(Alert.AlertType.WARNING, "Please, specify a file name", ButtonType.OK);
+                    wrongFileName.showAndWait();
+                }
+            } catch (WebServiceConnectorException ex) {
                 Alert error = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
                 error.showAndWait();
             }

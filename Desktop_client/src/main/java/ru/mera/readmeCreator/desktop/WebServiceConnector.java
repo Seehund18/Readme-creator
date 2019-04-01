@@ -4,14 +4,14 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class ServerConnector {
+public class WebServiceConnector {
     private final URL serverUrl;
 
-    ServerConnector(URL serverUrl) {
+    WebServiceConnector(URL serverUrl) {
         this.serverUrl = serverUrl;
     }
 
-    void sendGetRequest(String getMapping) {
+    void sendGetRequest(String getMapping, File saveToFile) {
         HttpURLConnection connection = null;
         try {
             URL fullURL = new URL(serverUrl.toString() + getMapping);
@@ -23,10 +23,9 @@ public class ServerConnector {
             System.out.println("\nSending 'GET' request to URL : " + fullURL);
             System.out.println("Response Code : " + connection.getResponseCode());
 
-            File helloWorldFile = new File("Hello World.rtf");
-            readResponse(connection, helloWorldFile);
+            readResponse(connection, saveToFile);
         } catch (IOException ex) {
-            throw new ServerConnectorException("There is a problem with connection to the server", ex);
+            throw new WebServiceConnectorException("There is a problem with connection to the server", ex);
         } finally {
             if (connection != null) {
                 connection.disconnect();
