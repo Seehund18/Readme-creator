@@ -8,6 +8,7 @@
     <artifactId>Desktop_client</artifactId>
     <version>0.1.0</version>
 
+
     <build>
         <plugins>
             <plugin>
@@ -17,6 +18,18 @@
                 <configuration>
                     <source>8</source>
                     <target>8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>ru.mera.readmeCreator.desktop.StartingGUI</mainClass>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
         </plugins>

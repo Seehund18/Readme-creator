@@ -10,7 +10,7 @@
    <display-name>Web client for Readme_creator project</display-name>
 
    <welcome-file-list>
-      <welcome-file>faces/home.xhtml</welcome-file>
+      <welcome-file>home.xhtml</welcome-file>
    </welcome-file-list>
 
    <context-param>
@@ -36,7 +36,7 @@
 
    <servlet-mapping>
       <servlet-name>Faces Servlet</servlet-name>
-      <url-pattern>*.faces</url-pattern>
+      <url-pattern>/</url-pattern>
    </servlet-mapping>
 
    <servlet-mapping>

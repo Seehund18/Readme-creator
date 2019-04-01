@@ -7,6 +7,7 @@ import java.io.IOException;
 
 @ManagedBean(eager = true)
 public class WebServiceConnector {
+
     @ManagedProperty(value = "#{fileGeneratorWebService}")
     private WebService webService;
 

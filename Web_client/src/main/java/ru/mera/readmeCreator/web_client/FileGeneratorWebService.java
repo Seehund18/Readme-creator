@@ -1,5 +1,6 @@
 package ru.mera.readmeCreator.web_client;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -9,7 +10,8 @@ import java.net.URL;
 @ManagedBean(eager = true)
 public class FileGeneratorWebService extends WebService {
 
-    {
+    @PostConstruct
+    public void init() {
         try {
             webServiceURL = new URL("http://localhost:8080");
         } catch (MalformedURLException e) {
@@ -25,10 +27,9 @@ public class FileGeneratorWebService extends WebService {
     @Override
     public int sendGetRequest(String getMapping) {
         try {
-            HttpURLConnection connection = null;
             URL fullURL = new URL(webServiceURL.toString() + getMapping);
 
-            connection = (HttpURLConnection) fullURL.openConnection();
+            HttpURLConnection connection = (HttpURLConnection) fullURL.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", "web_client");
 
