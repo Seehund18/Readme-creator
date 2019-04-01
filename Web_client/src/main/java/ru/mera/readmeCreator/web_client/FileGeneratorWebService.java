@@ -26,10 +26,11 @@ public class FileGeneratorWebService extends WebService {
 
     @Override
     public int sendGetRequest(String getMapping) {
-        try {
+        HttpURLConnection connection = null;
+        try  {
             URL fullURL = new URL(webServiceURL.toString() + getMapping);
 
-            HttpURLConnection connection = (HttpURLConnection) fullURL.openConnection();
+            connection = (HttpURLConnection) fullURL.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", "web_client");
 
@@ -40,6 +41,10 @@ public class FileGeneratorWebService extends WebService {
         } catch (IOException e) {
             e.printStackTrace();
             return HttpURLConnection.HTTP_INTERNAL_ERROR;
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
     }
 }
