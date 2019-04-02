@@ -17,6 +17,9 @@ public class RTFGenerator implements FileGenerator {
     }
 
     private File generateHelloWorldFile() throws IOException {
+        File filesDirectory = new File("files");
+        filesDirectory.mkdir();
+
         File helloWoldFile = new File("files/HelloWorld.rtf");
 
         if(!helloWoldFile.exists()) {
