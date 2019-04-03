@@ -10,12 +10,16 @@ import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.net.URL;
 
+
 public class App extends Application {
     private WebServiceConnector webServiceConnector;
+    Logger log = LoggerFactory.getLogger(App.class);
 
     @Override
     public void init() throws Exception {
@@ -32,6 +36,7 @@ public class App extends Application {
         generateButton.setPrefSize(100, 100);
         generateButton.setOnAction(event -> {
             try {
+                log.info("Hello");
                 FileChooser saveAs = new FileChooser();
                 saveAs.setTitle("Save file as");
                 saveAs.setInitialFileName("Hello World.rtf");

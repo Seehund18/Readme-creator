@@ -10,6 +10,11 @@
         <version>2.1.3.RELEASE</version>
     </parent>
 
+    <properties>
+        <SL4J.version>1.7.26</SL4J.version>
+        <JDK.version>8</JDK.version>
+    </properties>
+
     <groupId>ru.mera.readmeCreator</groupId>
     <artifactId>Web_service</artifactId>
     <version>0.1.0</version>
@@ -21,8 +26,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>${JDK.version}</source>
+                    <target>${JDK.version}</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -40,15 +45,31 @@
             <artifactId>jrtf</artifactId>
             <version>0.7</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-web</artifactId>
-            <version>5.1.5.RELEASE</version>
-        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <version>2.1.3.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.logging.log4j</groupId>
+                    <artifactId>log4j-to-slf4j</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.11.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.11.2</version>
         </dependency>
     </dependencies>
 </project>

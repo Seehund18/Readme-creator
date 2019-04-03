@@ -1,5 +1,7 @@
 package ru.mera.readmeCreator.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import java.io.IOException;
 
 @RestController
 public class FileController {
+    final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
     private final FileGenerator fileGenerator;
@@ -29,6 +32,7 @@ public class FileController {
         } catch (IOException ex) {
             throw new GeneratorException(ex.getMessage(), ex);
         }
+        logger.info("Document is generated");
 
         HttpHeaders responseHeader = new HttpHeaders();
         responseHeader.set(HttpHeaders.CONTENT_TYPE, "application/rtf; charset=utf-8");
