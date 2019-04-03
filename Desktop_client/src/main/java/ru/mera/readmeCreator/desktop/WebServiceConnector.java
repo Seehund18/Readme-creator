@@ -1,39 +1,53 @@
 package ru.mera.readmeCreator.desktop;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class WebServiceConnector {
-    private final URL serverUrl;
+    private final URL webService;
+    private HttpURLConnection connection;
+    private Logger log = LoggerFactory.getLogger(WebServiceConnector.class);
 
-    WebServiceConnector(URL serverUrl) {
-        this.serverUrl = serverUrl;
+    WebServiceConnector(URL webService) {
+        this.webService = webService;
     }
 
-    void sendGetRequest(String getMapping, File saveToFile) {
-        HttpURLConnection connection = null;
+    public void getFile(String mapping, File saveToFile) {
+        URL fullURL;
         try {
-            URL fullURL = new URL(serverUrl.toString() + getMapping);
+            fullURL = new URL(webService.toString() + mapping);
+        } catch (IOException ex) {
+            throw new WebServiceConnectorException("Can't generate full URL", ex);
+        }
+        int responseCode = sendGetRequest(fullURL);
+        log.info("Response code from the server: {}", responseCode);
 
-            connection = (HttpURLConnection) fullURL.openConnection();
+        if (responseCode >= 400) {
+            throw new WebServiceConnectorException("Bad response code: " + responseCode);
+        }
+        readResponse(saveToFile);
+        connection.disconnect();
+    }
+
+    private int sendGetRequest(URL url) {
+        try {
+            connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", "desktop");
 
-            System.out.println("\nSending 'GET' request to URL : " + fullURL);
-            System.out.println("Response Code : " + connection.getResponseCode());
-
-            readResponse(connection, saveToFile);
+            log.info("Sending 'GET' request to URL: {}", url);
+            return connection.getResponseCode();
         } catch (IOException ex) {
+            connection.disconnect();
             throw new WebServiceConnectorException("There is a problem with connection to the server", ex);
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
         }
     }
 
-    private void readResponse(HttpURLConnection connection, File helloWorldFile) throws IOException {
+    private void readResponse(File helloWorldFile) {
         String inputLine;
         try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
              FileWriter out = new FileWriter(helloWorldFile)) {
@@ -44,6 +58,8 @@ public class WebServiceConnector {
                 inputLine = in.readLine();
             }
             out.flush();
+        } catch (IOException ex) {
+            throw new WebServiceConnectorException("There is a problem with reading the response", ex);
         }
     }
 }

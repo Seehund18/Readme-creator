@@ -19,7 +19,7 @@ import java.net.URL;
 
 public class App extends Application {
     private WebServiceConnector webServiceConnector;
-    Logger log = LoggerFactory.getLogger(App.class);
+    private Logger log = LoggerFactory.getLogger(App.class);
 
     @Override
     public void init() throws Exception {
@@ -36,14 +36,13 @@ public class App extends Application {
         generateButton.setPrefSize(100, 100);
         generateButton.setOnAction(event -> {
             try {
-                log.info("Hello");
                 FileChooser saveAs = new FileChooser();
                 saveAs.setTitle("Save file as");
                 saveAs.setInitialFileName("Hello World.rtf");
 
                 File helloWorldFile = saveAs.showSaveDialog(stage);
                 if (helloWorldFile != null) {
-                    webServiceConnector.sendGetRequest("/files/HelloWorld.rtf", helloWorldFile);
+                    webServiceConnector.getFile("/files/HelloWorld.rtf", helloWorldFile);
                     Alert notify = new Alert(Alert.AlertType.INFORMATION, "Your file has been downloaded", ButtonType.OK);
                     notify.showAndWait();
                 } else {
@@ -51,6 +50,7 @@ public class App extends Application {
                     wrongFileName.showAndWait();
                 }
             } catch (WebServiceConnectorException ex) {
+                log.error(ex.getMessage(), ex);
                 Alert error = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
                 error.showAndWait();
             }
@@ -61,7 +61,6 @@ public class App extends Application {
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
-
         stage.show();
         setStageAtCenter(stage);
     }
