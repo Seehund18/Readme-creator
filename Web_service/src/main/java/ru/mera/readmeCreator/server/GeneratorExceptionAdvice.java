@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class GeneratorExceptionAdvice {
 
-    Logger logger = LoggerFactory.getLogger(GeneratorExceptionAdvice.class);
+    private final Logger logger = LoggerFactory.getLogger(GeneratorExceptionAdvice.class);
 
     @ResponseBody
     @ExceptionHandler(GeneratorException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     String generatorExceptionHandler(GeneratorException ex) {
-        logger.error("Generator exception occurred", ex);
+        logger.error("Generator exception occurred: ", ex);
         return ex.getMessage();
     }
 }

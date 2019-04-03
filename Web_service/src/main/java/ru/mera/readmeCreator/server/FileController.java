@@ -11,11 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 
 
 @RestController
 public class FileController {
-    final Logger logger = LoggerFactory.getLogger(FileController.class);
+    private final Logger logger = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
     private final FileGenerator fileGenerator;
@@ -32,7 +33,7 @@ public class FileController {
         } catch (IOException ex) {
             throw new GeneratorException(ex.getMessage(), ex);
         }
-        logger.info("Document is generated");
+        logger.info("Document {} was generated. Sending to client...", name);
 
         HttpHeaders responseHeader = new HttpHeaders();
         responseHeader.set(HttpHeaders.CONTENT_TYPE, "application/rtf; charset=utf-8");
