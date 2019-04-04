@@ -1,5 +1,8 @@
 */.idea
-*/target
 */*.iml
-Desktop_client/*.rtf
-*.rtf
+
+*/logs
+*/target
+*/files
+*/*.rtf
+
