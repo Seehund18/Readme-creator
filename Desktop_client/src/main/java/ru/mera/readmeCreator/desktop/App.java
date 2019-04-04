@@ -1,3 +1,11 @@
+/*
+ * Copyright Avaya Inc., All Rights Reserved. THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF Avaya Inc. The copyright
+ * notice above does not evidence any actual or intended publication of such source code. Some third-party source code
+ * components may have been modified from their original versions by Avaya Inc. The modifications are Copyright Avaya
+ * Inc., All Rights Reserved. Avaya - Confidential & Restricted. May not be distributed further without written
+ * permission of the Avaya owner.
+ */
+
 package ru.mera.readmeCreator.desktop;
 
 import javafx.application.Application;
@@ -16,7 +24,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.net.URL;
 
-
+/**
+ * Main class of the desktop application
+ */
 public class App extends Application {
     private WebServiceConnector webServiceConnector;
     private Logger log = LoggerFactory.getLogger(App.class);
@@ -28,21 +38,19 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) {
-        stage.setHeight(500);
-        stage.setWidth(500);
-        stage.setTitle("Readme generator");
-
+        //Configuring button
         Button generateButton = new Button("Generate file");
         generateButton.setPrefSize(100, 100);
         generateButton.setOnAction(event -> {
             try {
+                //User choose where to save file
                 FileChooser saveAs = new FileChooser();
                 saveAs.setTitle("Save file as");
                 saveAs.setInitialFileName("Hello World.rtf");
-
                 File helloWorldFile = saveAs.showSaveDialog(stage);
+
                 if (helloWorldFile != null) {
-                    webServiceConnector.getFile("/files/HelloWorld.rtf", helloWorldFile);
+                    webServiceConnector.downloadFile("/files/HelloWorld.rtf", helloWorldFile);
                     Alert notify = new Alert(Alert.AlertType.INFORMATION, "Your file has been downloaded", ButtonType.OK);
                     notify.showAndWait();
                 } else {
@@ -56,15 +64,21 @@ public class App extends Application {
             }
         });
 
+        //Configuring borderPane
         BorderPane root = new BorderPane(generateButton);
         root.setCenter(generateButton);
-
         Scene scene = new Scene(root);
+
+        //Configuring stage
+        stage.setHeight(500);
+        stage.setWidth(500);
+        stage.setTitle("Readme generator");
         stage.setScene(scene);
         stage.show();
         setStageAtCenter(stage);
     }
 
+    //Sets stage at the screen center. Method stage.centerOnScreen() doesn't seem to work properly
     private void setStageAtCenter(Stage stage) {
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
