@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="INFO">
-    //TODO Change file to logback configuration
-    <Appenders>
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </Console>
-        <File name="File" filename="logs/Desktop client.log">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </File>
-    </Appenders>
-    <Loggers>
-        <Root level="debug">
-            <AppenderRef ref="Console"/>
-            <AppenderRef ref="File"/>
-        </Root>
-    </Loggers>
-</Configuration>
+<configuration debug="true">
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/Desktop.log</file>
+        <encoder>
+            <pattern>
+                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>
