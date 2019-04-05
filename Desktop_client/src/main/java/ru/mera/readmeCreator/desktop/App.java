@@ -9,6 +9,7 @@
 package ru.mera.readmeCreator.desktop;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -22,22 +23,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
  * Main class of the desktop application
  */
 public class App extends Application {
+    private URL webServiceURL;
     private WebServiceConnector webServiceConnector;
     private Logger log = LoggerFactory.getLogger(App.class);
 
     @Override
-    public void init() throws Exception {
-        webServiceConnector = new WebServiceConnector(new URL("http://localhost:8080"));
-    }
-
-    @Override
     public void start(Stage stage) {
+        webServiceInit();
+
         //Configuring button
         Button generateButton = new Button("Generate file");
         generateButton.setPrefSize(100, 100);
@@ -51,14 +51,13 @@ public class App extends Application {
 
                 if (helloWorldFile != null) {
                     webServiceConnector.downloadFile("/files/HelloWorld.rtf", helloWorldFile);
-                    Alert notify = new Alert(Alert.AlertType.INFORMATION, "Your file has been downloaded", ButtonType.OK);
-                    notify.showAndWait();
+                    showAlert("Your file has been downloaded");
                 } else {
-                    Alert wrongFileName = new Alert(Alert.AlertType.WARNING, "Please, specify a file name", ButtonType.OK);
-                    wrongFileName.showAndWait();
+                    showAlert("Please, specify a file name");
                 }
             } catch (WebServiceConnectorException ex) {
                 log.error(ex.getMessage(), ex);
+                showAlert(ex.getMessage());
                 Alert error = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
                 error.showAndWait();
             }
@@ -76,6 +75,32 @@ public class App extends Application {
         stage.setScene(scene);
         stage.show();
         setStageAtCenter(stage);
+    }
+
+    private void webServiceInit() {
+        try {
+            //Trying to initialize web service from property file
+            webServiceURL = new URL(PropertiesManager.getPropertyValue("webServiceURL"));
+        } catch (ExceptionInInitializerError ex) {
+            //Problem occurred in static block of class PropertiesManager
+            String textOfError;
+            if(ex.getCause().getMessage().equals("No config file was found")) {
+                textOfError = "No config file was found";
+            } else {
+                textOfError = "Exception occurred while reading config file";
+            }
+            log.error(textOfError, ex);
+            showAlert(textOfError);
+            Platform.exit();
+        } catch (MalformedURLException ex) {
+            //TODO Dodelat
+        }
+    }
+
+    //Creates and shows alert to user
+    private void showAlert(String text) {
+        Alert alert = new Alert(Alert.AlertType.ERROR, text, ButtonType.OK);
+        alert.showAndWait();
     }
 
     //Sets stage at the screen center. Method stage.centerOnScreen() doesn't seem to work properly
