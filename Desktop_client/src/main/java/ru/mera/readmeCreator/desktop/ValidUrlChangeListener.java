@@ -12,15 +12,20 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import org.apache.commons.validator.routines.UrlValidator;
 
+/**
+ * Class which implements ChangeListener and adds ability to verify url.
+ * User can choose different behavior of listener according to its validation.
+ *
+ */
 public abstract class ValidUrlChangeListener implements ChangeListener<String> {
 
     @Override
     public abstract void changed(ObservableValue<? extends String> observable, String oldValue, String newValue);
 
     boolean isValid(String url) {
-        //Checking what url is only server url without path to any resource.
-        //For that, using regex pattern which checks that between beginning and ending of the string are only 2 or 3 slashes '/'
-        //For example: http://myService.ru is correct; http://myService.ru/files/HelloWorld.rtf is wrong
+        //Checking that url is the server url without path to any resource.
+        //For that, using regex pattern, which checks that between beginning and ending of the string are only 2 slashes '/'.
+        //For example: http://myService.ru is correct (2 slashes); http://myService.ru/files/HelloWorld.rtf is wrong (4 slashes)
         if(!url.matches("^http://[^/]+$")) {
             return false;
         }

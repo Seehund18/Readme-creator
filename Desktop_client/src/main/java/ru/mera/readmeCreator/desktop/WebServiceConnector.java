@@ -30,15 +30,12 @@ public class WebServiceConnector {
         this.webService = webServiceUrl;
     }
 
-    public URL getWebService() {
-        return webService;
-    }
-
     /**
      * Gets file from web service
      *
      * @param mapping Service mapping for 'GET' request
      * @param saveToFile Local file in which the file from the service is saved
+     * @throws WebServiceConnectorException Some exceptions occurred during download of the file
      */
     public void downloadFile(String mapping, File saveToFile) {
         //Constructing full URL to which 'GET' request will be sent
@@ -92,5 +89,15 @@ public class WebServiceConnector {
             connection.disconnect();
             throw new WebServiceConnectorException("There is a problem with reading the response", ex);
         }
+    }
+
+    /**
+     * Compares this url with another url from the string
+     * @param url url to compare with
+     * @return true if both urls are equal;
+     *         false otherwise
+     */
+    public boolean isUrlEqual(String url) {
+        return webService.toString().equals(url);
     }
 }
