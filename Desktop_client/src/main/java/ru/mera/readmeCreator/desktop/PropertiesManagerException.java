@@ -13,7 +13,7 @@ package ru.mera.readmeCreator.desktop;
  * Exceptions from PropertiesManager are wrapped into this one.
  * It extends RuntimeException because it must be unchecked exception to be thrown from static block of PropertiesManager.
  */
-public class PropertiesManagerException extends RuntimeException {
+public class PropertiesManagerException extends Exception {
 
     public PropertiesManagerException(String message, Throwable cause) {
         super(message, cause);

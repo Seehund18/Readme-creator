@@ -67,6 +67,13 @@
             <version>13-ea+3</version>
         </dependency>
 
+        <!--Apache commons validator-->
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>1.6</version>
+        </dependency>
+
         <!--Loggers-->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -78,8 +85,6 @@
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
         </dependency>
-
-
     </dependencies>
 
 </project>

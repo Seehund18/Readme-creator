@@ -26,8 +26,12 @@ public class WebServiceConnector {
     private HttpURLConnection connection;
     private final Logger log = LoggerFactory.getLogger(WebServiceConnector.class);
 
-    WebServiceConnector(URL webService) {
-        this.webService = webService;
+    WebServiceConnector(URL webServiceUrl) {
+        this.webService = webServiceUrl;
+    }
+
+    public URL getWebService() {
+        return webService;
     }
 
     /**
@@ -85,6 +89,7 @@ public class WebServiceConnector {
             }
             out.flush();
         } catch (IOException ex) {
+            connection.disconnect();
             throw new WebServiceConnectorException("There is a problem with reading the response", ex);
         }
     }

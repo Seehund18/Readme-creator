@@ -10,11 +10,16 @@ package ru.mera.readmeCreator.desktop;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.control.*;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -24,7 +29,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -32,26 +36,73 @@ import java.net.URL;
  * Main class of the desktop application
  */
 public class App extends Application {
+    //UI elements
+    private Label webServiceText = new Label("Please, enter a web service URI.\n"
+            + "Examples: http://localhost:8080, http://myService.com");
+    private TextField webServiceUrlField = new TextField();
+    private Text webServiceFieldStatus = new Text();
+    private Button generateButton = new Button("Generate file");
+    private FileChooser saveAs = new FileChooser();
+
+    private boolean isUrlValid = true;
     private WebServiceConnector webServiceConnector;
     private final Logger log = LoggerFactory.getLogger(App.class);
 
+    //Initialization of propertiesManager
+    private void propertiesInit() {
+        try {
+            PropertiesManager.init();
+        } catch (PropertiesManagerException ex) {
+            String errorText;
+            if(ex.getCause() instanceof FileNotFoundException) {
+                //FileNotFoundException was the cause
+                errorText = "No config file was found. Maybe it was deleted or moved";
+            } else {
+                //IOException was the cause
+                errorText = "Exception occurred while reading config file. See logs";
+            }
+            log.error(errorText, ex);
+            showAlert(errorText, Alert.AlertType.ERROR);
+            Platform.exit();
+        }
+    }
+
     @Override
     public void start(Stage stage) {
-        webServiceInit();
+        propertiesInit();
+        uiElementsInit();
 
-        //Configuring button
-        Button generateButton = new Button("Generate file");
-        generateButton.setPrefSize(100, 100);
+        webServiceUrlField.textProperty().addListener(new ValidUrlChangeListener() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if(isValid(newValue)) {
+                    webServiceFieldStatus.setText("Valid URL");
+                    webServiceFieldStatus.setFill(Color.GREEN);
+                    isUrlValid = true;
+                    return;
+                }
+                isUrlValid = false;
+                webServiceFieldStatus.setText("Not valid URL");
+                webServiceFieldStatus.setFill(Color.RED);
+            }
+        });
+
         generateButton.setOnAction(event -> {
-            //Configuring 'save as' window
-            FileChooser saveAs = new FileChooser();
-            saveAs.setTitle("Save file as");
-            saveAs.setInitialFileName("Hello World.rtf");
-            saveAs.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("All Files", "*.*"),
-                    new FileChooser.ExtensionFilter("RTF", "*.rtf")
-            );
-            saveAs.setInitialDirectory(new File(System.getProperty("user.home")));
+            String serviceURL = webServiceUrlField.getText();
+            if (!isUrlValid) {
+                showAlert("URL is not valid", Alert.AlertType.ERROR);
+                return;
+            }
+
+            if (webServiceConnector == null || !webServiceConnector.getWebService().toString().equals(serviceURL)) {
+                try {
+                    webServiceConnector = new WebServiceConnector(new URL(serviceURL));
+                } catch (MalformedURLException ex) {
+                    log.error("Can't create URL of web service", ex);
+                    showAlert("Can't create URL of web service", Alert.AlertType.ERROR);
+                }
+            }
+
             File helloWorldFile = saveAs.showSaveDialog(stage);
 
             try {
@@ -59,6 +110,11 @@ public class App extends Application {
                     webServiceConnector.downloadFile("/files/HelloWorld.rtf", helloWorldFile);
                     showAlert("Your file has been downloaded", Alert.AlertType.INFORMATION);
                     log.info("File has been downloaded");
+                    try {
+                        PropertiesManager.setPropertyValue("webServiceURL", serviceURL);
+                    } catch (PropertiesManagerException e) {
+                        showAlert(e.getMessage(), Alert.AlertType.ERROR);
+                    }
                 } else {
                     log.info("File downloading was canceled by user");
                 }
@@ -68,10 +124,12 @@ public class App extends Application {
             }
         });
 
-        //Configuring root element
-        BorderPane root = new BorderPane(generateButton);
-        root.setCenter(generateButton);
-        Scene scene = new Scene(root);
+        //Configuring layouts
+        FlowPane flow = new FlowPane(10,0,webServiceUrlField, webServiceFieldStatus);
+        flow.setAlignment(Pos.CENTER);
+        VBox verBox = new VBox(10, webServiceText, flow, generateButton);
+        verBox.setAlignment(Pos.CENTER);
+        Scene scene = new Scene(verBox);
 
         //Configuring stage
         stage.setHeight(500);
@@ -82,28 +140,29 @@ public class App extends Application {
         setStageAtCenter(stage);
     }
 
-    //Tries to initialize web service from property file
-    private void webServiceInit() {
-        URL webServiceURL = null;
-        try {
-            webServiceURL = new URL(PropertiesManager.getPropertyValue("webServiceURL"));
-        } catch (ExceptionInInitializerError | MalformedURLException ex) {
-            String errorText;
-            if(ex.getCause().getCause() instanceof FileNotFoundException) {
-                //FileNotFoundException was the cause
-                errorText = "No config file was found. Maybe it was deleted or moved";
-            } else if (ex.getCause().getCause() instanceof IOException) {
-                //IOException was the cause
-                errorText = "Exception occurred while reading config file";
-            } else {
-                //MalformedURLException was the cause
-                errorText = "Can't create URL of web service. Maybe config.properties file was corrupted";
-            }
-            log.error(errorText, ex);
-            showAlert(errorText, Alert.AlertType.ERROR);
-            Platform.exit();
-        }
-        webServiceConnector = new WebServiceConnector(webServiceURL);
+    private void uiElementsInit() {
+        webServiceText.setFont(new Font(14));
+        webServiceText.setPrefWidth(350);
+        webServiceText.setTextAlignment(TextAlignment.CENTER);
+        webServiceText.setWrapText(true);
+        webServiceText.setLabelFor(webServiceUrlField);
+
+        webServiceUrlField.setFont(new Font(13));
+        webServiceUrlField.setPromptText("Enter URI of web service...");
+        webServiceUrlField.setText(PropertiesManager.getPropertyValue("webServiceURL"));
+        webServiceUrlField.setMaxSize(200,10);
+
+        generateButton.setPrefSize(100, 10);
+
+        webServiceFieldStatus.setText("Valid URL");
+        webServiceFieldStatus.setFill(Color.GREEN);
+
+        saveAs.setTitle("Save file as");
+        saveAs.setInitialFileName("Hello World.rtf");
+        saveAs.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("RTF", "*.rtf")
+        );
+        saveAs.setInitialDirectory(new File(System.getProperty("user.home")));
     }
 
     //Creates and shows alert to user
