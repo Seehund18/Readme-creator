@@ -24,7 +24,7 @@ import java.net.URL;
 public class WebServiceConnector {
     private final URL webService;
     private HttpURLConnection connection;
-    private Logger log = LoggerFactory.getLogger(WebServiceConnector.class);
+    private final Logger log = LoggerFactory.getLogger(WebServiceConnector.class);
 
     WebServiceConnector(URL webService) {
         this.webService = webService;
@@ -37,7 +37,7 @@ public class WebServiceConnector {
      * @param saveToFile Local file in which the file from the service is saved
      */
     public void downloadFile(String mapping, File saveToFile) {
-        //Constructing full URL to which 'GET' request sent
+        //Constructing full URL to which 'GET' request will be sent
         URL fullURL;
         try {
             fullURL = new URL(webService.toString() + mapping);
@@ -72,7 +72,7 @@ public class WebServiceConnector {
         }
     }
 
-    //Reads response after sending 'GET' request
+    //Reads response from service
     private void readResponse(File helloWorldFile) {
         String inputLine;
         try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));

@@ -23,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -30,9 +32,8 @@ import java.net.URL;
  * Main class of the desktop application
  */
 public class App extends Application {
-    private URL webServiceURL;
     private WebServiceConnector webServiceConnector;
-    private Logger log = LoggerFactory.getLogger(App.class);
+    private final Logger log = LoggerFactory.getLogger(App.class);
 
     @Override
     public void start(Stage stage) {
@@ -42,28 +43,32 @@ public class App extends Application {
         Button generateButton = new Button("Generate file");
         generateButton.setPrefSize(100, 100);
         generateButton.setOnAction(event -> {
-            try {
-                //User choose where to save file
-                FileChooser saveAs = new FileChooser();
-                saveAs.setTitle("Save file as");
-                saveAs.setInitialFileName("Hello World.rtf");
-                File helloWorldFile = saveAs.showSaveDialog(stage);
+            //Configuring 'save as' window
+            FileChooser saveAs = new FileChooser();
+            saveAs.setTitle("Save file as");
+            saveAs.setInitialFileName("Hello World.rtf");
+            saveAs.getExtensionFilters().addAll(
+                    new FileChooser.ExtensionFilter("All Files", "*.*"),
+                    new FileChooser.ExtensionFilter("RTF", "*.rtf")
+            );
+            saveAs.setInitialDirectory(new File(System.getProperty("user.home")));
+            File helloWorldFile = saveAs.showSaveDialog(stage);
 
+            try {
                 if (helloWorldFile != null) {
                     webServiceConnector.downloadFile("/files/HelloWorld.rtf", helloWorldFile);
-                    showAlert("Your file has been downloaded");
+                    showAlert("Your file has been downloaded", Alert.AlertType.INFORMATION);
+                    log.info("File has been downloaded");
                 } else {
-                    showAlert("Please, specify a file name");
+                    log.info("File downloading was canceled by user");
                 }
             } catch (WebServiceConnectorException ex) {
                 log.error(ex.getMessage(), ex);
-                showAlert(ex.getMessage());
-                Alert error = new Alert(Alert.AlertType.ERROR, ex.getMessage(), ButtonType.OK);
-                error.showAndWait();
+                showAlert(ex.getMessage(), Alert.AlertType.ERROR);
             }
         });
 
-        //Configuring borderPane
+        //Configuring root element
         BorderPane root = new BorderPane(generateButton);
         root.setCenter(generateButton);
         Scene scene = new Scene(root);
@@ -77,29 +82,33 @@ public class App extends Application {
         setStageAtCenter(stage);
     }
 
+    //Tries to initialize web service from property file
     private void webServiceInit() {
+        URL webServiceURL = null;
         try {
-            //Trying to initialize web service from property file
             webServiceURL = new URL(PropertiesManager.getPropertyValue("webServiceURL"));
-        } catch (ExceptionInInitializerError ex) {
-            //Problem occurred in static block of class PropertiesManager
-            String textOfError;
-            if(ex.getCause().getMessage().equals("No config file was found")) {
-                textOfError = "No config file was found";
+        } catch (ExceptionInInitializerError | MalformedURLException ex) {
+            String errorText;
+            if(ex.getCause().getCause() instanceof FileNotFoundException) {
+                //FileNotFoundException was the cause
+                errorText = "No config file was found. Maybe it was deleted or moved";
+            } else if (ex.getCause().getCause() instanceof IOException) {
+                //IOException was the cause
+                errorText = "Exception occurred while reading config file";
             } else {
-                textOfError = "Exception occurred while reading config file";
+                //MalformedURLException was the cause
+                errorText = "Can't create URL of web service. Maybe config.properties file was corrupted";
             }
-            log.error(textOfError, ex);
-            showAlert(textOfError);
+            log.error(errorText, ex);
+            showAlert(errorText, Alert.AlertType.ERROR);
             Platform.exit();
-        } catch (MalformedURLException ex) {
-            //TODO Dodelat
         }
+        webServiceConnector = new WebServiceConnector(webServiceURL);
     }
 
     //Creates and shows alert to user
-    private void showAlert(String text) {
-        Alert alert = new Alert(Alert.AlertType.ERROR, text, ButtonType.OK);
+    private void showAlert(String text, Alert.AlertType type) {
+        Alert alert = new Alert(type, text, ButtonType.OK);
         alert.showAndWait();
     }
 

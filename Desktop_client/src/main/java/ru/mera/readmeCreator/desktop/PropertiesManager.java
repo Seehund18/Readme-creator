@@ -23,13 +23,17 @@ public class PropertiesManager {
 
     static {
         //Basic class initializer
-        File propertiesFile = new File("src/main/resources/confi.properties");
+        File propertiesFile = new File("src/main/resources/config.properties");
         prop = new Properties();
         try {
+            //Trying to load properties from file
             prop.load(new FileReader(propertiesFile));
         } catch (FileNotFoundException ex) {
+            //If file was not found (it may be deleted or moved by user),
+            //when FileNotFoundException is wrapped into unchecked PropertiesManagerException
             throw new PropertiesManagerException("No config file was found", ex);
         } catch (IOException ex) {
+            //If file
             throw new PropertiesManagerException("Exception while reading config file", ex);
         }
     }
