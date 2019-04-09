@@ -57,7 +57,7 @@ public class App extends Application {
         try {
             PropertiesManager.init();
         } catch (PropertiesManagerException ex) {
-            //If there is a exception, alerting user and exit the program
+            //If there is an exception, alerting user and exit the program
             log.error(ex.getMessage(), ex);
             showAlert(ex.getMessage(), Alert.AlertType.ERROR);
             Platform.exit();

@@ -12,7 +12,7 @@ package ru.mera.readmeCreator.desktop;
  * Represents all exceptions thrown from WebServiceConnector class.
  * Exceptions from WebServiceConnector are wrapped into this one.
  */
-public class WebServiceConnectorException extends RuntimeException {
+public class WebServiceConnectorException extends Exception {
 
     public WebServiceConnectorException(String message, Throwable cause) {
         super(message, cause);

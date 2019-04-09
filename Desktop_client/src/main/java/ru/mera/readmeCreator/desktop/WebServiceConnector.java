@@ -16,28 +16,32 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Class which represents web service in this app.
+ * Class which represents web service connection in this app.
  * It's responsible for sending Http requests to web service, establishing connection with it.
  * User of the class can communicate with web service via provided public methods.
  * Sending of various Http requests is hidden from the user.
+ * To call this class's constructor user must firstly verify passed webServiceUrl.
  **/
 public class WebServiceConnector {
     private final URL webService;
     private HttpURLConnection connection;
     private final Logger log = LoggerFactory.getLogger(WebServiceConnector.class);
 
+    /**
+     * Constructs new WebServiceConnector. It is assumed that webServiceUrl is correct URL
+     * @param webServiceUrl correct web service url
+     */
     WebServiceConnector(URL webServiceUrl) {
         this.webService = webServiceUrl;
     }
 
     /**
      * Gets file from web service
-     *
-     * @param mapping Service mapping for 'GET' request
-     * @param saveToFile Local file in which the file from the service is saved
-     * @throws WebServiceConnectorException Some exceptions occurred during download of the file
+     * @param mapping service mapping for 'GET' request
+     * @param saveToFile local file in which the file from the service is saved
+     * @throws WebServiceConnectorException some exceptions occurred during downloading of the file
      */
-    public void downloadFile(String mapping, File saveToFile) {
+    public void downloadFile(String mapping, File saveToFile) throws WebServiceConnectorException {
         //Constructing full URL to which 'GET' request will be sent
         URL fullURL;
         try {
@@ -59,7 +63,7 @@ public class WebServiceConnector {
     }
 
     //Sends 'GET' request to the web service and returns response code
-    private int sendGetRequest(URL url) {
+    private int sendGetRequest(URL url) throws WebServiceConnectorException {
         try {
             connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
@@ -74,7 +78,7 @@ public class WebServiceConnector {
     }
 
     //Reads response from service
-    private void readResponse(File helloWorldFile) {
+    private void readResponse(File helloWorldFile) throws WebServiceConnectorException {
         String inputLine;
         try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
              FileWriter out = new FileWriter(helloWorldFile)) {
@@ -92,10 +96,9 @@ public class WebServiceConnector {
     }
 
     /**
-     * Compares this url with another url from the string
+     * Compares this web service's url with another url from the string
      * @param url url to compare with
-     * @return true if both urls are equal;
-     *         false otherwise
+     * @return true if both urls are equal and false otherwise
      */
     public boolean isUrlEqual(String url) {
         return webService.toString().equals(url);
