@@ -143,7 +143,7 @@ public class App extends Application {
                 return false;
             }
 
-            //Using UrlValidator class from apache.commons library to check the rest
+            //Using UrlValidator class from apache.commons library to check the url
             UrlValidator urlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
             return urlValidator.isValid(url);
         }

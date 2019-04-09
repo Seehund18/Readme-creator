@@ -66,9 +66,9 @@ public class PropertiesManager {
      * @param key property
      * @param value new value of the property
      * @return true - new property value was successfully saved;
-     *         false - new property value is equal to the old one
+     *         false - new property value is equals to the old one
      * @throws UnsupportedOperationException propertyManager wasn't initialized first
-     * @throws PropertiesManagerException Exception occurred during
+     * @throws PropertiesManagerException Exception occurred during saving the file
      */
     public static boolean setPropertyValue(String key, String value) throws PropertiesManagerException {
         if (prop == null) {
