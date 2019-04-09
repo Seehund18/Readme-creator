@@ -16,7 +16,8 @@ import java.util.Properties;
 
 /**
  * Class through which properties of the application are controlled.
- * This class should be firstly initialized in the program. For this, method init() is used, which must be called only once.
+ * To use properties, class should be firstly initialized in the program.
+ * For this, method init() is used, which must be called only once.
  * User must decide how to handle situations when config file is missing
  */
 public class PropertiesManager {
@@ -25,7 +26,7 @@ public class PropertiesManager {
     private static final Logger log = LoggerFactory.getLogger(PropertiesManager.class);
 
     /**
-     * Initialize PropertyManager. Should be called first
+     * Initialize PropertyManager. Must be called first
      * @throws PropertiesManagerException problems with config file
      */
     public static void init() throws PropertiesManagerException {
@@ -40,7 +41,7 @@ public class PropertiesManager {
             //Trying to load properties from file
             prop.load(new FileReader(propertiesFile));
         } catch (FileNotFoundException ex) {
-            //If file was not found (it may be deleted or moved by user)
+            //File was not found (it may be deleted or moved by user)
             throw new PropertiesManagerException("No config file was found", ex);
         } catch (IOException ex) {
             throw new PropertiesManagerException("Exception while reading config file", ex);
@@ -50,9 +51,9 @@ public class PropertiesManager {
     /**
      * Gets property value
      *
-     * @param key property which value is need to be returned
+     * @param key property which value is needed to be returned
      * @return value of the property or null if property is missing
-     * @throws UnsupportedOperationException propertyManager wasn't initialized first
+     * @throws UnsupportedOperationException PropertyManager wasn't initialized
      */
     public static String getPropertyValue(String key) {
         if (prop == null) {
@@ -67,17 +68,17 @@ public class PropertiesManager {
      * @param value new value of the property
      * @return true - new property value was successfully saved;
      *         false - new property value is equals to the old one
-     * @throws UnsupportedOperationException propertyManager wasn't initialized first
+     * @throws UnsupportedOperationException PropertyManager wasn't initialized first
      * @throws PropertiesManagerException Exception occurred during saving the file
      */
     public static boolean setPropertyValue(String key, String value) throws PropertiesManagerException {
         if (prop == null) {
             throw new UnsupportedOperationException("PropertiesManager isn't initialized. Method init() must be called first");
         }
-
-        if (getPropertyValue(key).equals(value)) {
+        if (prop.getProperty(key).equals(value)) {
             return false;
         }
+
         prop.setProperty(key, value);
         saveToFile();
         log.info("Value of property {} was set to {}", key, value);
