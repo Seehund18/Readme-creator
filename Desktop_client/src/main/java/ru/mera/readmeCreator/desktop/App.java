@@ -10,6 +10,7 @@ package ru.mera.readmeCreator.desktop;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -25,6 +26,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import org.apache.commons.validator.routines.UrlValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +42,7 @@ public class App extends Application {
     private Label webServiceText = new Label("Please, enter a web service URI.\n"
             + "Examples: http://localhost:8080, http://myService.com");
     private TextField webServiceUrlField = new TextField();
-    private Text UrlStatus = new Text();
+    private Text urlStatus = new Text();
     private Button generateButton = new Button("Generate file");
     private FileChooser saveAs = new FileChooser();
 
@@ -55,6 +57,7 @@ public class App extends Application {
         try {
             PropertiesManager.init();
         } catch (PropertiesManagerException ex) {
+            //If there is a exception, alerting user and exit the program
             log.error(ex.getMessage(), ex);
             showAlert(ex.getMessage(), Alert.AlertType.ERROR);
             Platform.exit();
@@ -76,8 +79,8 @@ public class App extends Application {
 
         generateButton.setPrefSize(100, 10);
 
-        UrlStatus.setText("Valid URL");
-        UrlStatus.setFill(Color.GREEN);
+        urlStatus.setText("Valid URL");
+        urlStatus.setFill(Color.GREEN);
 
         saveAs.setTitle("Save file as");
         saveAs.setInitialFileName("Hello World.rtf");
@@ -93,14 +96,15 @@ public class App extends Application {
         propertiesInit();
         uiElementsInit();
 
-        //Adding new ValidatedUrlListener to webServiceUrlField, which activates on change of text in the field
-        webServiceUrlField.textProperty().addListener(new UrlStatusListener(UrlStatus, isUrlValid));
+        //Adding UrlStatusListener to webServiceUrlField, which activates on change of text in the field
+        //Every field change will activates validation and a status message near the field will be shown
+        webServiceUrlField.textProperty().addListener(new UrlStatusListener());
 
         //Adding listener to generateButton, which tries to download file
         generateButton.setOnAction(new GenerateButtonHandler(stage));
 
         //Configuring layouts
-        FlowPane flow = new FlowPane(10,0,webServiceUrlField, UrlStatus);
+        FlowPane flow = new FlowPane(10,0,webServiceUrlField, urlStatus);
         flow.setAlignment(Pos.CENTER);
         VBox verBox = new VBox(10, webServiceText, flow, generateButton);
         verBox.setAlignment(Pos.CENTER);
@@ -115,6 +119,37 @@ public class App extends Application {
         setStageAtCenter(stage);
     }
 
+    //ValidateChangeListener for webServiceUrlField
+    private class UrlStatusListener implements ValidatedChangeListener {
+        @Override
+        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+            if(isValid(newValue)) {
+                isUrlValid = true;
+                urlStatus.setText("Valid URL");
+                urlStatus.setFill(Color.GREEN);
+                return;
+            }
+            isUrlValid = false;
+            urlStatus.setText("Not valid URL");
+            urlStatus.setFill(Color.RED);
+        }
+
+        @Override
+        public boolean isValid(String url) {
+            //Checking that url is the server url without path to any resource.
+            //For that, using regex pattern, which checks that between beginning and ending of the string are only 2 slashes '/'.
+            //For example: http://myService.ru is correct (2 slashes); http://myService.ru/files/HelloWorld.rtf is wrong (4 slashes)
+            if(!url.matches("^http://[^/]+$")) {
+                return false;
+            }
+
+            //Using UrlValidator class from apache.commons library to check the rest
+            UrlValidator urlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
+            return urlValidator.isValid(url);
+        }
+    }
+
+    //Handler for generateButton
     private class GenerateButtonHandler implements EventHandler<ActionEvent> {
         private Stage stage;
 

@@ -16,7 +16,7 @@ import java.util.Properties;
 
 /**
  * Class through which properties of the application are controlled.
- * This class should be firstly initialized in the program. For this, method init() is used, which called only once.
+ * This class should be firstly initialized in the program. For this, method init() is used, which must be called only once.
  * User must decide how to handle situations when config file is missing
  */
 public class PropertiesManager {
@@ -26,7 +26,7 @@ public class PropertiesManager {
 
     /**
      * Initialize PropertyManager. Should be called first
-     * @throws PropertiesManagerException problems with config file, which user must to deal with
+     * @throws PropertiesManagerException problems with config file
      */
     public static void init() throws PropertiesManagerException {
         //If init() already been called, do nothing

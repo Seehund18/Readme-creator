@@ -12,7 +12,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
 /**
- * ChangeListener which and adds ability to validate new value before change.
+ * ChangeListener which adds ability to validate new value.
  * User can choose different behavior of listener according to its validation.
  */
 public interface ValidatedChangeListener extends ChangeListener<String> {
