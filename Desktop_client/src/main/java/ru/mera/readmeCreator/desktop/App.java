@@ -10,7 +10,8 @@ package ru.mera.readmeCreator.desktop;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.*;
@@ -28,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -40,12 +40,13 @@ public class App extends Application {
     private Label webServiceText = new Label("Please, enter a web service URI.\n"
             + "Examples: http://localhost:8080, http://myService.com");
     private TextField webServiceUrlField = new TextField();
-    private Text webServiceFieldStatus = new Text();
+    private Text UrlStatus = new Text();
     private Button generateButton = new Button("Generate file");
     private FileChooser saveAs = new FileChooser();
 
     //Flag which indicates, that Url in webServiceUrlField is valid
     private boolean isUrlValid = true;
+    //Connector to the webService
     private WebServiceConnector webServiceConnector;
     private final Logger log = LoggerFactory.getLogger(App.class);
 
@@ -60,7 +61,7 @@ public class App extends Application {
         }
     }
 
-    //Initialization of UI elements. Sets default text, size and font
+    //Initialization of UI elements. Sets basic text, size, font and configuration
     private void uiElementsInit() {
         webServiceText.setFont(new Font(14));
         webServiceText.setPrefWidth(350);
@@ -75,8 +76,8 @@ public class App extends Application {
 
         generateButton.setPrefSize(100, 10);
 
-        webServiceFieldStatus.setText("Valid URL");
-        webServiceFieldStatus.setFill(Color.GREEN);
+        UrlStatus.setText("Valid URL");
+        UrlStatus.setFill(Color.GREEN);
 
         saveAs.setTitle("Save file as");
         saveAs.setInitialFileName("Hello World.rtf");
@@ -92,25 +93,38 @@ public class App extends Application {
         propertiesInit();
         uiElementsInit();
 
-        //Adding new ValidUrlListener to webServiceUrlField, which activates on change of text in the field
-        webServiceUrlField.textProperty().addListener(new ValidUrlChangeListener() {
-            //Validates URL in the field and sets appropriate text and color in webServiceFieldStatus
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                if(isValid(newValue)) {
-                    webServiceFieldStatus.setText("Valid URL");
-                    webServiceFieldStatus.setFill(Color.GREEN);
-                    isUrlValid = true;
-                    return;
-                }
-                isUrlValid = false;
-                webServiceFieldStatus.setText("Not valid URL");
-                webServiceFieldStatus.setFill(Color.RED);
-            }
-        });
+        //Adding new ValidatedUrlListener to webServiceUrlField, which activates on change of text in the field
+        webServiceUrlField.textProperty().addListener(new UrlStatusListener(UrlStatus, isUrlValid));
 
-        //Adding listener to generateButton, which activates on button push
-        generateButton.setOnAction(event -> {
+        //Adding listener to generateButton, which tries to download file
+        generateButton.setOnAction(new GenerateButtonHandler(stage));
+
+        //Configuring layouts
+        FlowPane flow = new FlowPane(10,0,webServiceUrlField, UrlStatus);
+        flow.setAlignment(Pos.CENTER);
+        VBox verBox = new VBox(10, webServiceText, flow, generateButton);
+        verBox.setAlignment(Pos.CENTER);
+        Scene scene = new Scene(verBox);
+
+        //Configuring stage
+        stage.setHeight(500);
+        stage.setWidth(500);
+        stage.setTitle("Readme generator");
+        stage.setScene(scene);
+        stage.show();
+        setStageAtCenter(stage);
+    }
+
+    private class GenerateButtonHandler implements EventHandler<ActionEvent> {
+        private Stage stage;
+
+        private GenerateButtonHandler(Stage stage) {
+            this.stage = stage;
+        }
+
+        @Override
+        public void handle(ActionEvent event) {
+            //Taking value from the field
             String serviceURL = webServiceUrlField.getText();
             //Checking flag
             if (!isUrlValid) {
@@ -150,22 +164,7 @@ public class App extends Application {
                 //User canceled 'save as' dialog
                 log.info("File downloading was canceled by user");
             }
-        });
-
-        //Configuring layouts
-        FlowPane flow = new FlowPane(10,0,webServiceUrlField, webServiceFieldStatus);
-        flow.setAlignment(Pos.CENTER);
-        VBox verBox = new VBox(10, webServiceText, flow, generateButton);
-        verBox.setAlignment(Pos.CENTER);
-        Scene scene = new Scene(verBox);
-
-        //Configuring stage
-        stage.setHeight(500);
-        stage.setWidth(500);
-        stage.setTitle("Readme generator");
-        stage.setScene(scene);
-        stage.show();
-        setStageAtCenter(stage);
+        }
     }
 
     //Creates and shows alert to user

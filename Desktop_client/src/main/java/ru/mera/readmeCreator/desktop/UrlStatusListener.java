@@ -8,21 +8,34 @@
 
 package ru.mera.readmeCreator.desktop;
 
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import org.apache.commons.validator.routines.UrlValidator;
 
-/**
- * Class which implements ChangeListener and adds ability to verify url.
- * User can choose different behavior of listener according to its validation.
- *
- */
-public abstract class ValidUrlChangeListener implements ChangeListener<String> {
+public class UrlStatusListener implements ValidatedChangeListener {
+    private Text statusField;
+    private boolean statusFlag;
+
+    UrlStatusListener(Text statusField, boolean statusFlag) {
+        this.statusField = statusField;
+        this.statusFlag = statusFlag;
+    }
+
+    @Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+        if(isValid(newValue)) {
+            statusField.setText("Valid URL");
+            statusField.setFill(Color.GREEN);
+            statusFlag = true;
+            return;
+        }
+        statusFlag = false;
+        statusField.setText("Not valid URL");
+        statusField.setFill(Color.RED);
+    }
 
     @Override
-    public abstract void changed(ObservableValue<? extends String> observable, String oldValue, String newValue);
-
-    boolean isValid(String url) {
+    public boolean isValid(String url) {
         //Checking that url is the server url without path to any resource.
         //For that, using regex pattern, which checks that between beginning and ending of the string are only 2 slashes '/'.
         //For example: http://myService.ru is correct (2 slashes); http://myService.ru/files/HelloWorld.rtf is wrong (4 slashes)
