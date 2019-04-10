@@ -20,7 +20,7 @@
                     <target>8</target>
                 </configuration>
             </plugin>
-            <!--Plugin which which allows to deploy war-->
+            <!--Plugin which allows to deploy war to Tomcat-->
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
