@@ -185,7 +185,7 @@ public class App extends Application {
             if (helloWorldFile != null) {
                 try {
                     //Trying to download file
-                    webServiceConnector.downloadFile("/files/HelloWorld.rtf", helloWorldFile);
+                    webServiceConnector.downloadFile("/files/Hello_world.rtf", helloWorldFile);
                     showAlert("Your file has been downloaded", Alert.AlertType.INFORMATION);
                     log.info("File has been downloaded");
 
