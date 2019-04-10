@@ -12,6 +12,17 @@ public class WebServiceConnector {
     @ManagedProperty(value = "#{fileGeneratorWebService}")
     private WebService webService;
 
+    @ManagedProperty(value = "#{userData}")
+    private UserData userData;
+
+    public UserData getUserData() {
+        return userData;
+    }
+
+    public void setUserData(UserData userData) {
+        this.userData = userData;
+    }
+
     public WebService getWebService() {
         return webService;
     }
@@ -21,13 +32,11 @@ public class WebServiceConnector {
     }
 
     public void getFile() throws IOException {
-        System.out.println("I'm here");
-        FacesContext.getCurrentInstance().getExternalContext().dispatch("error.xhtml");
-//        if(webService.isAvailable()) {
-//            String uri = "http://localhost:8080/files/Hello_world.rtf";
-//            FacesContext.getCurrentInstance().getExternalContext().redirect(uri);
-//        } else {
-//
-//        }
+        if(webService.isAvailable()) {
+            String url = userData.getUrl() + "/files/Hello_world.rtf";
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url);
+        } else {
+            FacesContext.getCurrentInstance().getExternalContext().dispatch("error.xhtml");
+        }
     }
 }
