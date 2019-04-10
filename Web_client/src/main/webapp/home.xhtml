@@ -23,13 +23,13 @@
             <h:panelGrid id="panel" columns="3" border="0" cellpadding = "10"
                          cellspacing = "1">
                 <h:outputLabel value="Enter URL:"/>
-                <h:inputText id="webServiceURL" size="20" required="true"/>
+                <h:inputText id="webServiceURL" value="#{userData.url}" size="20" required="true">
+                    <f:validator validatorId="WebServiceUrlValidator" />
+                </h:inputText>
                 <h:message for = "webServiceURL" style = "color:red" />
                 <h:commandButton action = "#{webServiceConnector.getFile}"
                                  value = "Generate file" />
             </h:panelGrid>
-
-
         </h:form>
     </body>
 </html>
