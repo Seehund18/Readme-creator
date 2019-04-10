@@ -1,34 +1,41 @@
 package ru.mera.readmeCreator.server;
 
-import static com.tutego.jrtf.Rtf.rtf;
-import static com.tutego.jrtf.RtfPara.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.file.NoSuchFileException;
 
+/**
+ * File generator in .rtf format
+ */
 public class RTFGenerator implements FileGenerator {
+    private RtfPrinter printer = new RtfPrinter();
+    private final Logger log = LoggerFactory.getLogger(RTFGenerator.class);
 
     @Override
     public File generate(String name) throws IOException {
-        if(name.equals("HelloWorld.rtf")) {
-            return generateHelloWorldFile();
-        }
-        throw new NoSuchFileException("Server can't find file " + name);
-    }
-
-    private File generateHelloWorldFile() throws IOException {
+        //Creating files directory, if one is missing
         File filesDirectory = new File("files");
         filesDirectory.mkdir();
 
-        File helloWoldFile = new File("files/HelloWorld.rtf");
-
-        if(!helloWoldFile.exists()) {
-            try (FileWriter out = new FileWriter(helloWoldFile)) {
-                rtf()
-                  .section(p("Hello World!").alignCentered())
-                  .out(out);
-            }
+        //Searching for file
+        if(name.equals("Hello_world.rtf")) {
+            return generateHelloWorldFile();
         }
-        return helloWoldFile;
+
+        //File wasn't found
+        throw new NoSuchFileException("Server isn't generates this kind of file " + name);
+    }
+
+    //Generates "Hello world" file
+    private File generateHelloWorldFile() throws IOException {
+        File helloWorldFile = new File("files/Hello_world.rtf");
+
+        if(!helloWorldFile.exists()) {
+            log.debug("Prints into {} file", helloWorldFile);
+            printer.printHelloWorld(helloWorldFile);
+        }
+        return helloWorldFile;
     }
 }

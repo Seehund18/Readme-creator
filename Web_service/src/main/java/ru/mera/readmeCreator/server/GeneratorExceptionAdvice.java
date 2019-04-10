@@ -8,16 +8,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * Handler for GeneratorExceptions
+ */
 @ControllerAdvice
 public class GeneratorExceptionAdvice {
-
-    private final Logger logger = LoggerFactory.getLogger(GeneratorExceptionAdvice.class);
+    private final Logger log = LoggerFactory.getLogger(GeneratorExceptionAdvice.class);
 
     @ResponseBody
     @ExceptionHandler(GeneratorException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    String generatorExceptionHandler(GeneratorException ex) {
-        logger.error("Generator exception occurred: ", ex);
-        return ex.getMessage();
+    void generatorExceptionHandler(GeneratorException ex) {
+        log.error("Generator exception occurred", ex);
     }
 }

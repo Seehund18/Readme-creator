@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.NoSuchFileException;
 
-
+/**
+ * Controller of service
+ */
 @RestController
 public class FileController {
-    private final Logger logger = LoggerFactory.getLogger(FileController.class);
+    private final Logger log = LoggerFactory.getLogger(FileController.class);
 
     @Autowired
     private final FileGenerator fileGenerator;
@@ -25,16 +26,26 @@ public class FileController {
         this.fileGenerator = fileGenerator;
     }
 
+    /**
+     * Handler method for file download requests
+     * @param name file name
+     * @return http response with file
+     */
     @GetMapping("/files/{name}")
     public ResponseEntity<FileSystemResource> sendDocument(@PathVariable String name) {
+        log.info("Received 'GET' request to generate {} file", name);
         File document;
         try {
+            //Trying to generate file with given name
             document = fileGenerator.generate(name);
         } catch (IOException ex) {
+            //If some problems occurred, GeneratorException is thrown
+            //which will be caught and handled by GeneratorExceptionAdvice
             throw new GeneratorException(ex.getMessage(), ex);
         }
-        logger.info("Document {} was generated. Sending to client...", name);
+        log.info("Document {} was generated. Sending to client", name);
 
+        //Setting Http response headers
         HttpHeaders responseHeader = new HttpHeaders();
         responseHeader.set(HttpHeaders.CONTENT_TYPE, "application/rtf; charset=utf-8");
         responseHeader.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + document.getName());
