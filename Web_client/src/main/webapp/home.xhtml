@@ -3,14 +3,33 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns = "http://www.w3.org/1999/xhtml"
-      xmlns:h = "http://java.sun.com/jsf/html">
+      xmlns:h = "http://java.sun.com/jsf/html"
+      xmlns:f = "http://java.sun.com/jsf/core">
+    <head>
+        <title>Readme generator</title>
+    </head>
 
-    <h:body>
-        <h1>File Generator</h1>
-        Push the button to generate file
+    <body>
+        <h1>Readme generator</h1>
+        <h3>Please, enter a web service URL in an appropriate format.
+            And then click "Generate file" to start downloading<br/>
+        </h3>
+        <i>Examples:</i><br/>
+        http://localhost:8080<br/>
+        http://myService.com<br/>
+        <hr/>
+
         <h:form>
-            <h:commandButton action = "#{webServiceConnector.getFile}"
-                             value = "Generate file" />
+            <h:panelGrid id="panel" columns="3" border="0" cellpadding = "10"
+                         cellspacing = "1">
+                <h:outputLabel value="Enter URL:"/>
+                <h:inputText id="webServiceURL" size="20" required="true"/>
+                <h:message for = "webServiceURL" style = "color:red" />
+                <h:commandButton action = "#{webServiceConnector.getFile}"
+                                 value = "Generate file" />
+            </h:panelGrid>
+
+
         </h:form>
-    </h:body>
+    </body>
 </html>
