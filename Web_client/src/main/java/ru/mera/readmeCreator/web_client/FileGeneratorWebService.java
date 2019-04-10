@@ -21,7 +21,7 @@ public class FileGeneratorWebService extends WebService {
 
     @Override
     public boolean isAvailable() {
-        return sendGetRequest("/files/HelloWorld.rtf") < 500;
+        return sendGetRequest("/files/Hello_world.rtf") < 500;
     }
 
     @Override

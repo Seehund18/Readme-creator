@@ -5,6 +5,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
 
+
 @ManagedBean(eager = true)
 public class WebServiceConnector {
 
@@ -20,11 +21,13 @@ public class WebServiceConnector {
     }
 
     public void getFile() throws IOException {
-        if(webService.isAvailable()) {
-            String uri = "http://localhost:8080/files/HelloWorld.rtf";
-            FacesContext.getCurrentInstance().getExternalContext().redirect(uri);
-        } else {
-            FacesContext.getCurrentInstance().getExternalContext().dispatch("error.xhtml");
-        }
+        System.out.println("I'm here");
+        FacesContext.getCurrentInstance().getExternalContext().dispatch("error.xhtml");
+//        if(webService.isAvailable()) {
+//            String uri = "http://localhost:8080/files/Hello_world.rtf";
+//            FacesContext.getCurrentInstance().getExternalContext().redirect(uri);
+//        } else {
+//
+//        }
     }
 }
