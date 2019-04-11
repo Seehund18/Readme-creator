@@ -49,7 +49,7 @@ public class App extends Application {
     //Flag which indicates, that Url in webServiceUrlField is valid
     private boolean isUrlValid = true;
     //Connector to the webService
-    private WebServiceConnector webServiceConnector;
+    private FileWebServiceConnector fileWebServiceConnector;
     private final Logger log = LoggerFactory.getLogger(App.class);
 
     //Initialization of propertiesManager
@@ -167,15 +167,27 @@ public class App extends Application {
                 return;
             }
 
-            //If webServiceConnector is not instantiated yet
-            //or serviceURL is different from the existed one, creates new Connector
-            if (webServiceConnector == null || !webServiceConnector.isUrlEqual(serviceURL)) {
-                try {
-                    webServiceConnector = new WebServiceConnector(new URL(serviceURL));
-                } catch (MalformedURLException ex) {
-                    log.error("Can't create URL of web service", ex);
-                    showAlert("Can't create URL of web service", Alert.AlertType.ERROR);
+            //If fileWebServiceConnector is not instantiated yet, creating new Connector
+            //otherwise setting URL in existed Connector
+            try {
+                if (fileWebServiceConnector == null) {
+                    fileWebServiceConnector = new FileWebServiceConnector(new URL(serviceURL));
+                } else {
+                    fileWebServiceConnector.setWebService(serviceURL);
                 }
+            } catch (MalformedURLException ex) {
+                log.error("Can't create URL of web service", ex);
+                showAlert("Can't create URL of web service", Alert.AlertType.ERROR);
+            }
+
+            try {
+                if (!fileWebServiceConnector.isServiceAvailable()) {
+                    showAlert("Service is unavailable right now. Try again later", Alert.AlertType.WARNING);
+                    return;
+                }
+            } catch (WebServiceConnectorException e) {
+                log.error(e.getMessage(), e);
+                showAlert(e.getMessage(), Alert.AlertType.ERROR);
             }
 
             //Invoking 'save as' dialog and choosing place to save file
@@ -185,7 +197,7 @@ public class App extends Application {
             if (helloWorldFile != null) {
                 try {
                     //Trying to download file
-                    webServiceConnector.downloadFile("/files/Hello_world.rtf", helloWorldFile);
+                    fileWebServiceConnector.downloadFile("/files/Hello_world.rtf", helloWorldFile);
                     showAlert("Your file has been downloaded", Alert.AlertType.INFORMATION);
                     log.info("File has been downloaded");
 

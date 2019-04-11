@@ -9,8 +9,8 @@
 package ru.mera.readmeCreator.desktop;
 
 /**
- * Represents all exceptions thrown from WebServiceConnector class.
- * Exceptions from WebServiceConnector are wrapped into this one.
+ * Represents all exceptions thrown from FileWebServiceConnector class.
+ * Exceptions from FileWebServiceConnector are wrapped into this one.
  */
 public class WebServiceConnectorException extends Exception {
 
