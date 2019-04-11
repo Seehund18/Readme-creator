@@ -20,7 +20,7 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class UserData implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static final Logger log = LoggerFactory.getLogger(UserData.class);
+    private final Logger log = LoggerFactory.getLogger(UserData.class);
 
     private String url;
 
@@ -29,7 +29,7 @@ public class UserData implements Serializable {
     }
 
     public void setUrl(String url) {
-        log.info("Setting url in UserData");
+        log.info("Setting url in UserData to {}\n", url);
         this.url = url;
     }
 }
