@@ -15,7 +15,7 @@ public class RTFGenerator implements FileGenerator {
 
     @Override
     public File generate(String name) throws IOException {
-        //Creating files directory, if one is missing
+        //Creating 'files' directory, if one is missing
         File filesDirectory = new File("files");
         filesDirectory.mkdir();
 
