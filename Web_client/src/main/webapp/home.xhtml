@@ -27,7 +27,7 @@
                     <f:validator validatorId="WebServiceUrlValidator" />
                 </h:inputText>
                 <h:message for = "webServiceURL" style = "color:red" />
-                <h:commandButton action = "#{webServiceConnector.getFile}"
+                <h:commandButton action = "#{mainController.getHelloFile}"
                                  value = "Generate file" />
             </h:panelGrid>
         </h:form>

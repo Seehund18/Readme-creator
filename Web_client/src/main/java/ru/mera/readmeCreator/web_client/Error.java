@@ -8,35 +8,20 @@
 
 package ru.mera.readmeCreator.web_client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.Serializable;
-
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-
-@ManagedBean(eager = true)
+@ManagedBean
 @SessionScoped
-public class UserData implements Serializable {
-    private static final long serialVersionUID = 1L;
-    private final Logger log = LoggerFactory.getLogger(UserData.class);
+public class Error {
 
-    private String url;
+    private String message;
 
-    @PostConstruct
-    private void init() {
-        url = CookieHelper.getCookieValue("URL");
+    public String getMessage() {
+        return message;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        log.info("Setting url in UserData to {}\n", url);
-        this.url = url;
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

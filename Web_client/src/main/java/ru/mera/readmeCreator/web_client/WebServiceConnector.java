@@ -1,44 +1,41 @@
 package ru.mera.readmeCreator.web_client;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.context.FacesContext;
-import java.io.IOException;
+/**
+ * Interface for web services in this program.
+ * For now, classes which extends this abstract class,
+ * must be able to sendGetRequests (sendGetRequest() method)
+ */
+public abstract class WebServiceConnector {
+    //URL of web service
+    protected URL webService;
+    //Connection to the web service
+    protected HttpURLConnection connection;
 
-@ManagedBean(eager = true)
-public class WebServiceConnector {
-    private final Logger log = LoggerFactory.getLogger(WebServiceConnector.class);
-
-    @ManagedProperty(value = "#{fileGeneratorWebService}")
-    private WebService webService;
-
-    @ManagedProperty(value = "#{userData}")
-    private UserData userData;
-
-    public void setUserData(UserData userData) {
-        log.info("Setting UserData object\n");
-        this.userData = userData;
+    protected URL getWebService() {
+        return this.webService;
     }
 
-    public void setWebService(WebService webService) {
-        log.info("Setting webService object\n");
-        this.webService = webService;
+    protected void setWebService(String webService) throws MalformedURLException {
+        this.webService = new URL(webService);
     }
 
-    public void getFile() throws IOException {
-        log.info("User pushed button");
-        webService.setWebServiceURL(userData.getUrl());
-        if(webService.isAvailable()) {
-            log.info("Service is available. Redirecting user...\n");
-            String url = userData.getUrl() + "/files/Hello_world.rtf";
-            FacesContext.getCurrentInstance().getExternalContext().redirect(url);
-            log.info("User was redirected\n");
-        } else {
-            log.info("Service is unavailable\n");
-            FacesContext.getCurrentInstance().getExternalContext().dispatch("error.xhtml");
-        }
+    /**
+     * Defines when this web service is available. For this, sending 'GET' request
+     * directly to service URL
+     * @return true - service is available and false otherwise
+     */
+    public boolean isServiceAvailable() throws WebServiceConnectorException {
+        return sendGetRequest("") != -1;
     }
+
+    /**
+     * Method for sending 'GET' requests to web service
+     * @param getMapping mapping for 'GET' request
+     * @return response code or -1 if connection to server was refused
+     */
+    public abstract int sendGetRequest(String getMapping) throws WebServiceConnectorException;
 }
