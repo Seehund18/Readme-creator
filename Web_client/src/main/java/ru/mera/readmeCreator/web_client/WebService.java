@@ -6,8 +6,7 @@ import java.net.URL;
 /**
  * Interface for web services in this program.
  * For now, classes which extends this abstract class,
- * must define when they are available (isAvailable() method)
- * and must be able to sendGetRequests (sendGetRequest() method)
+ * must be able to sendGetRequests (sendGetRequest() method)
  */
 public abstract class WebService {
     //URL of web service
