@@ -20,7 +20,7 @@ import java.util.Properties;
  * For this, method init() is used, which must be called only once.
  */
 public class PropertiesManager {
-    private static final File propertiesFile = new File("src/main/resources/config.properties");
+    private static final File propertiesFile = new File("conf/config.properties");
     private static Properties prop;
     private static final Logger log = LoggerFactory.getLogger(PropertiesManager.class);
 
@@ -35,6 +35,10 @@ public class PropertiesManager {
             return;
         }
 
+        if (!propertiesFile.exists()) {
+            createPropertyFile();
+        }
+
         prop = new Properties();
         try {
             //Trying to load properties from file
@@ -44,6 +48,18 @@ public class PropertiesManager {
             throw new PropertiesManagerException("No config file was found", ex);
         } catch (IOException ex) {
             throw new PropertiesManagerException("Exception while reading config file", ex);
+        }
+    }
+
+    /**
+     * Creates property file with needed properties
+     */
+    private static void createPropertyFile() {
+        new File("conf").mkdir();
+        try (FileWriter out = new FileWriter(propertiesFile)) {
+            out.write("webServiceURL");
+        } catch (IOException ex) {
+            log.error("Exception during first writing to property file", ex);
         }
     }
 
