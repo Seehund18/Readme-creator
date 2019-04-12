@@ -5,16 +5,17 @@
  * Desktop client;
  * Web client.
 
-Information about deploying and starting of each application is described in README.txt file to each application.
-
 <h3>RESTfull web service</h3>
 Generates readme file in RTF format. For generating .rtf files Jrtf library is used.
 
 <h3>Desktop client</h3>
-Desktop application on JavaFX, which connects to web service and downloads file from it.
+Desktop application based on JavaFX, which connects to web service and downloads file from it.
 
 <h3>Web client</h3>
 MVC aplication based on JSF webframework, which also connects to web service and downloads file.
+
+<h2>Deployment</h2>
+For deployment purposes I wrote "deploy.bat" scripts for every application. They creates "deployment" folder with all that is needed to run application. Additional information about deploying and starting of each application is described in README.txt file for each application.
 
 <h2>v0.1</h2>
 Web service generates Hello World.rtf file with "Hello World!" phrase written in it.
