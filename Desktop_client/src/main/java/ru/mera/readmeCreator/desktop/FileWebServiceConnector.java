@@ -70,6 +70,7 @@ public class FileWebServiceConnector extends WebServiceConnector {
             try {
                 responseCode = connection.getResponseCode();
             } catch (ConnectException ex) {
+                connection.disconnect();
                 log.debug("ConnectException was caught");
                 return -1;
             }
