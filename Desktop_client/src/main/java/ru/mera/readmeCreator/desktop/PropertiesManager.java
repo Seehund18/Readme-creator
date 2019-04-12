@@ -18,7 +18,6 @@ import java.util.Properties;
  * Class through which properties of the application are controlled.
  * To use properties, class should be firstly initialized in the program.
  * For this, method init() is used, which must be called only once.
- * User must decide how to handle situations when config file is missing
  */
 public class PropertiesManager {
     private static final File propertiesFile = new File("src/main/resources/config.properties");
@@ -50,14 +49,14 @@ public class PropertiesManager {
 
     /**
      * Gets property value
-     *
      * @param key property which value is needed to be returned
      * @return value of the property or null if property is missing
      * @throws UnsupportedOperationException PropertyManager wasn't initialized
      */
     public static String getPropertyValue(String key) {
         if (prop == null) {
-            throw new UnsupportedOperationException("PropertiesManager isn't initialized. Method init() must be called first");
+            throw new UnsupportedOperationException("PropertiesManager isn't initialized."
+                    + " Method init() must be called first");
         }
         return prop.getProperty(key);
     }
@@ -73,7 +72,8 @@ public class PropertiesManager {
      */
     public static boolean setPropertyValue(String key, String value) throws PropertiesManagerException {
         if (prop == null) {
-            throw new UnsupportedOperationException("PropertiesManager isn't initialized. Method init() must be called first");
+            throw new UnsupportedOperationException("PropertiesManager isn't initialized."
+                    + " Method init() must be called first");
         }
         if (prop.getProperty(key).equals(value)) {
             return false;
@@ -85,7 +85,10 @@ public class PropertiesManager {
         return true;
     }
 
-    //Saves properties to file
+    /**
+     * Saves properties to file
+     * @throws PropertiesManagerException error while writing properties to file
+     */
     private static void saveToFile() throws PropertiesManagerException {
         try (FileWriter out = new FileWriter(propertiesFile)) {
             prop.store(out,"List of desktop client properties");
