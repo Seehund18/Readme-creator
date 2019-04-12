@@ -6,8 +6,6 @@ import java.net.URL;
 
 /**
  * Interface for web services in this program.
- * For now, classes which extends this abstract class,
- * must be able to sendGetRequests (sendGetRequest() method)
  */
 public abstract class WebServiceConnector {
     //URL of web service
@@ -27,6 +25,7 @@ public abstract class WebServiceConnector {
      * Defines when this web service is available. For this, sending 'GET' request
      * directly to service URL
      * @return true - service is available and false otherwise
+     * @throws WebServiceConnectorException problems with sending request
      */
     public boolean isServiceAvailable() throws WebServiceConnectorException {
         return sendGetRequest("") != -1;
@@ -36,6 +35,7 @@ public abstract class WebServiceConnector {
      * Method for sending 'GET' requests to web service
      * @param getMapping mapping for 'GET' request
      * @return response code or -1 if connection to server was refused
+     * @throws WebServiceConnectorException problems with sending request
      */
     public abstract int sendGetRequest(String getMapping) throws WebServiceConnectorException;
 }

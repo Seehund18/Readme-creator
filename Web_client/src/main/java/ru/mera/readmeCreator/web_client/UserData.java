@@ -17,15 +17,19 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-
+/**
+ * Holds all of the data, entered by user
+ */
 @ManagedBean(eager = true)
 @SessionScoped
 public class UserData implements Serializable {
-    private static final long serialVersionUID = 1L;
     private final Logger log = LoggerFactory.getLogger(UserData.class);
 
     private String url;
 
+    /**
+     * After constructing of this object, sets url field to value from URL cookie
+     */
     @PostConstruct
     private void init() {
         url = CookieHelper.getCookieValue("URL");

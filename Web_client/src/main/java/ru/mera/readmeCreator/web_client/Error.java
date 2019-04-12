@@ -11,10 +11,12 @@ package ru.mera.readmeCreator.web_client;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
+/**
+ * Holds error message, which error.xhtml page shows
+ */
 @ManagedBean
 @SessionScoped
 public class Error {
-
     private String message;
 
     public String getMessage() {

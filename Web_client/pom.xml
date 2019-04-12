@@ -49,7 +49,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+        <!--Servlet API for cookies -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>

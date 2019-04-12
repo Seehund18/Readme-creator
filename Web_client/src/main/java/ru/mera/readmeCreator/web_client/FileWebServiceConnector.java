@@ -11,6 +11,11 @@ import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * Implementation of WebService Connector.
+ * Represents connection to file generator service.
+ * It's responsible for sending Http requests to web service, establishing connection with it.
+ **/
 @ManagedBean(eager = true)
 @SessionScoped
 public class FileWebServiceConnector extends WebServiceConnector implements Serializable {
@@ -18,7 +23,6 @@ public class FileWebServiceConnector extends WebServiceConnector implements Seri
 
     @Override
     public int sendGetRequest(String getMapping) throws WebServiceConnectorException {
-        //Constructing full URL to which 'GET' request will be sent
         URL fullURL;
         try {
             fullURL = new URL(webService.toString() + getMapping);
@@ -36,15 +40,16 @@ public class FileWebServiceConnector extends WebServiceConnector implements Seri
             try {
                 responseCode = connection.getResponseCode();
             } catch (ConnectException ex) {
-                log.info("ConnectException was caught\n");
+                //Service refused connection
+                connection.disconnect();
+                log.debug("ConnectException was caught\n");
                 return -1;
             }
             log.info("Response code: {}", responseCode);
             return responseCode;
         } catch (IOException ex) {
-            throw new WebServiceConnectorException("There is a problem with connection to the server", ex);
-        } finally {
             connection.disconnect();
+            throw new WebServiceConnectorException("There is a problem with connection to the server", ex);
         }
     }
 }

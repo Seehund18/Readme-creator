@@ -13,23 +13,37 @@ import javax.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class which simplify working with cookies in the program
+ */
 public class CookieHelper {
 
-    public static void addCookie(String key, String value) {
+    /**
+     * Adds permanent cookies.
+     * @param key name of the cookie
+     * @param cookieValue cookie value
+     * @param maxAge time in seconds how long cookie will live
+     */
+    public static void addPermanentCookie(String key, String cookieValue, int maxAge) {
         Map<String, Object> properties = new HashMap<>();
-        properties.put("maxAge", 31536000);
+        properties.put("maxAge", maxAge);
         properties.put("secure", false);
         properties.put("path","/");
         FacesContext.getCurrentInstance()
                 .getExternalContext()
-                .addResponseCookie(key,value,properties);
+                .addResponseCookie(key, cookieValue, properties);
     }
 
-    public static String getCookieValue(String key) {
+    /**
+     * Gets cookies
+     * @param cookieKey name of the cookie
+     * @return value of the cookie or empty string if there is no such cookie
+     */
+    public static String getCookieValue(String cookieKey) {
         Map<String, Object> cookies = FacesContext.getCurrentInstance()
                 .getExternalContext()
                 .getRequestCookieMap();
-        Cookie cookie = (Cookie) cookies.get(key);
+        Cookie cookie = (Cookie) cookies.get(cookieKey);
         if (cookie == null) {
             return "";
         }

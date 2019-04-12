@@ -52,10 +52,14 @@ public class MainController implements Serializable {
      */
     public void getHelloFile() throws IOException, WebServiceConnectorException {
         log.info("User pushed the button\n");
+
+        //Getting url from the field and setting web service
         String url = userData.getUrl();
         connector.setWebService(url);
+
         if(connector.isServiceAvailable()) {
-            CookieHelper.addCookie("URL", url);
+            //Adding cookie which lives for 2 days
+            CookieHelper.addPermanentCookie("URL", url, 172_800);
             log.info("Service is available. Redirecting user...\n");
             FacesContext.getCurrentInstance().getExternalContext().redirect(url + "/files/Hello_world.rtf");
             log.info("User was redirected\n");
