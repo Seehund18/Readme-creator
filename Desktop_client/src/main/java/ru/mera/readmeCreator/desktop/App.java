@@ -52,7 +52,9 @@ public class App extends Application {
     private FileWebServiceConnector fileWebServiceConnector;
     private final Logger log = LoggerFactory.getLogger(App.class);
 
-    //Initialization of propertiesManager
+    /**
+     * Initialization of propertiesManager
+     */
     private void propertiesInit() {
         try {
             PropertiesManager.init();
@@ -64,7 +66,9 @@ public class App extends Application {
         }
     }
 
-    //Initialization of UI elements. Sets basic text, size, font and configuration
+    /**
+     * Initialization of UI elements. Sets basic text, size, font and configuration
+     */
     private void uiElementsInit() {
         webServiceText.setFont(new Font(14));
         webServiceText.setPrefWidth(350);
@@ -119,7 +123,9 @@ public class App extends Application {
         setStageAtCenter(stage);
     }
 
-    //ValidateChangeListener for webServiceUrlField
+    /**
+     * Listener for webServiceUrlField
+     */
     private class UrlStatusListener implements ValidatedChangeListener {
         @Override
         public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -149,7 +155,9 @@ public class App extends Application {
         }
     }
 
-    //Handler for generateButton
+    /**
+     * Handler for generateButton
+     */
     private class GenerateButtonHandler implements EventHandler<ActionEvent> {
         private Stage stage;
 
@@ -159,35 +167,15 @@ public class App extends Application {
 
         @Override
         public void handle(ActionEvent event) {
-            //Taking value from the field
-            String serviceURL = webServiceUrlField.getText();
             //Checking flag
             if (!isUrlValid) {
                 showAlert("URL is not valid", Alert.AlertType.ERROR);
                 return;
             }
 
-            //If fileWebServiceConnector is not instantiated yet, creating new Connector
-            //otherwise setting URL in existed Connector
-            try {
-                if (fileWebServiceConnector == null) {
-                    fileWebServiceConnector = new FileWebServiceConnector(new URL(serviceURL));
-                } else {
-                    fileWebServiceConnector.setWebService(serviceURL);
-                }
-            } catch (MalformedURLException ex) {
-                log.error("Can't create URL of web service", ex);
-                showAlert("Can't create URL of web service", Alert.AlertType.ERROR);
-            }
-
-            try {
-                if (!fileWebServiceConnector.isServiceAvailable()) {
-                    showAlert("Service is unavailable right now. Try again later", Alert.AlertType.WARNING);
-                    return;
-                }
-            } catch (WebServiceConnectorException e) {
-                log.error(e.getMessage(), e);
-                showAlert(e.getMessage(), Alert.AlertType.ERROR);
+            String serviceURL = webServiceUrlField.getText();
+            if (!settingConnector(serviceURL) || !checkingWebService()) {
+                return;
             }
 
             //Invoking 'save as' dialog and choosing place to save file
@@ -201,7 +189,7 @@ public class App extends Application {
                     showAlert("Your file has been downloaded", Alert.AlertType.INFORMATION);
                     log.info("File has been downloaded");
 
-                    //If download was successful, changing default value of webServiceURL
+                    //If download was successful, changing default value of webServiceURL in property file
                     PropertiesManager.setPropertyValue("webServiceURL", serviceURL);
                 } catch (PropertiesManagerException | WebServiceConnectorException ex) {
                     showAlert(ex.getMessage(), Alert.AlertType.ERROR);
@@ -212,15 +200,62 @@ public class App extends Application {
                 log.info("File downloading was canceled by user");
             }
         }
+
+        /**
+         * Sets connector. If fileWebServiceConnector is not instantiated yet,
+         * creating new Connector otherwise setting URL in existed Connector
+         * @param serviceURL url of web service
+         * @return true if everything is alright and false if there was an exception
+         */
+        private boolean settingConnector(String serviceURL) {
+            try {
+                if (fileWebServiceConnector == null) {
+                    fileWebServiceConnector = new FileWebServiceConnector(new URL(serviceURL));
+                } else {
+                    fileWebServiceConnector.setWebService(serviceURL);
+                }
+                return true;
+            } catch (MalformedURLException ex) {
+                log.error("Can't create URL of web service", ex);
+                showAlert("Can't create URL of web service", Alert.AlertType.ERROR);
+                return false;
+            }
+        }
+
+        /**
+         * Checks webService availability
+         * @return true if service is available and false otherwise
+         */
+        private boolean checkingWebService() {
+            try {
+                if (fileWebServiceConnector.isServiceAvailable()) {
+                    return true;
+                } else {
+                    showAlert("This service is unavailable. Try again later", Alert.AlertType.WARNING);
+                    return false;
+                }
+            } catch (WebServiceConnectorException e) {
+                log.error(e.getMessage(), e);
+                showAlert(e.getMessage(), Alert.AlertType.ERROR);
+                return false;
+            }
+        }
     }
 
-    //Creates and shows alert to user
+    /**
+     * Creates and shows alert to user
+     * @param text text to show
+     * @param type type of alert
+     */
     private void showAlert(String text, Alert.AlertType type) {
         Alert alert = new Alert(type, text, ButtonType.OK);
         alert.showAndWait();
     }
 
-    //Sets stage at the screen center. Method stage.centerOnScreen() doesn't seem to work properly
+    /**
+     * Sets stage at the screen center. Method stage.centerOnScreen() doesn't seem to work properly
+     * @param stage stage which needed to be centered
+     */
     private void setStageAtCenter(Stage stage) {
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
