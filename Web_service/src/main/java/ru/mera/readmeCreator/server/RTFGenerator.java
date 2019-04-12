@@ -19,21 +19,23 @@ public class RTFGenerator implements FileGenerator {
         File filesDirectory = new File("files");
         filesDirectory.mkdir();
 
-        //Searching for file
         if(name.equals("Hello_world.rtf")) {
             return generateHelloWorldFile();
         }
 
-        //File wasn't found
         throw new NoSuchFileException("Server isn't generates this kind of file " + name);
     }
 
-    //Generates "Hello world" file
+    /**
+     * Generates "Hello world" file
+     * @return generated file
+     * @throws IOException problems with writing to file
+     */
     private File generateHelloWorldFile() throws IOException {
         File helloWorldFile = new File("files/Hello_world.rtf");
 
         if(!helloWorldFile.exists()) {
-            log.debug("Prints into {} file", helloWorldFile);
+            log.info("Printing into {} file", helloWorldFile);
             printer.printHelloWorld(helloWorldFile);
         }
         return helloWorldFile;

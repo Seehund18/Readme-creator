@@ -10,7 +10,7 @@ import java.nio.file.NoSuchFileException;
 public interface FileGenerator {
 
     /**
-     * Generates file
+     * Generates file if it's possible
      * @param name file name
      * @return generated file
      * @throws NoSuchFileException generator isn't creates such file
