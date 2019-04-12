@@ -17,11 +17,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Class which represents web service connection in this app.
+ * Implementation of WebService Connector.
+ * Represents connection to file generator service.
  * It's responsible for sending Http requests to web service, establishing connection with it.
- * User of the class can communicate with web service via provided public methods.
- * Sending of various Http requests is hidden from the user.
- * To call this class's constructor user must firstly verify passed webServiceUrl.
  **/
 public class FileWebServiceConnector extends WebServiceConnector {
     private final Logger log = LoggerFactory.getLogger(FileWebServiceConnector.class);
@@ -49,13 +47,12 @@ public class FileWebServiceConnector extends WebServiceConnector {
         }
 
         //If response code is ok, reading response and closing connection
-        readResponse(saveToFile);
+        readResponseToFile(saveToFile);
         connection.disconnect();
     }
 
     @Override
     protected int sendGetRequest(String mapping) throws WebServiceConnectorException {
-        //Constructing full URL to which 'GET' request will be sent
         URL fullURL;
         try {
             fullURL = new URL(webService.toString() + mapping);
@@ -64,16 +61,16 @@ public class FileWebServiceConnector extends WebServiceConnector {
         }
 
         try {
+            log.info("Sending 'GET' request to URL: {}", fullURL);
             connection = (HttpURLConnection) fullURL.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", "desktop");
 
-            log.info("Sending 'GET' request to URL: {}", fullURL);
             int responseCode;
             try {
                 responseCode = connection.getResponseCode();
             } catch (ConnectException ex) {
-                log.info("ConnectException was caught");
+                log.debug("ConnectException was caught");
                 return -1;
             }
             log.info("Response code: {}", responseCode);
@@ -84,11 +81,15 @@ public class FileWebServiceConnector extends WebServiceConnector {
         }
     }
 
-    //Reads response from service
-    private void readResponse(File helloWorldFile) throws WebServiceConnectorException {
+    /**
+     * Reads response from service
+     * @param saveToFile file to which save the response
+     * @throws WebServiceConnectorException problem with reading the response
+     */
+    private void readResponseToFile(File saveToFile) throws WebServiceConnectorException {
         String inputLine;
         try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-             FileWriter out = new FileWriter(helloWorldFile)) {
+             FileWriter out = new FileWriter(saveToFile)) {
 
             inputLine = in.readLine();
             while (inputLine != null) {
