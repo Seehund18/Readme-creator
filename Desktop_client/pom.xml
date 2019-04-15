@@ -29,7 +29,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ru.mera.readmeCreator.desktop.App</mainClass>
+                            <mainClass>ru.mera.readmeCreator.desktop.UI.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -47,6 +47,13 @@
     </build>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.8</version>
+        </dependency>
+
         <!--JavaFX-->
         <dependency>
             <groupId>org.openjfx</groupId>

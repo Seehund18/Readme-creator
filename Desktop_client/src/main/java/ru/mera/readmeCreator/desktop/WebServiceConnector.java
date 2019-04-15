@@ -46,4 +46,9 @@ public abstract class WebServiceConnector {
      * @throws WebServiceConnectorException problems with sending request
      */
     protected abstract int sendGetRequest(String getMapping) throws WebServiceConnectorException;
+
+    /**
+     * Method for sending 'POST' requests to web service
+     */
+    protected abstract int sendPostRequest(String postMapping, String info) throws WebServiceConnectorException;
 }

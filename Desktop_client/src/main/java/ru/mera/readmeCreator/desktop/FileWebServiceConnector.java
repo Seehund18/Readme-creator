@@ -15,6 +15,8 @@ import java.io.*;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Implementation of WebService Connector.
@@ -28,7 +30,7 @@ public class FileWebServiceConnector extends WebServiceConnector {
      * Constructs new FileWebServiceConnector. It is assumed that webServiceUrl is correct URL
      * @param webServiceUrl correct web service url
      */
-    FileWebServiceConnector(URL webServiceUrl) {
+    public FileWebServiceConnector(URL webServiceUrl) {
         this.webService = webServiceUrl;
     }
 
@@ -51,11 +53,31 @@ public class FileWebServiceConnector extends WebServiceConnector {
         connection.disconnect();
     }
 
+    /**
+     * Gets file from web service
+     * @param mapping service mapping for 'GET' request
+     * @param saveToFile local file in which the file from the service is saved
+     * @throws WebServiceConnectorException some exceptions occurred during downloading of the file
+     */
+    public void downloadFile(String mapping, String info, File saveToFile) throws WebServiceConnectorException {
+        //Sending and reading response code and validating it
+        int responseCode = sendPostRequest(mapping, info);
+        log.info("Response code from the server: {}", responseCode);
+        if (responseCode >= 400) {
+            throw new WebServiceConnectorException("Bad response code: " + responseCode);
+        }
+
+        //If response code is ok, reading response and closing connection
+        readResponseToFile(saveToFile);
+        connection.disconnect();
+    }
+
+
     @Override
-    protected int sendGetRequest(String mapping) throws WebServiceConnectorException {
+    protected int sendGetRequest(String getMapping) throws WebServiceConnectorException {
         URL fullURL;
         try {
-            fullURL = new URL(webService.toString() + mapping);
+            fullURL = new URL(webService.toString() + getMapping);
         } catch (IOException ex) {
             throw new WebServiceConnectorException("Can't generate full URL", ex);
         }
@@ -65,6 +87,45 @@ public class FileWebServiceConnector extends WebServiceConnector {
             connection = (HttpURLConnection) fullURL.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", "desktop");
+
+            int responseCode;
+            try {
+                responseCode = connection.getResponseCode();
+            } catch (ConnectException ex) {
+                connection.disconnect();
+                log.debug("ConnectException was caught");
+                return -1;
+            }
+            log.info("Response code: {}", responseCode);
+            return responseCode;
+        } catch (IOException ex) {
+            connection.disconnect();
+            throw new WebServiceConnectorException("There is a problem with connection to the server", ex);
+        }
+    }
+
+    @Override
+    protected int sendPostRequest(String postMapping, String info) throws WebServiceConnectorException {
+        URL fullURL;
+        try {
+            fullURL = new URL(webService.toString() + postMapping);
+        } catch (IOException ex) {
+            throw new WebServiceConnectorException("Can't generate full URL", ex);
+        }
+
+        byte[] out = info.getBytes(StandardCharsets.UTF_8);
+        try {
+            log.info("Sending 'POST' request to URL: {}", fullURL);
+
+            connection = (HttpURLConnection) fullURL.openConnection();
+            connection.setDoOutput(true);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("User-Agent", "desktop");
+            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            connection.setFixedLengthStreamingMode(out.length);
+            try(OutputStream os = connection.getOutputStream()) {
+                os.write(out);
+            }
 
             int responseCode;
             try {
