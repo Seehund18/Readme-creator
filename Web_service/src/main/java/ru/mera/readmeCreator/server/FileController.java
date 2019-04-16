@@ -17,6 +17,9 @@ import java.io.IOException;
 public class FileController {
     private final Logger log = LoggerFactory.getLogger(FileController.class);
 
+    /**
+     * Injected file generator
+     */
     @Autowired
     private final FileGenerator fileGenerator;
 
@@ -25,13 +28,14 @@ public class FileController {
     }
 
     /**
-     * Handler method for file download requests
+     * Handler method for 'GET' file download requests
      * @param name file name
      * @return http response with file
      */
     @GetMapping("/files/{name}")
     public ResponseEntity<FileSystemResource> sendDocument(@PathVariable String name) {
         log.info("Received 'GET' request to generate {} file", name);
+
         File document;
         try {
             //Trying to generate file with given name
@@ -53,25 +57,25 @@ public class FileController {
     }
 
     /**
-     * Handler method for file download requests
-//     * @param name file name
+     * Handler method for 'POST' file download requests
+     * @param name file name
      * @return http response with file
      */
-    @PostMapping("/files/Readme.rtf")
-    public ResponseEntity<FileSystemResource> sendDocument(@RequestBody UserData userData) {
+    @PostMapping("/files/{name}")
+    public ResponseEntity<FileSystemResource> sendDocument(@PathVariable String name, @RequestBody UserData userData) {
+        log.info("Received 'POST' request to generate {} file", name);
+        log.info("Received data:\n{}", userData);
 
-        log.info("Received 'POST' request to generate Readme file");
-        log.info(userData.getInfo());
         File document;
         try {
             //Trying to generate file with given name
-            document = fileGenerator.generate("Readme.rtf");
+            document = fileGenerator.generate(name, userData.getInfo());
         } catch (IOException ex) {
             //If some problems occurred, GeneratorException is thrown
             //which will be caught and handled by GeneratorExceptionAdvice
             throw new GeneratorException(ex.getMessage(), ex);
         }
-        log.info("Document Readme.rtf was generated. Sending to client");
+        log.info("Document {} was generated. Sending to client", name);
 
         //Setting Http response headers
         HttpHeaders responseHeader = new HttpHeaders();

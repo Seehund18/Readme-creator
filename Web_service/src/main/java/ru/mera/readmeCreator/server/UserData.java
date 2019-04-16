@@ -10,7 +10,9 @@ package ru.mera.readmeCreator.server;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 
-
+/**
+ * Entity which represents data entered by user.
+ */
 public class UserData {
 
     private String info;
@@ -26,5 +28,10 @@ public class UserData {
     @JsonCreator
     public UserData(String info) {
         this.info = info;
+    }
+
+    @Override
+    public String toString() {
+        return "Info: " + info;
     }
 }

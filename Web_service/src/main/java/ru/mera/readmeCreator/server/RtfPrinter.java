@@ -16,7 +16,7 @@ import static com.tutego.jrtf.Rtf.rtf;
 import static com.tutego.jrtf.RtfPara.p;
 
 /**
- * Class encapsulates third party library, which prints in .rtf format
+ * Class encapsulates third party Jrtf library, which prints in .rtf format
  */
 public class RtfPrinter {
 
@@ -27,8 +27,20 @@ public class RtfPrinter {
      */
     void printHelloWorld(File helloWorld) throws IOException {
         try (FileWriter out = new FileWriter(helloWorld)) {
-            rtf()
-                    .section(p("Hello World!").alignCentered())
+            rtf().section(p("Hello World!").alignCentered())
+                    .out(out);
+        }
+    }
+
+    /**
+     * Prints user information to file
+     * @param userDataFile file to which print
+     * @param info information, entered by user
+     * @throws IOException problem with writing to file
+     */
+    void printUserData(File userDataFile, String info) throws IOException {
+        try (FileWriter out = new FileWriter(userDataFile)) {
+            rtf().section(p(info).alignCentered())
                     .out(out);
         }
     }
