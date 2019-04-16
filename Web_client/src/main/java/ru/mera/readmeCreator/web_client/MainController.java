@@ -9,6 +9,7 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.io.Serializable;
+import java.net.MalformedURLException;
 
 /**
  * Controller of this app
@@ -68,5 +69,16 @@ public class MainController implements Serializable {
             error.setMessage("Service is unavailable. Try again later");
             FacesContext.getCurrentInstance().getExternalContext().dispatch("error.xhtml");
         }
+    }
+
+    public void getUserDataFile() throws IOException, WebServiceConnectorException {
+        log.info("User sending info to service ");
+
+        //Getting url from the field and setting web service
+        String url = userData.getUrl();
+        connector.setWebService(url);
+
+        log.info("Enetered value: {}", userData.getText());
+
     }
 }

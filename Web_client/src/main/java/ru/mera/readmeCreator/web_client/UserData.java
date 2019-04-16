@@ -25,15 +25,15 @@ import javax.faces.bean.SessionScoped;
 public class UserData implements Serializable {
     private final Logger log = LoggerFactory.getLogger(UserData.class);
 
+    /**
+     * Url entered in webServiceURL
+     */
     private String url;
 
     /**
-     * After constructing of this object, sets url field to value from URL cookie
+     * Text entered in the userText area
      */
-    @PostConstruct
-    private void init() {
-        url = CookieHelper.getCookieValue("URL");
-    }
+    private String text;
 
     public String getUrl() {
         return url;
@@ -43,4 +43,22 @@ public class UserData implements Serializable {
         log.info("Setting url in UserData to {}\n", url);
         this.url = url;
     }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    /**
+     * After constructing of this object, sets url field to value from URL cookie
+     */
+    @PostConstruct
+    private void init() {
+        url = CookieHelper.getCookieValue("URL");
+    }
+
+
 }

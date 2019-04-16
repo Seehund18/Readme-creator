@@ -25,7 +25,7 @@ import javax.faces.validator.ValidatorException;
  * For example: http://myService.ru is correct (2 slashes); http://myService.ru/files/HelloWorld.rtf is wrong (4 slashes)
  * Also using UrlValidator class from apache.commons library to check the url
  */
-@FacesValidator("WebServiceUrlValidator")
+@FacesValidator("webServiceUrlValidator")
 public class WebServiceUrlValidator implements Validator {
     //from apache.commons library
     UrlValidator webServiceUrlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);

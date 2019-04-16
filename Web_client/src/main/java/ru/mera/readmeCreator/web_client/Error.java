@@ -10,13 +10,14 @@ package ru.mera.readmeCreator.web_client;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
 
 /**
  * Holds error message, which error.xhtml page shows
  */
 @ManagedBean
 @SessionScoped
-public class Error {
+public class Error implements Serializable {
     private String message;
 
     public String getMessage() {
