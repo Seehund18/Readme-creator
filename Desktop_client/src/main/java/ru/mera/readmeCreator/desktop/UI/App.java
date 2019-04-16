@@ -60,6 +60,9 @@ public class App extends Application implements AlertSender {
         }
     }
 
+    /**
+     * Entry point of JavaFX application
+     */
     @Override
     public void start(Stage stage) {
         propertiesInit();
