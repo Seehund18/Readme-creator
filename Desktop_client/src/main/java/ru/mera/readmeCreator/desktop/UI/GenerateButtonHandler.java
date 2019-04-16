@@ -63,7 +63,6 @@ class GenerateButtonHandler implements EventHandler<ActionEvent>, AlertSender {
         if (helloWorldFile != null) {
             //User decided there to save file
             try {
-
                 //Trying to download file
                 App.getFileWebServiceConnector().downloadFile("/files/Hello_world.rtf", helloWorldFile);
                 sendAlert("Your file has been downloaded", Alert.AlertType.INFORMATION);
