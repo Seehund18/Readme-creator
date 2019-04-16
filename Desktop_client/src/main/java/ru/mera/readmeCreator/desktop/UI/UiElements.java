@@ -25,18 +25,22 @@ import java.io.File;
 /**
  * Ui elements of the app's main window
  */
-public class UiElements {
+class UiElements {
     static Label webServiceLabel = new Label("Please, enter a web service URI.\n"
             + "Examples: http://localhost:8080, http://myService.com");
-    static TextField webServiceUrlField = new TextField();
+    static TextField webServiceUrl = new TextField();
     static Text urlStatus = new Text();
+
     static Label helloLabel = new Label("Press to generate Hello World.rtf file:");
     static Button generateButton = new Button("Generate HelloWorld file");
+
     static Label textToFileLabel = new Label("Enter text which will be written to file:");
-    static TextArea textToFile = new TextArea();
+    static TextArea userInput = new TextArea();
     static Button submitButton = new Button("Submit");
+
     static FileChooser saveAs = new FileChooser();
     static Line[] separatLines = new Line[2];
+
     static {
         for (int i = 0; i < separatLines.length; i++) {
             separatLines[i] = new Line();
@@ -44,19 +48,19 @@ public class UiElements {
     }
 
     /**
-     * Initialization of UI elements. Sets basic text, size, font and configuration
+     * Configuration of the UI elements. Sets basic text, size, font and configuration
      */
     static void config() {
         webServiceLabel.setFont(new Font(14));
         webServiceLabel.setPrefWidth(350);
         webServiceLabel.setTextAlignment(TextAlignment.CENTER);
         webServiceLabel.setWrapText(true);
-        webServiceLabel.setLabelFor(webServiceUrlField);
+        webServiceLabel.setLabelFor(webServiceUrl);
 
-        webServiceUrlField.setFont(new Font(13));
-        webServiceUrlField.setPromptText("Enter URI of web service...");
-        webServiceUrlField.setText(PropertiesManager.getPropertyValue("webServiceURL"));
-        webServiceUrlField.setMaxSize(200,10);
+        webServiceUrl.setFont(new Font(13));
+        webServiceUrl.setPromptText("Enter URI of web service...");
+        webServiceUrl.setText(PropertiesManager.getPropertyValue("webServiceURL"));
+        webServiceUrl.setMaxSize(200,10);
 
         urlStatus.setText("Valid URL");
         urlStatus.setFill(Color.GREEN);
@@ -66,13 +70,12 @@ public class UiElements {
         textToFileLabel.setFont(new Font(14));
         textToFileLabel.setTextAlignment(TextAlignment.CENTER);
         textToFileLabel.setWrapText(true);
-        textToFileLabel.setLabelFor(textToFile);
+        textToFileLabel.setLabelFor(userInput);
 
-        textToFile.setMaxSize(400, 100);
-        textToFile.setWrapText(true);
+        userInput.setMaxSize(400, 100);
+        userInput.setWrapText(true);
 
         saveAs.setTitle("Save file as");
-        saveAs.setInitialFileName("Hello World.rtf");
         saveAs.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("RTF", "*.rtf")
         );

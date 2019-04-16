@@ -10,18 +10,18 @@ package ru.mera.readmeCreator.desktop;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.mera.readmeCreator.desktop.interfaces.WebServiceConnector;
 
 import java.io.*;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Implementation of WebService Connector.
+ * Implementation of WebServiceConnector.
  * Represents connection to file generator service.
- * It's responsible for sending Http requests to web service, establishing connection with it.
+ * It's responsible for sending Http requests to web service, establishing connection with it and reading responses.
  **/
 public class FileWebServiceConnector extends WebServiceConnector {
     private final Logger log = LoggerFactory.getLogger(FileWebServiceConnector.class);
@@ -54,8 +54,8 @@ public class FileWebServiceConnector extends WebServiceConnector {
     }
 
     /**
-     * Gets file from web service
-     * @param mapping service mapping for 'GET' request
+     * Sends info to the web service and downloads generated file from it
+     * @param mapping service mapping for 'POST' request
      * @param saveToFile local file in which the file from the service is saved
      * @throws WebServiceConnectorException some exceptions occurred during downloading of the file
      */
@@ -72,9 +72,9 @@ public class FileWebServiceConnector extends WebServiceConnector {
         connection.disconnect();
     }
 
-
     @Override
     protected int sendGetRequest(String getMapping) throws WebServiceConnectorException {
+        //Constructing full URL from webService url and mapping
         URL fullURL;
         try {
             fullURL = new URL(webService.toString() + getMapping);
@@ -84,10 +84,13 @@ public class FileWebServiceConnector extends WebServiceConnector {
 
         try {
             log.info("Sending 'GET' request to URL: {}", fullURL);
+
+            //Setting request headers
             connection = (HttpURLConnection) fullURL.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", "desktop");
 
+            //Trying to read response
             int responseCode;
             try {
                 responseCode = connection.getResponseCode();
@@ -96,7 +99,6 @@ public class FileWebServiceConnector extends WebServiceConnector {
                 log.debug("ConnectException was caught");
                 return -1;
             }
-            log.info("Response code: {}", responseCode);
             return responseCode;
         } catch (IOException ex) {
             connection.disconnect();
@@ -106,6 +108,7 @@ public class FileWebServiceConnector extends WebServiceConnector {
 
     @Override
     protected int sendPostRequest(String postMapping, String info) throws WebServiceConnectorException {
+        //Constructing full URL from webService url and mapping
         URL fullURL;
         try {
             fullURL = new URL(webService.toString() + postMapping);
@@ -113,20 +116,24 @@ public class FileWebServiceConnector extends WebServiceConnector {
             throw new WebServiceConnectorException("Can't generate full URL", ex);
         }
 
-        byte[] out = info.getBytes(StandardCharsets.UTF_8);
+        byte[] byteInfo = info.getBytes(StandardCharsets.UTF_8);
         try {
             log.info("Sending 'POST' request to URL: {}", fullURL);
 
+            //Setting request headers
             connection = (HttpURLConnection) fullURL.openConnection();
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
             connection.setRequestProperty("User-Agent", "desktop");
             connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            connection.setFixedLengthStreamingMode(out.length);
-            try(OutputStream os = connection.getOutputStream()) {
-                os.write(out);
+            connection.setFixedLengthStreamingMode(byteInfo.length);
+
+            //Sending info
+            try (OutputStream os = connection.getOutputStream()) {
+                os.write(byteInfo);
             }
 
+            //Trying to read response
             int responseCode;
             try {
                 responseCode = connection.getResponseCode();
@@ -135,7 +142,6 @@ public class FileWebServiceConnector extends WebServiceConnector {
                 log.debug("ConnectException was caught");
                 return -1;
             }
-            log.info("Response code: {}", responseCode);
             return responseCode;
         } catch (IOException ex) {
             connection.disconnect();

@@ -8,8 +8,6 @@
 
 package ru.mera.readmeCreator.desktop.UI;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
@@ -17,15 +15,21 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.mera.readmeCreator.desktop.*;
+import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
 
-import javax.jws.soap.SOAPBinding;
 import java.io.File;
 import java.net.MalformedURLException;
 
-import static ru.mera.readmeCreator.desktop.UI.UiElements.*;
+import static ru.mera.readmeCreator.desktop.UI.UiElements.userInput;
+import static ru.mera.readmeCreator.desktop.UI.UiElements.webServiceUrl;
+import static ru.mera.readmeCreator.desktop.UI.UiElements.saveAs;
 
-public class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
+/**
+ * Handler for "Submit" button
+ */
+class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
     private Stage stage;
+    private UserInputValidator userInputValidator = new UserInputValidator();
     private static Logger log = LoggerFactory.getLogger(SubmitButtonHandler.class);
 
     SubmitButtonHandler(Stage stage) {
@@ -34,41 +38,44 @@ public class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSend
 
     @Override
     public void handle(ActionEvent event) {
-        log.info("{\"info\":\"" + textToFile.getText()+"\"}");
-        //TODO можно как-то убрать повторяющиеся блоки
+        //Validating userInput
+        String userInputText = userInput.getText();
+        if (!userInputValidator.isValid(userInputText)) {
+            sendAlert("Please, enter at least one symbol", Alert.AlertType.WARNING);
+            log.info("User entered not enough symbols");
+            return;
+        }
+
         //Checking flag
         if (!UrlStatusListener.isUrlValid()) {
             sendAlert("URL is not valid", Alert.AlertType.ERROR);
             return;
         }
 
-        String serviceURL = webServiceUrlField.getText();
+        //Setting and checking web service url
+        String serviceURL = webServiceUrl.getText();
         try {
             App.settingConnector(serviceURL);
-            if (!App.checkingWebService()) {
-                sendAlert("Service is unavailable right now. Try again later", Alert.AlertType.WARNING);
-                return;
-            }
-        } catch (MalformedURLException ex) {
-            log.error("Can't create URL of web service", ex);
-            sendAlert("Can't create URL of web service", Alert.AlertType.ERROR);
-        } catch (WebServiceConnectorException ex) {
-            log.error(ex.getMessage(), ex);
-            sendAlert(ex.getMessage(), Alert.AlertType.ERROR);
+        } catch (MalformedURLException e) {
+            sendAlert("Can't create web service url", Alert.AlertType.ERROR);
+            log.error("Can't create web service url", e);
+            return;
+        }
+        if (!App.checkingWebService()) {
+            sendAlert("Service is unavailable right now. Try again later", Alert.AlertType.WARNING);
+            return;
         }
 
         //Invoking 'save as' dialog and choosing place to save file
-        File dummyFile = saveAs.showSaveDialog(stage);
+        saveAs.setInitialFileName("User_data.rtf");
+        File userDataFile = saveAs.showSaveDialog(stage);
 
-        //If user choose where to save file, then try to download file from service
-        if (dummyFile != null) {
+        if (userDataFile != null) {
+            //User decided there to save file
             try {
                 //Trying to download file
-                ObjectMapper mapper = new ObjectMapper();
-                UserData userData = new UserData(textToFile.getText());
-                String jsonString = mapper.writeValueAsString(userData);
-                log.info(jsonString);
-                App.getFileWebServiceConnector().downloadFile("/files/Readme.rtf", jsonString, dummyFile);
+                UserData userData = new UserData(userInputText);
+                App.getFileWebServiceConnector().downloadFile("/files/User_data.rtf", userData.toString(), userDataFile);
                 sendAlert("Your file has been downloaded", Alert.AlertType.INFORMATION);
                 log.info("File has been downloaded");
 
@@ -77,14 +84,10 @@ public class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSend
             } catch (PropertiesManagerException | WebServiceConnectorException ex) {
                 sendAlert(ex.getMessage(), Alert.AlertType.ERROR);
                 log.error(ex.getMessage(), ex);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
             }
         } else {
             //User canceled 'save as' dialog
             log.info("File downloading was canceled by user");
         }
-
-
     }
 }

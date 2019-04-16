@@ -6,13 +6,13 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop;
+package ru.mera.readmeCreator.desktop.interfaces;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 /**
- * Indicates that class that implements this interface is able to send alerts to user
+ * Indicates what class that implements this interface is able to send alerts to user
  */
 public interface AlertSender {
 
@@ -25,5 +25,4 @@ public interface AlertSender {
         Alert alert = new Alert(type, text, ButtonType.OK);
         alert.showAndWait();
     }
-
 }

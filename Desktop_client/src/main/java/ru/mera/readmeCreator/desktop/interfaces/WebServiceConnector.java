@@ -6,19 +6,27 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop;
+package ru.mera.readmeCreator.desktop.interfaces;
+
+import ru.mera.readmeCreator.desktop.WebServiceConnectorException;
 
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * Interface for web services in this program.
+ * Interface for web services connector in this program.
  */
 public abstract class WebServiceConnector {
-    //URL of web service
+
+    /**
+     * URL of web service
+     */
     protected URL webService;
-    //Connection to the web service
+
+    /**
+     * Connection to the web service
+     */
     protected HttpURLConnection connection;
 
     public URL getWebService() {
@@ -49,6 +57,10 @@ public abstract class WebServiceConnector {
 
     /**
      * Method for sending 'POST' requests to web service
+     * @param postMapping mapping for 'POST' request
+     * @param info information which must be sent to web service
+     * @return response code or -1 if connection to server was refused
+     * @throws WebServiceConnectorException problems with sending request
      */
     protected abstract int sendPostRequest(String postMapping, String info) throws WebServiceConnectorException;
 }

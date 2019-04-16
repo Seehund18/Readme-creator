@@ -8,18 +8,25 @@
 
 package ru.mera.readmeCreator.desktop.UI;
 
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
-import org.apache.commons.validator.routines.UrlValidator;
-import ru.mera.readmeCreator.desktop.ValidatedChangeListener;
-
 import static ru.mera.readmeCreator.desktop.UI.UiElements.urlStatus;
 
 /**
- * Listener for webServiceUrlField
+ * Listener for webServiceUrl field
  */
-class UrlStatusListener implements ValidatedChangeListener {
+class UrlStatusListener implements ChangeListener<String> {
+
+    /**
+     * Shows is url in webServiceUrl field valid
+     */
     private static boolean isUrlValid;
+
+    /**
+     * Validator for the webServiceUrl field
+     */
+    private UrlFieldValidator urlFieldValidator = new UrlFieldValidator();
 
     static boolean isUrlValid() {
         return isUrlValid;
@@ -27,37 +34,16 @@ class UrlStatusListener implements ValidatedChangeListener {
 
     @Override
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        if(isValid(newValue)) {
+        if(urlFieldValidator.isValid(newValue)) {
+            //If validation was passed, "Valid URL" will be shown near the webServiceUrl field
             isUrlValid = true;
             urlStatus.setText("Valid URL");
             urlStatus.setFill(Color.GREEN);
             return;
         }
+        //If not, "Not valid URL" will be shown
         isUrlValid = false;
         urlStatus.setText("Not valid URL");
         urlStatus.setFill(Color.RED);
-    }
-
-    /**
-     * Checking that url is the server url without path to any resource.
-     * For that, using regex pattern, which checks that there are
-     * only two slashes '/' between the beginning and the ending of the string.
-     * For example: http://myService.ru is correct (2 slashes);
-     *              http://myService.ru/files/HelloWorld.rtf is wrong (4 slashes)
-     * @param url
-     * @return
-     */
-    @Override
-    public boolean isValid(String url) {
-        //Checking that url is the server url without path to any resource.
-        //For that, using regex pattern, which checks that between beginning and ending of the string are only 2 slashes '/'.
-        //For example: http://myService.ru is correct (2 slashes); http://myService.ru/files/HelloWorld.rtf is wrong (4 slashes)
-        if(!url.matches("^http://[^/]+$")) {
-            return false;
-        }
-
-        //Using UrlValidator class from apache.commons library to check the url
-        UrlValidator urlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
-        return urlValidator.isValid(url);
     }
 }

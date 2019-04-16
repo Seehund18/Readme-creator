@@ -6,19 +6,18 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop;
+package ru.mera.readmeCreator.desktop.UI;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import ru.mera.readmeCreator.desktop.interfaces.Validator;
 
 /**
- * ChangeListener which adds ability to validate new value.
- * Allows to choose different behavior of listener according to its validation.
+ * Validator for userInput field
  */
-public interface ValidatedChangeListener extends ChangeListener<String> {
+class UserInputValidator implements Validator {
 
     @Override
-    void changed(ObservableValue<? extends String> observable, String oldValue, String newValue);
-
-    boolean isValid(String value);
+    public boolean isValid(String value) {
+        //Value shouldn't be empty
+        return value != null && !value.equals("");
+    }
 }
