@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.server;
+package ru.mera.readmeCreator.service;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 

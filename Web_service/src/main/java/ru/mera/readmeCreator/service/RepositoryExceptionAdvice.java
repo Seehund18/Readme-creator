@@ -1,4 +1,4 @@
-package ru.mera.readmeCreator.server;
+package ru.mera.readmeCreator.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * Handler for GeneratorExceptions
+ * Handler for RepositoryExceptions
  */
 @ControllerAdvice
-public class GeneratorExceptionAdvice {
-    private final Logger log = LoggerFactory.getLogger(GeneratorExceptionAdvice.class);
+public class RepositoryExceptionAdvice {
+    private final Logger log = LoggerFactory.getLogger(RepositoryExceptionAdvice.class);
 
     @ResponseBody
-    @ExceptionHandler(GeneratorException.class)
+    @ExceptionHandler(RepositoryException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    void generatorExceptionHandler(GeneratorException ex) {
-        log.error("Generator exception occurred", ex);
+    void handler(RepositoryException ex) {
+        log.error("Repository exception occurred", ex);
     }
 }

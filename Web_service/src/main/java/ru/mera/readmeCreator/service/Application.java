@@ -1,4 +1,4 @@
-package ru.mera.readmeCreator.server;
+package ru.mera.readmeCreator.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,5 +18,10 @@ public class Application {
     @Bean
     RTFGenerator initRTFGenerator() {
         return new RTFGenerator();
+    }
+
+    @Bean
+    FileRepo initFileRepo() {
+        return new FileRepo(initRTFGenerator());
     }
 }
