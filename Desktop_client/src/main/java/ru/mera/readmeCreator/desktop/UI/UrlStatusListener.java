@@ -17,7 +17,6 @@ import static ru.mera.readmeCreator.desktop.UI.UiElements.urlStatus;
  * Listener for webServiceUrl field
  */
 class UrlStatusListener implements ChangeListener<String> {
-
     /**
      * Shows is url in webServiceUrl field valid
      */

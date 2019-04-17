@@ -12,7 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -61,9 +60,6 @@ class UiElements {
         webServiceUrl.setPromptText("Enter URI of web service...");
         webServiceUrl.setText(PropertiesManager.getPropertyValue("webServiceURL"));
         webServiceUrl.setMaxSize(200,10);
-
-        urlStatus.setText("Valid URL");
-        urlStatus.setFill(Color.GREEN);
 
         helloLabel.setFont(new Font(14));
 
