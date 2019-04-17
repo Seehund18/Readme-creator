@@ -43,7 +43,7 @@ public class FileWebServiceConnector extends WebServiceConnector {
     public void downloadFile(String mapping, File saveToFile) throws WebServiceConnectorException {
         //Sending and reading response code and validating it
         int responseCode = sendGetRequest(mapping);
-        log.info("Response code from the server: {}", responseCode);
+        log.info("Response code from the server after sending 'GET' request: {}", responseCode);
         if (responseCode >= 400) {
             throw new WebServiceConnectorException("Bad response code: " + responseCode);
         }
@@ -60,16 +60,15 @@ public class FileWebServiceConnector extends WebServiceConnector {
      * @throws WebServiceConnectorException some exceptions occurred during downloading of the file
      */
     public void downloadFile(String mapping, String info, File saveToFile) throws WebServiceConnectorException {
-        //Sending and reading response code and validating it
+        //Sending 'POST' request, reading response code and validating it
         int responseCode = sendPostRequest(mapping, info);
-        log.info("Response code from the server: {}", responseCode);
+        log.info("Response code from the service after sending 'POST' request: {}", responseCode);
         if (responseCode >= 400) {
             throw new WebServiceConnectorException("Bad response code: " + responseCode);
         }
 
-        //If response code is ok, reading response and closing connection
-        readResponseToFile(saveToFile);
-        connection.disconnect();
+        //Sending 'GET' request to download generated file
+        downloadFile(mapping, saveToFile);
     }
 
     @Override
