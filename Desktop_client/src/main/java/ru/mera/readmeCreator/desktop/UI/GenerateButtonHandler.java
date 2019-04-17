@@ -45,13 +45,13 @@ class GenerateButtonHandler implements EventHandler<ActionEvent>, AlertSender {
         //Setting and checking web service url
         String serviceURL = webServiceUrl.getText();
         try {
-            App.settingConnector(serviceURL);
+            App.setConnector(serviceURL);
         } catch (MalformedURLException e) {
             sendAlert("Can't create web service url", Alert.AlertType.ERROR);
             log.error("Can't create web service url", e);
             return;
         }
-        if (!App.checkingWebService()) {
+        if (!App.checkWebService()) {
             sendAlert("Service is unavailable right now. Try again later", Alert.AlertType.WARNING);
             return;
         }

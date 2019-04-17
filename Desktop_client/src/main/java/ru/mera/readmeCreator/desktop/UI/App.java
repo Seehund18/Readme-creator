@@ -110,9 +110,9 @@ public class App extends Application implements AlertSender {
     /**
      * Sets connector. If fileWebServiceConnector is not instantiated yet,
      * creates new connector. Otherwise sets new URL in existed connector
-     * @param serviceURL url of web service     *
+     * @param serviceURL url of web service
      */
-    static void settingConnector(String serviceURL) throws MalformedURLException {
+    static void setConnector(String serviceURL) throws MalformedURLException {
         if (fileWebServiceConnector == null) {
             fileWebServiceConnector = new FileWebServiceConnector(new URL(serviceURL));
         } else {
@@ -124,7 +124,7 @@ public class App extends Application implements AlertSender {
      * Checks webService availability
      * @return true if service is available and false otherwise
      */
-    static boolean checkingWebService() {
+    static boolean checkWebService() {
         try {
             return fileWebServiceConnector.isServiceAvailable();
         } catch (WebServiceConnectorException ex) {

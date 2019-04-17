@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 public class UserData {
 
     /**
-     * Text entered by user. For now, it is text from userInput field ()
+     * Text entered by user. For now, it is text from userInput field
      */
     private String info;
 

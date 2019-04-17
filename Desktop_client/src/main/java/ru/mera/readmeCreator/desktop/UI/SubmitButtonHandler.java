@@ -29,6 +29,9 @@ import static ru.mera.readmeCreator.desktop.UI.UiElements.saveAs;
  */
 class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
     private Stage stage;
+    /**
+     * Validator for userInput field
+     */
     private UserInputValidator userInputValidator = new UserInputValidator();
     private static Logger log = LoggerFactory.getLogger(SubmitButtonHandler.class);
 
@@ -42,9 +45,9 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
         String userInputText = userInput.getText();
         if (!userInputValidator.isValid(userInputText)) {
             sendAlert("Please, enter at least one symbol", Alert.AlertType.WARNING);
-            log.info("User entered not enough symbols");
             return;
         }
+        UserData userData = new UserData(userInputText);
 
         //Checking flag
         if (!UrlStatusListener.isUrlValid()) {
@@ -55,13 +58,13 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
         //Setting and checking web service url
         String serviceURL = webServiceUrl.getText();
         try {
-            App.settingConnector(serviceURL);
+            App.setConnector(serviceURL);
         } catch (MalformedURLException e) {
             sendAlert("Can't create web service url", Alert.AlertType.ERROR);
             log.error("Can't create web service url", e);
             return;
         }
-        if (!App.checkingWebService()) {
+        if (!App.checkWebService()) {
             sendAlert("Service is unavailable right now. Try again later", Alert.AlertType.WARNING);
             return;
         }
@@ -71,10 +74,9 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
         File userDataFile = saveAs.showSaveDialog(stage);
 
         if (userDataFile != null) {
-            //User decided there to save file
+            //User decided where to save file
             try {
                 //Trying to download file
-                UserData userData = new UserData(userInputText);
                 App.getFileWebServiceConnector().downloadFile("/files/User_data.rtf", userData.toString(), userDataFile);
                 sendAlert("Your file has been downloaded", Alert.AlertType.INFORMATION);
                 log.info("File has been downloaded");
