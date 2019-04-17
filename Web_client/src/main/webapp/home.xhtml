@@ -20,40 +20,38 @@
         <hr/>
 
         <h:form>
-
             <h:panelGrid id="panel1" columns="3" border="0" cellpadding = "10"
                          cellspacing = "1">
                 <h:outputLabel value="Enter URL:"/>
-                <h:inputText id="webServiceURL" value="#{userData.url}" size="20" required="true">
+                <h:inputText id="webServiceURL" value="#{mainController.url}" size="20" required="true">
                     <f:validator validatorId="webServiceUrlValidator" />
                 </h:inputText>
                 <h:message for = "webServiceURL" style = "color:red" />
             </h:panelGrid>
             <hr/>
+        </h:form>
 
+        <h:form>
             <h4>Hello world generator</h4>
-            <h:panelGrid id="panel2" columns="2" border="0" cellpadding = "10"
-                         cellspacing = "1">
+
+            <h:panelGrid id="panel2" columns="2" border="0" cellpadding = "10" cellspacing = "1">
                 <h:outputLabel value="Press to generate Hello_world.rtf file:"/>
-                <h:commandButton action = "#{mainController.getHelloFile}"
-                                 value = "Generate HelloWorld file" />
+                <h:commandButton action = "#{mainController.getHelloFile}" value = "Generate HelloWorld file"/>
             </h:panelGrid>
+
             <hr/>
+        </h:form>
 
+        <h:form>
             <h4>User data generator</h4>
-            <h:panelGrid id="panel3" columns="3" border="0" cellpadding = "10"
-                         cellspacing = "10">
 
+            <h:panelGrid id="panel3" columns="3" border="0" cellpadding = "10" cellspacing = "10">
                 <h:outputLabel value="Enter some text:"/>
-                <h:inputTextarea id="userText" row="20" col="20" value="#{userData.text}" reqired="true">
-                    <f:validator validatorId="inputTextValidator" />
-                </h:inputTextarea>
+                <h:inputTextarea id="userText" row="20" col="20" value="#{userData.info}" required="true"/>
                 <h:message for = "userText" style = "color:red" />
-                <h:commandButton action = "#{mainController.getUserDataFile}"
-                                 value = "Submit" />
+                <h:commandButton action = "#{mainController.getUserDataFile}" value = "Submit" />
             </h:panelGrid>
 
         </h:form>
-
     </body>
 </html>

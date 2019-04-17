@@ -3,6 +3,7 @@ package ru.mera.readmeCreator.web_client;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -17,6 +18,10 @@ import java.net.MalformedURLException;
 @ManagedBean(eager = true)
 @SessionScoped
 public class MainController implements Serializable {
+    /**
+     * Url entered in webServiceURL
+     */
+    private String url;
     private final Logger log = LoggerFactory.getLogger(MainController.class);
 
     //Injecting FileWebServiceConnector into this field
@@ -41,9 +46,25 @@ public class MainController implements Serializable {
         this.connector = webServiceConnector;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
     public void setError(Error error) {
         log.info("Setting error object\n");
         this.error = error;
+    }
+
+    /**
+     * After constructing of this object, sets url field to value from URL cookie
+     */
+    @PostConstruct
+    private void init() {
+        url = CookieHelper.getCookieValue("URL");
     }
 
     /**
@@ -55,10 +76,9 @@ public class MainController implements Serializable {
         log.info("User pushed the button\n");
 
         //Getting url from the field and setting web service
-        String url = userData.getUrl();
         connector.setWebService(url);
 
-        if(connector.isServiceAvailable()) {
+        if (connector.isServiceAvailable()) {
             //Adding cookie which lives for 2 days
             CookieHelper.addPermanentCookie("URL", url, 172_800);
             log.info("Service is available. Redirecting user...\n");
@@ -72,13 +92,24 @@ public class MainController implements Serializable {
     }
 
     public void getUserDataFile() throws IOException, WebServiceConnectorException {
-        log.info("User sending info to service ");
+        log.info("User wants to generate file with: {}", userData.getInfo());
 
         //Getting url from the field and setting web service
-        String url = userData.getUrl();
         connector.setWebService(url);
 
-        log.info("Enetered value: {}", userData.getText());
+        if (connector.isServiceAvailable()) {
+            //Adding cookie which lives for 2 days
+            CookieHelper.addPermanentCookie("URL", url, 172_800);
+            log.info("Service is available. Sending POST request..." + url + "/files/User_data.rtf");
+            connector.sendPostRequest("/files/User_data.rtf", userData.toString());
 
+            log.info("File was created. Redirecting user to " + url + "/files/User_data.rtf");
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url + "/files/User_data.rtf");
+            log.info("User was redirected\n");
+        } else {
+            log.info("Service is unavailable\n");
+            error.setMessage("Service is unavailable. Try again later");
+            FacesContext.getCurrentInstance().getExternalContext().dispatch("error.xhtml");
+        }
     }
 }

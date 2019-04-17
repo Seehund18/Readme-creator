@@ -38,4 +38,13 @@ public abstract class WebServiceConnector {
      * @throws WebServiceConnectorException problems with sending request
      */
     public abstract int sendGetRequest(String getMapping) throws WebServiceConnectorException;
+
+    /**
+     * Method for sending 'POST' requests to web service
+     * @param postMapping mapping for 'POST' request
+     * @param info information which must be sent to web service
+     * @return response code or -1 if connection to server was refused
+     * @throws WebServiceConnectorException problems with sending request
+     */
+    protected abstract int sendPostRequest(String postMapping, String info) throws WebServiceConnectorException;
 }

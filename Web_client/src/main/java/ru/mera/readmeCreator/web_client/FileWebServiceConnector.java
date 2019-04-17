@@ -10,6 +10,7 @@ import java.io.*;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Implementation of WebService Connector.
@@ -46,6 +47,49 @@ public class FileWebServiceConnector extends WebServiceConnector implements Seri
                 return -1;
             }
             log.info("Response code: {}", responseCode);
+            return responseCode;
+        } catch (IOException ex) {
+            connection.disconnect();
+            throw new WebServiceConnectorException("There is a problem with connection to the server", ex);
+        }
+    }
+
+    @Override
+    public int sendPostRequest(String postMapping, String info) throws WebServiceConnectorException {
+        //Constructing full URL from webService url and mapping
+        URL fullURL;
+        try {
+            fullURL = new URL(webService.toString() + postMapping);
+        } catch (IOException ex) {
+            throw new WebServiceConnectorException("Can't generate full URL", ex);
+        }
+
+        byte[] byteInfo = info.getBytes(StandardCharsets.UTF_8);
+        try {
+            log.info("Sending 'POST' request to URL: {}", fullURL);
+
+            //Setting request headers
+            connection = (HttpURLConnection) fullURL.openConnection();
+            connection.setDoOutput(true);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("User-Agent", "web_client");
+            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            connection.setFixedLengthStreamingMode(byteInfo.length);
+
+            //Sending info
+            try (OutputStream os = connection.getOutputStream()) {
+                os.write(byteInfo);
+            }
+
+            //Trying to read response
+            int responseCode;
+            try {
+                responseCode = connection.getResponseCode();
+            } catch (ConnectException ex) {
+                connection.disconnect();
+                log.debug("ConnectException was caught");
+                return -1;
+            }
             return responseCode;
         } catch (IOException ex) {
             connection.disconnect();

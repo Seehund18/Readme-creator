@@ -8,6 +8,8 @@
 
 package ru.mera.readmeCreator.web_client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,42 +25,32 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean(eager = true)
 @SessionScoped
 public class UserData implements Serializable {
-    private final Logger log = LoggerFactory.getLogger(UserData.class);
-
-    /**
-     * Url entered in webServiceURL
-     */
-    private String url;
-
     /**
      * Text entered in the userText area
      */
-    private String text;
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        log.info("Setting url in UserData to {}\n", url);
-        this.url = url;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
+    private String info;
 
     /**
-     * After constructing of this object, sets url field to value from URL cookie
+     * Mapper to JSON format
      */
-    @PostConstruct
-    private void init() {
-        url = CookieHelper.getCookieValue("URL");
+    private ObjectMapper mapper = new ObjectMapper();
+    private Logger log = LoggerFactory.getLogger(UserData.class);
+
+    public String getInfo() {
+        return info;
     }
 
+    public void setInfo(String info) {
+        this.info = info;
+    }
 
+    @Override
+    public String toString() {
+        try {
+            return mapper.writeValueAsString(this);
+        } catch (JsonProcessingException ex) {
+            log.error("Can't convert user data object to json string", ex);
+            return "";
+        }
+    }
 }

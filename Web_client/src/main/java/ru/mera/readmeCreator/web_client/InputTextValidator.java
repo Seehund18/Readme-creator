@@ -20,7 +20,7 @@ import javax.faces.validator.ValidatorException;
 
 @FacesValidator("inputTextValidator")
 public class InputTextValidator implements Validator {
-    private final Logger log = LoggerFactory.getLogger(MainController.class);
+    private final Logger log = LoggerFactory.getLogger(InputTextValidator.class);
 
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
@@ -30,12 +30,12 @@ public class InputTextValidator implements Validator {
             msg.setSeverity(FacesMessage.SEVERITY_ERROR);
             throw new ValidatorException(msg);
         }
-//        String input = value.toString();
+        String input = value.toString();
 
-//        if (input.length() == 0) {
-//            FacesMessage msg = new FacesMessage("User input text validation failed","Enter some text");
-//            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
-//            throw new ValidatorException(msg);
-//        }
+        if (input.length() == 0) {
+            FacesMessage msg = new FacesMessage("User input text validation failed","Enter some text");
+            msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+            throw new ValidatorException(msg);
+        }
     }
 }
