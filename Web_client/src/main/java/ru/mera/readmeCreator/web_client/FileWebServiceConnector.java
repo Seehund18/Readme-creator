@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 import java.io.*;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;

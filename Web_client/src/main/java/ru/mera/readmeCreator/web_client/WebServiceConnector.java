@@ -13,11 +13,11 @@ public abstract class WebServiceConnector {
     //Connection to the web service
     protected HttpURLConnection connection;
 
-    protected URL getWebService() {
+    public URL getWebService() {
         return this.webService;
     }
 
-    protected void setWebService(String webService) throws MalformedURLException {
+    public void setWebService(String webService) throws MalformedURLException {
         this.webService = new URL(webService);
     }
 

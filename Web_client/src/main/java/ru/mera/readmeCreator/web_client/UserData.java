@@ -15,12 +15,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 /**
- * Holds all of the data, entered by user
+ * Entity which represents data entered by user.
+ * If there is a need to send UserData to service, it's serialized in JSON string format by toString() method
  */
 @ManagedBean(eager = true)
 @SessionScoped

@@ -30,19 +30,13 @@ public class WebServiceUrlValidator implements Validator {
     //from apache.commons library
     UrlValidator webServiceUrlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
 
-    /**
-     * Validates value
-     * @param context
-     * @param component
-     * @param value
-     * @throws ValidatorException
-     */
     @Override
     public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
         String url = value.toString();
         if(url.matches("^http://[^/]+$") && webServiceUrlValidator.isValid(url)) {
             return;
         }
+        //If value is not valid, setting message to "Invalid URL format"
         FacesMessage msg = new FacesMessage("URL validation failed","Invalid URL format");
         msg.setSeverity(FacesMessage.SEVERITY_ERROR);
         throw new ValidatorException(msg);

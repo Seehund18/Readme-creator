@@ -10,7 +10,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.MalformedURLException;
 
 /**
  * Controller of this app
@@ -36,26 +35,26 @@ public class MainController implements Serializable {
     @ManagedProperty(value = "#{error}")
     private Error error;
 
-    public void setUserData(UserData userData) {
-        log.info("Setting UserData object\n");
-        this.userData = userData;
-    }
-
-    public void setConnector(WebServiceConnector webServiceConnector) {
-        log.info("Setting connector object\n");
-        this.connector = webServiceConnector;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getUrl() {
         return url;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setConnector(WebServiceConnector webServiceConnector) {
+        log.debug("Setting connector object\n");
+        this.connector = webServiceConnector;
+    }
+
+    public void setUserData(UserData userData) {
+        log.debug("Setting UserData object\n");
+        this.userData = userData;
     }
 
     public void setError(Error error) {
-        log.info("Setting error object\n");
+        log.debug("Setting error object\n");
         this.error = error;
     }
 
@@ -68,13 +67,11 @@ public class MainController implements Serializable {
     }
 
     /**
-     * Gets helloWorld file from web service
+     * Gets "Hello_World.rtf" file from the web service
      * @throws IOException can't generate url for web service or problems with redirecting
      * @throws WebServiceConnectorException problem in WebServiceConnector
      */
     public void getHelloFile() throws IOException, WebServiceConnectorException {
-        log.info("User pushed the button\n");
-
         //Getting url from the field and setting web service
         connector.setWebService(url);
 
@@ -91,19 +88,24 @@ public class MainController implements Serializable {
         }
     }
 
+    /**
+     * Gets "User_data.rtf" file from the web service
+     * @throws IOException can't generate url for web service or problems with redirecting
+     * @throws WebServiceConnectorException problem in WebServiceConnector
+     */
     public void getUserDataFile() throws IOException, WebServiceConnectorException {
-        log.info("User wants to generate file with: {}", userData.getInfo());
-
         //Getting url from the field and setting web service
         connector.setWebService(url);
 
         if (connector.isServiceAvailable()) {
             //Adding cookie which lives for 2 days
             CookieHelper.addPermanentCookie("URL", url, 172_800);
-            log.info("Service is available. Sending POST request..." + url + "/files/User_data.rtf");
+
+            //Sending POST request to service
+            log.info("Service is available. Sending POST request to {}", url + "/files/User_data.rtf");
             connector.sendPostRequest("/files/User_data.rtf", userData.toString());
 
-            log.info("File was created. Redirecting user to " + url + "/files/User_data.rtf");
+            log.info("Redirecting user to {}", url + "/files/User_data.rtf");
             FacesContext.getCurrentInstance().getExternalContext().redirect(url + "/files/User_data.rtf");
             log.info("User was redirected\n");
         } else {
