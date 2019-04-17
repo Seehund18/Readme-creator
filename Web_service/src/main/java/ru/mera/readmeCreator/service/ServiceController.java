@@ -31,7 +31,7 @@ public class ServiceController {
      */
     @GetMapping("/files/{name}")
     public ResponseEntity<FileSystemResource> sendDocument(@PathVariable String name) {
-        log.info("Received 'GET' request to generate {} file", name);
+        log.info("Received 'GET' request to addFile {} file", name);
 
         File document;
         try {
@@ -60,12 +60,12 @@ public class ServiceController {
     @PostMapping("/files/{name}")
     @ResponseStatus(HttpStatus.CREATED)
     public void sendDocument(@PathVariable String name, @RequestBody UserData userData) {
-        log.info("Received 'POST' request to generate {} file", name);
+        log.info("Received 'POST' request to addFile {} file", name);
         log.info("Received data:\n{}", userData);
 
         try {
-            //Trying to generate file with given name
-            repository.generate(name, userData.getInfo());
+            //Trying to addFile file with given name
+            repository.addFile(name, userData.getInfo());
         } catch (IOException ex) {
             //If some problems occurred, RepositoryException is thrown
             //which will be caught and handled by GeneratorExceptionAdvice

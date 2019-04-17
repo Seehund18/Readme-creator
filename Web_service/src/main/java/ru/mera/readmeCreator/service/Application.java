@@ -16,12 +16,7 @@ public class Application {
     }
 
     @Bean
-    RTFGenerator initRTFGenerator() {
-        return new RTFGenerator();
-    }
-
-    @Bean
     FileRepo initFileRepo() {
-        return new FileRepo(initRTFGenerator());
+        return new LocalFileRepo(new RTFGenerator());
     }
 }
