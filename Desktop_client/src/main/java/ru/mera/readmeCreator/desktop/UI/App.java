@@ -13,8 +13,10 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -71,28 +73,30 @@ public class App extends Application implements AlertSender {
         //Every field change will activates validation and a status message near the field will be shown
         webServiceUrl.textProperty().addListener(new UrlStatusListener());
 
-        //Adding handler to "Generate HelloWorld file"
-        generateButton.setOnAction(new GenerateButtonHandler(stage));
-
         //Adding handler to "Submit" button
-        submitButton.setOnAction(new SubmitButtonHandler(stage));
+//        submitButton.setOnAction(new SubmitButtonHandler(stage));
 
         //Configuring layouts
-        FlowPane flow;
-        flow = new FlowPane(10,0, webServiceUrl, urlStatus);
+        FlowPane flow = new FlowPane(10,0, webServiceUrl, urlStatus);
         flow.setAlignment(Pos.CENTER);
-        VBox firstSection = new VBox(10, webServiceLabel, flow, separatLines[0]);
+        VBox firstSection = new VBox(10, webServiceLabel, flow, separateLine);
         firstSection.setAlignment(Pos.CENTER);
 
-        flow = new FlowPane(10,0, helloLabel, generateButton);
-        flow.setAlignment(Pos.CENTER);
-        VBox secondSection = new VBox(10, flow, separatLines[1]);
-        secondSection.setAlignment(Pos.CENTER);
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setAlignment(Pos.CENTER);
 
-        VBox thirdSection = new VBox(10, textToFileLabel, userInput, submitButton);
-        thirdSection.setAlignment(Pos.CENTER);
+        Node[] formLabels = formElemLabels.values().toArray(new Node[0]);
+        gridPane.addColumn(0, formLabels);
 
-        VBox root = new VBox(10,firstSection, secondSection,thirdSection);
+        Node[] form = formElements.values().toArray(new Node[0]);
+        gridPane.addColumn(1, form);
+
+        Node[] formStatuses = formElemStatuses.values().toArray(new Node[0]);
+        gridPane.addColumn(2, formStatuses);
+
+        VBox root = new VBox(10,firstSection, parametersLabel, gridPane, submitButton);
         root.setAlignment(Pos.CENTER);
         Scene scene = new Scene(root);
 

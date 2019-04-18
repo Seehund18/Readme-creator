@@ -10,8 +10,8 @@ package ru.mera.readmeCreator.desktop.UI;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -20,31 +20,63 @@ import javafx.stage.FileChooser;
 import ru.mera.readmeCreator.desktop.PropertiesManager;
 
 import java.io.File;
+import java.util.LinkedHashMap;
 
 /**
  * Ui elements of the app's main window
  */
 class UiElements {
-    static Label webServiceLabel = new Label("Please, enter a web service URI.\n"
+    //Url input segment
+    static Label webServiceLabel = new Label("Please, enter URL of web service.\n"
             + "Examples: http://localhost:8080, http://myService.com");
     static TextField webServiceUrl = new TextField();
     static Text urlStatus = new Text();
 
-    static Label helloLabel = new Label("Press to generate Hello World.rtf file:");
-    static Button generateButton = new Button("Generate HelloWorld file");
-
-    static Label textToFileLabel = new Label("Enter text which will be written to file:");
-    static TextArea userInput = new TextArea();
+    //Readme parameters segment
+    static Label parametersLabel = new Label("Enter parameters for readme file:");
+//    static Label patchNameLabel = new Label("Patch name:");
+//    static TextField patchName = new TextField();
+//    static Label dateLabel = new Label("Date:");
+//    static TextField date = new TextField();
+//    static Label updateIdLabel = new Label("Update ID");
+//    static TextField updateId = new TextField();
+//    static Label releaseVerLabel = new Label("Release version");
+//    static TextField releaseVer = new TextField();
+//    static Label jiraIdLabel = new Label("Jira ID");
+//    static TextField jiraId = new TextField();
+//    static Label jiraDescriptLabel = new Label("Jira description");
+//    static TextField jiraDescript = new TextField();
+    static LinkedHashMap<String, Label> formElemLabels = new LinkedHashMap<>();
+    static LinkedHashMap<String, TextField> formElements = new LinkedHashMap<>();
+    static LinkedHashMap<String, Text> formElemStatuses = new LinkedHashMap<>();
     static Button submitButton = new Button("Submit");
 
+    static Line separateLine = new Line();
     static FileChooser saveAs = new FileChooser();
-    static Line[] separatLines = new Line[2];
 
     static {
-        for (int i = 0; i < separatLines.length; i++) {
-            separatLines[i] = new Line();
-        }
+        formElemLabels.put("patchNameLabel", new Label("Patch name:"));
+        formElemLabels.put("dateLabel", new Label("Date:"));
+        formElemLabels.put("updateIdLabel", new Label("Update ID:"));
+        formElemLabels.put("releaseVerLabel", new Label("Release version:"));
+        formElemLabels.put("jiraIdLabel", new Label("Jira ID:"));
+        formElemLabels.put("jiraDescriptLabel", new Label("Jira description:"));
+
+        formElements.put("patchName", new TextField());
+        formElements.put("date", new TextField());
+        formElements.put("updateId", new TextField());
+        formElements.put("releaseVer", new TextField());
+        formElements.put("jiraId", new TextField());
+        formElements.put("jiraDescript", new TextField());
+
+        formElemStatuses.put("patchNameStatus", new Text());
+        formElemStatuses.put("dateStatus", new Text());
+        formElemStatuses.put("updateIdStatus", new Text());
+        formElemStatuses.put("releaseVerStatus", new Text());
+        formElemStatuses.put("jiraIdStatus", new Text());
+        formElemStatuses.put("jiraDescriptStatus", new Text());
     }
+
 
     /**
      * Configuration of the UI elements. Sets basic text, size, font and configuration
@@ -61,15 +93,16 @@ class UiElements {
         webServiceUrl.setText(PropertiesManager.getPropertyValue("webServiceURL"));
         webServiceUrl.setMaxSize(200,10);
 
-        helloLabel.setFont(new Font(14));
-
-        textToFileLabel.setFont(new Font(14));
-        textToFileLabel.setTextAlignment(TextAlignment.CENTER);
-        textToFileLabel.setWrapText(true);
-        textToFileLabel.setLabelFor(userInput);
-
-        userInput.setMaxSize(400, 100);
-        userInput.setWrapText(true);
+        parametersLabel.setFont(new Font(14));
+        formElemLabels.values()
+                .forEach(label -> label.setFont(new Font(14)));
+        formElements.values()
+                .forEach(field -> field.setFont(new Font(13)));
+        formElemStatuses.values()
+                .forEach(statusText -> {
+                    statusText.setText("It's alright");
+                    statusText.setFill(Color.GREEN);
+                });
 
         saveAs.setTitle("Save file as");
         saveAs.getExtensionFilters().addAll(
@@ -77,8 +110,6 @@ class UiElements {
         );
         saveAs.setInitialDirectory(new File(System.getProperty("user.home")));
 
-        for (Line line : separatLines ) {
-            line.setEndX(line.getScene().getWidth());
-        }
+        separateLine.setEndX(separateLine.getScene().getWidth());
     }
 }
