@@ -17,6 +17,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -96,13 +97,26 @@ public class App extends Application implements AlertSender {
         Node[] formStatuses = formElemStatuses.values().toArray(new Node[0]);
         gridPane.addColumn(2, formStatuses);
 
-        VBox root = new VBox(10,firstSection, parametersLabel, gridPane, submitButton);
+
+        VBox controlButtons = new VBox(3, tableButtons.get("+"),
+                tableButtons.get("-"),
+                tableButtons.get("edit")
+                );
+
+        controlButtons.setAlignment(Pos.TOP_LEFT);
+        HBox box = new HBox(8, table, controlButtons);
+        box.setAlignment(Pos.CENTER);
+
+
+
+
+        VBox root = new VBox(10,firstSection, parametersLabel, gridPane, box, submitButton);
         root.setAlignment(Pos.CENTER);
         Scene scene = new Scene(root);
 
         //Configuring stage
-        stage.setHeight(500);
-        stage.setWidth(500);
+        stage.setHeight(600);
+        stage.setWidth(600);
         stage.setTitle("Readme generator");
         stage.setScene(scene);
         stage.show();

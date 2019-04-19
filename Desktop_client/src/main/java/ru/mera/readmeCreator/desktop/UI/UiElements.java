@@ -8,15 +8,17 @@
 
 package ru.mera.readmeCreator.desktop.UI;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
+import ru.mera.readmeCreator.desktop.JiraPair;
 import ru.mera.readmeCreator.desktop.PropertiesManager;
 
 import java.io.File;
@@ -49,6 +51,8 @@ class UiElements {
     static LinkedHashMap<String, Label> formElemLabels = new LinkedHashMap<>();
     static LinkedHashMap<String, TextField> formElements = new LinkedHashMap<>();
     static LinkedHashMap<String, Text> formElemStatuses = new LinkedHashMap<>();
+    static TableView<JiraPair> table = new TableView<>();
+    static LinkedHashMap<String, Button> tableButtons = new LinkedHashMap<>();
     static Button submitButton = new Button("Submit");
 
     static Line separateLine = new Line();
@@ -59,22 +63,20 @@ class UiElements {
         formElemLabels.put("dateLabel", new Label("Date:"));
         formElemLabels.put("updateIdLabel", new Label("Update ID:"));
         formElemLabels.put("releaseVerLabel", new Label("Release version:"));
-        formElemLabels.put("jiraIdLabel", new Label("Jira ID:"));
-        formElemLabels.put("jiraDescriptLabel", new Label("Jira description:"));
 
         formElements.put("patchName", new TextField());
         formElements.put("date", new TextField());
         formElements.put("updateId", new TextField());
         formElements.put("releaseVer", new TextField());
-        formElements.put("jiraId", new TextField());
-        formElements.put("jiraDescript", new TextField());
 
         formElemStatuses.put("patchNameStatus", new Text());
         formElemStatuses.put("dateStatus", new Text());
         formElemStatuses.put("updateIdStatus", new Text());
         formElemStatuses.put("releaseVerStatus", new Text());
-        formElemStatuses.put("jiraIdStatus", new Text());
-        formElemStatuses.put("jiraDescriptStatus", new Text());
+
+        tableButtons.put("+", new Button("+"));
+        tableButtons.put("-", new Button("-"));
+        tableButtons.put("edit", new Button("Edit"));
     }
 
 
@@ -82,6 +84,7 @@ class UiElements {
      * Configuration of the UI elements. Sets basic text, size, font and configuration
      */
     static void config() {
+
         webServiceLabel.setFont(new Font(14));
         webServiceLabel.setPrefWidth(350);
         webServiceLabel.setTextAlignment(TextAlignment.CENTER);
@@ -89,9 +92,9 @@ class UiElements {
         webServiceLabel.setLabelFor(webServiceUrl);
 
         webServiceUrl.setFont(new Font(13));
-        webServiceUrl.setPromptText("Enter URI of web service...");
+        webServiceUrl.setPromptText("Enter URL of web service...");
         webServiceUrl.setText(PropertiesManager.getPropertyValue("webServiceURL"));
-        webServiceUrl.setMaxSize(200,10);
+        webServiceUrl.setPrefSize(200,10);
 
         parametersLabel.setFont(new Font(14));
         formElemLabels.values()
@@ -104,12 +107,42 @@ class UiElements {
                     statusText.setFill(Color.GREEN);
                 });
 
-        saveAs.setTitle("Save file as");
-        saveAs.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("RTF", "*.rtf")
+        //Table configuration
+        ObservableList<JiraPair> people = FXCollections.observableArrayList(
+                new JiraPair("Alala", "34678696976978698759875496497654986598759564646959595"),
+                new JiraPair("UNIDESK-14682", "Add page push url event to Widget Framework"),
+                new JiraPair("Sam", "28"),
+                new JiraPair("Alice", "29"),
+                new JiraPair("Alice", "29"),
+                new JiraPair("Alice", "29"),
+                new JiraPair("Alice", "29"),
+                new JiraPair("Alice", "29")
         );
+        TableColumn<JiraPair, String> jiraIdColumn = new TableColumn<>("Jira ID");
+        jiraIdColumn.setCellValueFactory(new PropertyValueFactory<>("jiraId"));
+        TableColumn<JiraPair, String> jiraDescripColumn = new TableColumn<>("Jira description");
+        jiraDescripColumn.setCellValueFactory(new PropertyValueFactory<>("jiraDescrip"));
+        table.setPrefWidth(500);
+        table.setPrefHeight(200);
+        table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        table.getColumns().addAll(jiraIdColumn, jiraDescripColumn);
+        table.resizeColumn(jiraIdColumn, -100);
+        table.setItems(people);
+
+        //Table buttons configuring
+        tableButtons.values()
+                .forEach(button -> {
+                    button.setMinSize(40, 25);
+                    button.setFont(new Font(13));
+                });
+
+        //Save as window configuring
+        saveAs.setTitle("Save file as");
+        saveAs.getExtensionFilters()
+                .add(new FileChooser.ExtensionFilter("RTF", "*.rtf"));
         saveAs.setInitialDirectory(new File(System.getProperty("user.home")));
 
+        //Separate line configuring
         separateLine.setEndX(separateLine.getScene().getWidth());
     }
 }
