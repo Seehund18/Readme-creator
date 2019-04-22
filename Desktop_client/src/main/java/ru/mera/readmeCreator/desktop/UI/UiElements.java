@@ -108,15 +108,15 @@ class UiElements {
                 });
 
         //Table configuration
-        ObservableList<JiraPair> people = FXCollections.observableArrayList(
-                new JiraPair("Alala", "34678696976978698759875496497654986598759564646959595"),
-                new JiraPair("UNIDESK-14682", "Add page push url event to Widget Framework"),
-                new JiraPair("Sam", "28"),
-                new JiraPair("Alice", "29"),
-                new JiraPair("Alice", "29"),
-                new JiraPair("Alice", "29"),
-                new JiraPair("Alice", "29"),
-                new JiraPair("Alice", "29")
+        ObservableList<JiraPair> people  = FXCollections.observableArrayList(
+//                new JiraPair("Alala", "34678696976978698759875496497654986598759564646959595"),
+//                new JiraPair("UNIDESK-14682", "Add page push url event to Widget Framework"),
+//                new JiraPair("Sam", "28"),
+//                new JiraPair("Alice", "29"),
+//                new JiraPair("Alice", "29"),
+//                new JiraPair("Alice", "29"),
+//                new JiraPair("Alice", "29"),
+//                new JiraPair("Alice", "29")
         );
         TableColumn<JiraPair, String> jiraIdColumn = new TableColumn<>("Jira ID");
         jiraIdColumn.setCellValueFactory(new PropertyValueFactory<>("jiraId"));

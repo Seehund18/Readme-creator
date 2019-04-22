@@ -9,7 +9,7 @@
 package ru.mera.readmeCreator.desktop;
 
 /**
- * Entity which represents jira id and jira description
+ * Entity which represents jira id and jira description pair
  */
 public class JiraPair {
     private String jiraId;
@@ -34,5 +34,10 @@ public class JiraPair {
 
     public void setJiraDescrip(String jiraDescrip) {
         this.jiraDescrip = jiraDescrip;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString();
     }
 }

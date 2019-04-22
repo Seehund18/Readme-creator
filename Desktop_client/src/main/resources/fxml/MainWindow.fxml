@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.Line?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="MainController"
+      alignment="CENTER"
+      spacing="10">
+    <fx:define>
+        <Font fx:id="LabelFont" name="Arial" size="14" />
+    </fx:define>
+
+    <Label prefWidth="350" textAlignment="CENTER" wrapText="true" font="$LabelFont"
+           text="Please, enter URL of web service.&#10;Examples: http://localhost:8080, http://myService.com" />
+
+    <FlowPane alignment="CENTER" hgap="10">
+        <TextField fx:id="webServiceUrl" promptText="Enter URL of web service..."
+                   prefWidth="200" prefHeight="10"/>
+        <Text fx:id="urlStatus" text="Hello"/>
+    </FlowPane>
+
+    <Line endX="500"/>
+
+    <Label text="Enter parameters for readme file:" textAlignment="CENTER" font="$LabelFont"/>
+
+    <GridPane fx:id="form" hgap="10" vgap="10" alignment="CENTER">
+        <Label GridPane.columnIndex="0" GridPane.rowIndex="0" text="Patch name:" font="$LabelFont" />
+        <Label GridPane.columnIndex="0" GridPane.rowIndex="1" text="Date:" font="$LabelFont"/>
+        <Label GridPane.columnIndex="0" GridPane.rowIndex="2" text="Update ID:" font="$LabelFont"/>
+        <Label GridPane.columnIndex="0" GridPane.rowIndex="3" text="Release version:" font="$LabelFont"/>
+    </GridPane>
+
+    <HBox alignment="CENTER" spacing="3">
+        <TableView fx:id="jiraTable" prefWidth="500" prefHeight="200"/>
+        <VBox spacing="5">
+            <Button text="+" minHeight="25" minWidth="45" onAction="#addButton"/>
+            <Button text="-" minHeight="25" minWidth="45"/>
+            <Button text="Edit" minHeight="25" minWidth="45"/>
+        </VBox>
+    </HBox>
+</VBox>

@@ -23,6 +23,7 @@ public interface AlertSender {
      */
     default void sendAlert(String text, Alert.AlertType type) {
         Alert alert = new Alert(type, text, ButtonType.OK);
+        alert.setHeaderText(null);
         alert.showAndWait();
     }
 }
