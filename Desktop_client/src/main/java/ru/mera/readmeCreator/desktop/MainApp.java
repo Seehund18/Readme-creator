@@ -23,6 +23,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class MainApp extends Application implements AlertSender {
+    /**
+     * File connector to the web service
+     */
+    private static FileWebServiceConnector fileWebServiceConnector;
     private static final Logger log = LoggerFactory.getLogger(MainApp.class);
 
     /**

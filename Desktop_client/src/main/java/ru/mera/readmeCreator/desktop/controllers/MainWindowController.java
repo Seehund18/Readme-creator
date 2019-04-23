@@ -20,13 +20,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import ru.mera.readmeCreator.desktop.JiraInputDialog;
 import ru.mera.readmeCreator.desktop.JiraPair;
 import ru.mera.readmeCreator.desktop.PropertiesManager;
 import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
 
 import java.util.Optional;
-
 
 /**
  * Controller for MainWindow.fxml.
@@ -47,6 +47,9 @@ public class MainWindowController implements AlertSender {
     private TableView<JiraPair> jiraTable = new TableView<>();
     private ObservableList<JiraPair> jiraList = FXCollections.observableArrayList();
 
+    @FXML
+    private Button submitButton;
+
     {
         formElements.put("patchName", new TextField());
         formElements.put("date", new TextField());
@@ -61,14 +64,13 @@ public class MainWindowController implements AlertSender {
 
     /**
      * Initializes elements, which can't be initialized in MainWindow.fxml file.
-     * This method will be automatically called by FXMLLoader.
-     * @see Initializable
+     * This method will be automatically called by FXMLLoader {@link Initializable}
      */
     public void initialize() {
         webServiceUrl.setText(PropertiesManager.getPropertyValue("webServiceURL"));
 
-        //Adding UrlStatusListener to webServiceUrl, which activates on change of text in the field
-        //Every field change will activates validation and a status message near the field will be shown
+        //Adding UrlStatusListener to webServiceUrl, which will validate it
+        //and show validation status to user by editing urlStatus
         webServiceUrl.textProperty().addListener(new UrlStatusListener(urlStatus));
 
         formElemStatuses.values()
@@ -87,6 +89,9 @@ public class MainWindowController implements AlertSender {
         jiraTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         jiraTable.getColumns().addAll(jiraIdColumn, jiraDescripColumn);
         jiraTable.setItems(jiraList);
+
+        //Adding button handler for "Submit" button
+        submitButton.setOnAction(new SubmitButtonHandler());
     }
 
     /**

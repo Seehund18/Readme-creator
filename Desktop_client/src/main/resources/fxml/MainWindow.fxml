@@ -44,5 +44,5 @@
         </VBox>
     </HBox>
 
-    <Button text="Submit" prefWidth="200"/>
+    <Button fx:id="submitButton" text="Submit" prefWidth="200"/>
 </VBox>

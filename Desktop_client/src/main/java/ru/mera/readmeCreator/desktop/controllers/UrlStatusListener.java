@@ -23,6 +23,9 @@ class UrlStatusListener implements ChangeListener<String> {
      */
     private static boolean isUrlValid;
 
+    /**
+     * Text which will dynamically change showing validation status
+     */
     private Text urlStatus;
 
     /**
@@ -40,7 +43,7 @@ class UrlStatusListener implements ChangeListener<String> {
 
     @Override
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        if(urlFieldValidator.isValid(newValue)) {
+        if (urlFieldValidator.isValid(newValue)) {
             //If validation was passed, "Valid URL" will be shown near the webServiceUrl field
             isUrlValid = true;
             urlStatus.setText("Valid URL");
