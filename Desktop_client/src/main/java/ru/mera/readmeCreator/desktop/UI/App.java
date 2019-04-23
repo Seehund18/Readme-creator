@@ -12,19 +12,18 @@ import static ru.mera.readmeCreator.desktop.UI.UiElements.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.mera.readmeCreator.desktop.*;
+import ru.mera.readmeCreator.desktop.controllers.UrlStatusListener;
 import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
 
 import java.net.MalformedURLException;
@@ -120,46 +119,13 @@ public class App extends Application implements AlertSender {
         stage.setTitle("Readme generator");
         stage.setScene(scene);
         stage.show();
-        setStageAtCenter(stage);
 
         UiElements.config();
     }
 
-    /**
-     * Sets connector. If fileWebServiceConnector is not instantiated yet,
-     * creates new connector. Otherwise sets new URL in existed connector
-     * @param serviceURL url of web service
-     */
-    static void setConnector(String serviceURL) throws MalformedURLException {
-        if (fileWebServiceConnector == null) {
-            fileWebServiceConnector = new FileWebServiceConnector(new URL(serviceURL));
-        } else {
-            fileWebServiceConnector.setWebService(serviceURL);
-        }
-    }
 
-    /**
-     * Checks webService availability
-     * @return true if service is available and false otherwise
-     */
-    static boolean checkWebService() {
-        try {
-            return fileWebServiceConnector.isServiceAvailable();
-        } catch (WebServiceConnectorException ex) {
-            log.error(ex.getMessage(), ex);
-            return false;
-        }
-    }
 
-    /**
-     * Sets stage at the screen center. Method stage.centerOnScreen() doesn't seem to work properly
-     * @param stage stage which needed to be centered
-     */
-    private void setStageAtCenter(Stage stage) {
-        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
-        stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
-        stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
-    }
+
 
     public static void main(String[] args) {
         Application.launch(args);

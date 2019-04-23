@@ -40,4 +40,16 @@ public class JiraPair {
     public String toString() {
         return super.toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof JiraPair) {
+            JiraPair pair = (JiraPair) obj;
+            return this.jiraId.equals(pair.jiraId);
+        }
+        return false;
+    }
 }

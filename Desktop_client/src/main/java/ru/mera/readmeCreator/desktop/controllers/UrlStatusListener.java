@@ -6,21 +6,24 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.UI;
+package ru.mera.readmeCreator.desktop.controllers;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
-import static ru.mera.readmeCreator.desktop.UI.UiElements.urlStatus;
+import javafx.scene.text.Text;
 
 /**
  * Listener for webServiceUrl field
  */
 class UrlStatusListener implements ChangeListener<String> {
+
     /**
      * Shows is url in webServiceUrl field valid
      */
     private static boolean isUrlValid;
+
+    private Text urlStatus;
 
     /**
      * Validator for the webServiceUrl field
@@ -29,6 +32,10 @@ class UrlStatusListener implements ChangeListener<String> {
 
     static boolean isUrlValid() {
         return isUrlValid;
+    }
+
+    UrlStatusListener (Text urlStatus) {
+        this.urlStatus = urlStatus;
     }
 
     @Override

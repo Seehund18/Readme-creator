@@ -8,7 +8,7 @@
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
-      fx:controller="MainController"
+      fx:controller="ru.mera.readmeCreator.desktop.controllers.MainWindowController"
       alignment="CENTER"
       spacing="10">
     <fx:define>
@@ -21,10 +21,10 @@
     <FlowPane alignment="CENTER" hgap="10">
         <TextField fx:id="webServiceUrl" promptText="Enter URL of web service..."
                    prefWidth="200" prefHeight="10"/>
-        <Text fx:id="urlStatus" text="Hello"/>
+        <Text fx:id="urlStatus"/>
     </FlowPane>
 
-    <Line endX="500"/>
+    <Line endX="1000"/>
 
     <Label text="Enter parameters for readme file:" textAlignment="CENTER" font="$LabelFont"/>
 
@@ -38,9 +38,11 @@
     <HBox alignment="CENTER" spacing="3">
         <TableView fx:id="jiraTable" prefWidth="500" prefHeight="200"/>
         <VBox spacing="5">
-            <Button text="+" minHeight="25" minWidth="45" onAction="#addButton"/>
-            <Button text="-" minHeight="25" minWidth="45"/>
-            <Button text="Edit" minHeight="25" minWidth="45"/>
+            <Button text="+" minHeight="25" minWidth="45" onAction="#addJira"/>
+            <Button text="-" minHeight="25" minWidth="45" onAction="#removeJira"/>
+            <Button text="Edit" minHeight="25" minWidth="45" onAction="#editJira"/>
         </VBox>
     </HBox>
+
+    <Button text="Submit" prefWidth="200"/>
 </VBox>

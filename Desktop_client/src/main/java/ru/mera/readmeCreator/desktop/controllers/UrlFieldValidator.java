@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.UI;
+package ru.mera.readmeCreator.desktop.controllers;
 
 import org.apache.commons.validator.routines.UrlValidator;
 import ru.mera.readmeCreator.desktop.interfaces.Validator;

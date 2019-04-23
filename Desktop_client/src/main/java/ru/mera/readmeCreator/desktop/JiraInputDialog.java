@@ -17,14 +17,14 @@ import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
 import java.util.Optional;
 
 /**
- * Dialog, which is shown when user pressed "+" button.
+ * Dialog, which is shown when user pressed "+" or "Edit" button.
  * User can write Jira ID and jira description and when this pair will be added to the table
  * or he can cancel this dialog
  */
 public class JiraInputDialog implements AlertSender {
 
     /**
-     * Skeleton of this dialog to which actions are delegated
+     * Skeleton of this dialog window
      */
     private Dialog<JiraPair> dialog = new Dialog<>();
 
@@ -33,15 +33,43 @@ public class JiraInputDialog implements AlertSender {
      */
     private boolean isIdValid;
 
-    //UI elements
+    /**
+     * Type of dialog for this dialog screen
+     */
+    private DialogType dialogType;
+
+    /**
+     * UI elements
+     */
     private TextField jiraIdField = new TextField();
     private TextField jiraDecripField = new TextField();
 
-    {
-        //Adding new button type to a dialog and getting addButton instance
-        ButtonType addButtonType = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
-        dialog.getDialogPane().getButtonTypes().addAll(addButtonType, ButtonType.CANCEL);
-        Button addButton = (Button) dialog.getDialogPane().lookupButton(addButtonType);
+    public JiraInputDialog (DialogType dialogType) {
+        this.dialogType = dialogType;
+        init();
+    }
+
+    public JiraInputDialog (String jiraId, String jiraDescription, DialogType dialogType) {
+        this.dialogType = dialogType;
+        init();
+        jiraIdField.setText(jiraId);
+        jiraDecripField.setText(jiraDescription);
+    }
+
+    private void init() {
+        //Depending on dialogType, choosing buttonType with text and setting title of the screen
+        ButtonType buttonType;
+        if (dialogType == DialogType.EDIT) {
+            buttonType = new ButtonType("Edit", ButtonBar.ButtonData.OK_DONE);
+            dialog.setTitle("Edit jira");
+        } else {
+            buttonType = new ButtonType("Add", ButtonBar.ButtonData.OK_DONE);
+            dialog.setTitle("Add new jira");
+        }
+
+        //Adding new buttonType and retrieving Button instance
+        dialog.getDialogPane().getButtonTypes().addAll(buttonType, ButtonType.CANCEL);
+        Button addButton = (Button) dialog.getDialogPane().lookupButton(buttonType);
 
         //Configuring gridPane
         GridPane grid = new GridPane();
@@ -54,7 +82,6 @@ public class JiraInputDialog implements AlertSender {
         grid.add(jiraDecripField, 1, 1);
 
         //Configuring dialog
-        dialog.setTitle("Add new jira");
         dialog.setHeaderText(null);
         dialog.getDialogPane().setContent(grid);
 
@@ -67,19 +94,19 @@ public class JiraInputDialog implements AlertSender {
             isIdValid = true;
         });
 
-        //Catching the action event (user pushed "add" button)
-        //If jira ID field is not valid, showing alert to user and return him to dialog
+        //Catching the action event (user pushed "Add" or "Edit" button)
+        //If jira ID field is not valid, showing alert to user and return him to the dialog screen
         addButton.addEventFilter(ActionEvent.ACTION, event -> {
-           if (!isIdValid) {
-               sendAlert("Enter Jira id, please", Alert.AlertType.WARNING);
-               event.consume();
-           }
+            if (!isIdValid) {
+                sendAlert("Enter Jira id, please", Alert.AlertType.WARNING);
+                event.consume();
+            }
         });
 
         //If jira ID field is valid, creating new JiraPair object and returning it
         //(It will be wrapped into Optional)
         dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == addButtonType) {
+            if (dialogButton == buttonType) {
                 if (isIdValid) {
                     return new JiraPair(jiraIdField.getText(), jiraDecripField.getText());
                 }
@@ -94,5 +121,15 @@ public class JiraInputDialog implements AlertSender {
      */
     public Optional<JiraPair> showAndWait() {
         return dialog.showAndWait();
+    }
+
+    /**
+     * Types of dialog for this screen.
+     * ADD - dialog for adding new Jira
+     * EDIT - dialog for editing existed Jira
+     */
+    public enum DialogType {
+        ADD,
+        EDIT
     }
 }

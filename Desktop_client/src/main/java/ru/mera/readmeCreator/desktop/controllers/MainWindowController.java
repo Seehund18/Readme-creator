@@ -6,6 +6,8 @@
  * permission of the Avaya owner.
  */
 
+package ru.mera.readmeCreator.desktop.controllers;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -21,12 +23,15 @@ import javafx.scene.text.Text;
 import ru.mera.readmeCreator.desktop.JiraInputDialog;
 import ru.mera.readmeCreator.desktop.JiraPair;
 import ru.mera.readmeCreator.desktop.PropertiesManager;
+import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
 
-import java.net.URL;
 import java.util.Optional;
-import java.util.ResourceBundle;
 
-public class MainController implements Initializable {
+
+/**
+ * Controller for MainWindow.fxml.
+ */
+public class MainWindowController implements AlertSender {
     @FXML
     private TextField webServiceUrl;
 
@@ -40,9 +45,7 @@ public class MainController implements Initializable {
 
     @FXML
     private TableView<JiraPair> jiraTable = new TableView<>();
-    private ObservableList<JiraPair> jiras  = FXCollections.observableArrayList();
-
-    private JiraInputDialog dialog = new JiraInputDialog();
+    private ObservableList<JiraPair> jiraList = FXCollections.observableArrayList();
 
     {
         formElements.put("patchName", new TextField());
@@ -56,9 +59,17 @@ public class MainController implements Initializable {
         formElemStatuses.put("releaseVerStatus", new Text());
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    /**
+     * Initializes elements, which can't be initialized in MainWindow.fxml file.
+     * This method will be automatically called by FXMLLoader.
+     * @see Initializable
+     */
+    public void initialize() {
         webServiceUrl.setText(PropertiesManager.getPropertyValue("webServiceURL"));
+
+        //Adding UrlStatusListener to webServiceUrl, which activates on change of text in the field
+        //Every field change will activates validation and a status message near the field will be shown
+        webServiceUrl.textProperty().addListener(new UrlStatusListener(urlStatus));
 
         formElemStatuses.values()
                 .forEach(statusText -> {
@@ -75,13 +86,63 @@ public class MainController implements Initializable {
         jiraDescripColumn.setCellValueFactory(new PropertyValueFactory<>("jiraDescrip"));
         jiraTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         jiraTable.getColumns().addAll(jiraIdColumn, jiraDescripColumn);
-        jiraTable.setItems(jiras);
+        jiraTable.setItems(jiraList);
     }
 
+    /**
+     * Handler for "+" table button which adds new jiraPair to the table
+     * @param e {@link Event}
+     */
     @FXML
-    public void addButton(Event e) {
-//        ru.mera.readmeCreator.desktop.JiraInputDialog dialog = new ru.mera.readmeCreator.desktop.JiraInputDialog();
-        Optional<JiraPair> jiraPair = dialog.showAndWait();
-        jiraPair.ifPresent(pair -> jiras.add(pair));
+    public void addJira(Event e) {
+        JiraInputDialog jiraDialog = new JiraInputDialog(JiraInputDialog.DialogType.ADD);
+        Optional<JiraPair> jiraPair = jiraDialog.showAndWait();
+        jiraPair.ifPresent(pair -> {
+            if (jiraList.contains(pair)) {
+                sendAlert("Such jira already exists", Alert.AlertType.WARNING);
+                return;
+            }
+            jiraList.add(pair);
+        });
+    }
+
+    /**
+     * Handler for "-" table button which removes selected jiraPair from the table
+     * @param e {@link Event}
+     */
+    @FXML
+    public void removeJira(Event e) {
+        int removeIndex = jiraTable.getFocusModel().getFocusedIndex();
+        if (removeIndex >= 0) {
+            //Table is empty. There is nothing to remove
+            jiraList.remove(removeIndex);
+        }
+    }
+
+    /**
+     * Handler for "Edit" table button which edits selected jiraPair in the table
+     * @param e {@link Event}
+     */
+    @FXML
+    public void editJira(Event e) {
+        int editIndex = jiraTable.getFocusModel().getFocusedIndex();
+        if (editIndex < 0) {
+            //Table is empty. There is nothing to edit
+            return;
+        }
+        JiraPair editPair = jiraList.get(editIndex);
+
+        JiraInputDialog jiraDialog = new JiraInputDialog(editPair.getJiraId(),
+                editPair.getJiraDescrip(),
+                JiraInputDialog.DialogType.EDIT);
+        Optional<JiraPair> jiraPair = jiraDialog.showAndWait();
+        jiraPair.ifPresent(pair -> {
+            //Alerting user if the jiraId already exists in the table
+            if (!pair.equals(editPair) && jiraList.contains(pair)) {
+                sendAlert("Such jira already exists", Alert.AlertType.WARNING);
+                return;
+            }
+            jiraList.set(editIndex, pair);
+        });
     }
 }

@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.mera.readmeCreator.desktop.*;
+import ru.mera.readmeCreator.desktop.controllers.UrlStatusListener;
 import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
 
 import java.io.File;
@@ -24,7 +25,7 @@ import static ru.mera.readmeCreator.desktop.UI.UiElements.saveAs;
 import static ru.mera.readmeCreator.desktop.UI.UiElements.webServiceUrl;
 
 /**
- * Button handler for "Generate HelloWorld" button
+ * removeJira handler for "Generate HelloWorld" button
  */
 class GenerateButtonHandler implements EventHandler<ActionEvent>, AlertSender {
     private Stage stage;
