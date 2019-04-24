@@ -11,6 +11,7 @@ package ru.mera.readmeCreator.desktop.controllers;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,20 +21,22 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import ru.mera.readmeCreator.desktop.JiraInputDialog;
 import ru.mera.readmeCreator.desktop.JiraPair;
 import ru.mera.readmeCreator.desktop.PropertiesManager;
+import ru.mera.readmeCreator.desktop.UserData;
 import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
 
-import java.util.Optional;
+import java.net.URL;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Controller for MainWindow.fxml.
  */
 public class MainWindowController implements AlertSender {
     @FXML
-    private TextField webServiceUrl;
+    private TextField serviceUrlField;
 
     @FXML
     private Text urlStatus;
@@ -67,11 +70,11 @@ public class MainWindowController implements AlertSender {
      * This method will be automatically called by FXMLLoader {@link Initializable}
      */
     public void initialize() {
-        webServiceUrl.setText(PropertiesManager.getPropertyValue("webServiceURL"));
+        serviceUrlField.setText(PropertiesManager.getPropertyValue("webServiceURL"));
 
-        //Adding UrlStatusListener to webServiceUrl, which will validate it
-        //and show validation status to user by editing urlStatus
-        webServiceUrl.textProperty().addListener(new UrlStatusListener(urlStatus));
+        //Adding UrlStatusListener to serviceUrlField, which will validate it
+        //and show validation status to user by editing urlStatus text
+        serviceUrlField.textProperty().addListener(new UrlStatusListener(urlStatus));
 
         formElemStatuses.values()
                 .forEach(statusText -> {
@@ -79,9 +82,11 @@ public class MainWindowController implements AlertSender {
                     statusText.setFill(Color.GREEN);
                 });
 
+        //Adding columns to table form
         form.addColumn(1, formElements.values().toArray(new Node[0]));
         form.addColumn(2, formElemStatuses.values().toArray(new Node[0]));
 
+        //Configuring jiraTable
         TableColumn<JiraPair, String> jiraIdColumn = new TableColumn<>("Jira ID");
         TableColumn<JiraPair, String> jiraDescripColumn = new TableColumn<>("Jira description");
         jiraIdColumn.setCellValueFactory(new PropertyValueFactory<>("jiraId"));
@@ -90,8 +95,21 @@ public class MainWindowController implements AlertSender {
         jiraTable.getColumns().addAll(jiraIdColumn, jiraDescripColumn);
         jiraTable.setItems(jiraList);
 
+        submitButton.addEventFilter(ActionEvent.ACTION, event -> {
+
+        });
+
         //Adding button handler for "Submit" button
-        submitButton.setOnAction(new SubmitButtonHandler());
+        submitButton.setOnAction(new SubmitButtonHandler(this));
+    }
+
+    public UserData retrieveUserData() {
+        if ()
+        URL serviceUrl = new URL()
+        Map<String, String> parameters = formElements.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getText()));
+
+        return new UserData(parameters, jiraList);
     }
 
     /**
@@ -99,7 +117,7 @@ public class MainWindowController implements AlertSender {
      * @param e {@link Event}
      */
     @FXML
-    public void addJira(Event e) {
+    private void addJira(Event e) {
         JiraInputDialog jiraDialog = new JiraInputDialog(JiraInputDialog.DialogType.ADD);
         Optional<JiraPair> jiraPair = jiraDialog.showAndWait();
         jiraPair.ifPresent(pair -> {
@@ -116,7 +134,7 @@ public class MainWindowController implements AlertSender {
      * @param e {@link Event}
      */
     @FXML
-    public void removeJira(Event e) {
+    private void removeJira(Event e) {
         int removeIndex = jiraTable.getFocusModel().getFocusedIndex();
         if (removeIndex >= 0) {
             //Table is empty. There is nothing to remove
@@ -129,7 +147,7 @@ public class MainWindowController implements AlertSender {
      * @param e {@link Event}
      */
     @FXML
-    public void editJira(Event e) {
+    private void editJira(Event e) {
         int editIndex = jiraTable.getFocusModel().getFocusedIndex();
         if (editIndex < 0) {
             //Table is empty. There is nothing to edit

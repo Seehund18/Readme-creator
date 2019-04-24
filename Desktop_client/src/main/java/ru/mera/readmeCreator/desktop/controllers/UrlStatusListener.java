@@ -19,9 +19,9 @@ import javafx.scene.text.Text;
 class UrlStatusListener implements ChangeListener<String> {
 
     /**
-     * Shows is url in webServiceUrl field valid
+     * Shows if is url in webServiceUrl field valid
      */
-    private static boolean isUrlValid;
+    static boolean isUrlValid;
 
     /**
      * Text which will dynamically change showing validation status
@@ -32,10 +32,6 @@ class UrlStatusListener implements ChangeListener<String> {
      * Validator for the webServiceUrl field
      */
     private UrlFieldValidator urlFieldValidator = new UrlFieldValidator();
-
-    static boolean isUrlValid() {
-        return isUrlValid;
-    }
 
     UrlStatusListener (Text urlStatus) {
         this.urlStatus = urlStatus;

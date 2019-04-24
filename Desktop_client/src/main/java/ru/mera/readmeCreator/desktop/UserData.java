@@ -8,11 +8,16 @@
 
 package ru.mera.readmeCreator.desktop;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javafx.fxml.FXML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.net.URL;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Entity which represents data entered by user.
@@ -20,26 +25,30 @@ import org.slf4j.LoggerFactory;
  */
 public class UserData {
 
-    /**
-     * Text entered by user. For now, it is text from userInput field
-     */
-    private String info;
+    @JsonIgnore
+    private URL webServiceUrl;
 
+    private Map<String, String> parameters;
+    private List<JiraPair> jiras;
     /**
      * Mapper to JSON format
      */
     private ObjectMapper mapper = new ObjectMapper();
     private Logger log = LoggerFactory.getLogger(UserData.class);
 
-    public UserData(String info) {
-        this.info = info;
-    }
-    public String getInfo() {
-        return info;
+    @JsonAnyGetter
+    public Map<String, String> getParameters() {
+        return parameters;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public List<JiraPair> getJiras() {
+        return jiras;
+    }
+
+    public UserData(URL webServiceUrl, Map<String, String > parameters, List<JiraPair> jiras) {
+        this.webServiceUrl = webServiceUrl;
+        this.parameters = parameters;
+        this.jiras = jiras;
     }
 
     @Override

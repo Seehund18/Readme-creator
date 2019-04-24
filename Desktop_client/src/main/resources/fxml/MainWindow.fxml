@@ -19,7 +19,7 @@
            text="Please, enter URL of web service.&#10;Examples: http://localhost:8080, http://myService.com" />
 
     <FlowPane alignment="CENTER" hgap="10">
-        <TextField fx:id="webServiceUrl" promptText="Enter URL of web service..."
+        <TextField fx:id="serviceUrlField" promptText="Enter URL of web service..."
                    prefWidth="200" prefHeight="10"/>
         <Text fx:id="urlStatus"/>
     </FlowPane>

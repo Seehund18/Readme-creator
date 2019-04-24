@@ -27,6 +27,7 @@ import java.net.MalformedURLException;
  * Handler for "Submit" button
  */
 class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
+    private MainWindowController controller;
 
     /**
      * Validator for userInput field
@@ -43,15 +44,18 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
         saveAs.setInitialDirectory(new File(System.getProperty("user.home")));
     }
 
+    SubmitButtonHandler(MainWindowController controller) {
+        this.controller = controller;
+    }
 
     @Override
     public void handle(ActionEvent event) {
         //Retrieving current stage
         Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
-        //Invoking 'save as' dialog and choosing place to save file
-        File userDataFile = saveAs.showSaveDialog(stage);
 
-//        //Validating userInput
+        UserData userData = controller.retrieveUserData();
+
+        //Validating userInput
 //        String userInputText = userInput.getText();
 //        if (!userInputValidator.isValid(userInputText)) {
 //            sendAlert("Please, enter at least one symbol", Alert.AlertType.WARNING);
@@ -59,25 +63,25 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
 //        }
 //        UserData userData = new UserData(userInputText);
 //
-//        //Checking flag
-//        if (!UrlStatusListener.isUrlValid()) {
-//            sendAlert("URL is not valid", Alert.AlertType.ERROR);
-//            return;
-//        }
-//
-//        //Setting and checking web service url
-//        String serviceURL = webServiceUrl.getText();
-//        try {
-//            App.setConnector(serviceURL);
-//        } catch (MalformedURLException e) {
-//            sendAlert("Can't create web service url", Alert.AlertType.ERROR);
-//            log.error("Can't create web service url", e);
-//            return;
-//        }
-//        if (!App.checkWebService()) {
-//            sendAlert("Service is unavailable right now. Try again later", Alert.AlertType.WARNING);
-//            return;
-//        }
+        //Checking flag
+        if (!UrlStatusListener.isUrlValid) {
+            sendAlert("URL is not valid", Alert.AlertType.ERROR);
+            return;
+        }
+
+        //Setting and checking web service url
+        String serviceURL = webServiceUrl.getText();
+        try {
+            App.setConnector(serviceURL);
+        } catch (MalformedURLException e) {
+            sendAlert("Can't create web service url", Alert.AlertType.ERROR);
+            log.error("Can't create web service url", e);
+            return;
+        }
+        if (!App.checkWebService()) {
+            sendAlert("Service is unavailable right now. Try again later", Alert.AlertType.WARNING);
+            return;
+        }
 //
 //        //Invoking 'save as' dialog and choosing place to save file
 //        saveAs.setInitialFileName("User_data.rtf");
