@@ -21,7 +21,7 @@ import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
 
 import java.io.File;
 import java.net.MalformedURLException;
-
+import java.util.Optional;
 
 /**
  * Handler for "Submit" button
@@ -53,35 +53,40 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
         //Retrieving current stage
         Stage stage = (Stage)((Node) event.getSource()).getScene().getWindow();
 
-        UserData userData = controller.retrieveUserData();
-
-        //Validating userInput
-//        String userInputText = userInput.getText();
-//        if (!userInputValidator.isValid(userInputText)) {
-//            sendAlert("Please, enter at least one symbol", Alert.AlertType.WARNING);
+        try {
+            controller.retrieveUserData();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        //        UserData userData;
+//        try {
+//            Optional<UserData> result = controller.retrieveUserData();
+//            if (!result.isPresent()) {
+//                return;
+//            }
+//            userData = result.get();
+//        } catch (MalformedURLException ex) {
+//            log.error("Can't create URL of web service", ex);
+//            sendAlert("Can't create URL of web service", Alert.AlertType.ERROR);
 //            return;
 //        }
-//        UserData userData = new UserData(userInputText);
 //
-        //Checking flag
-        if (!UrlStatusListener.isUrlValid) {
-            sendAlert("URL is not valid", Alert.AlertType.ERROR);
-            return;
-        }
+//        System.out.println(userData);
 
-        //Setting and checking web service url
-        String serviceURL = webServiceUrl.getText();
-        try {
-            App.setConnector(serviceURL);
-        } catch (MalformedURLException e) {
-            sendAlert("Can't create web service url", Alert.AlertType.ERROR);
-            log.error("Can't create web service url", e);
-            return;
-        }
-        if (!App.checkWebService()) {
-            sendAlert("Service is unavailable right now. Try again later", Alert.AlertType.WARNING);
-            return;
-        }
+
+//        //Setting and checking web service url
+//        String serviceURL = webServiceUrl.getText();
+//        try {
+//            App.setConnector(serviceURL);
+//        } catch (MalformedURLException e) {
+//            sendAlert("Can't create web service url", Alert.AlertType.ERROR);
+//            log.error("Can't create web service url", e);
+//            return;
+//        }
+//        if (!App.checkWebService()) {
+//            sendAlert("Service is unavailable right now. Try again later", Alert.AlertType.WARNING);
+//            return;
+//        }
 //
 //        //Invoking 'save as' dialog and choosing place to save file
 //        saveAs.setInitialFileName("User_data.rtf");

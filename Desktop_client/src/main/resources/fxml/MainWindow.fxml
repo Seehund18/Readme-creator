@@ -18,17 +18,22 @@
     <Label prefWidth="350" textAlignment="CENTER" wrapText="true" font="$LabelFont"
            text="Please, enter URL of web service.&#10;Examples: http://localhost:8080, http://myService.com" />
 
-    <FlowPane alignment="CENTER" hgap="10">
-        <TextField fx:id="serviceUrlField" promptText="Enter URL of web service..."
-                   prefWidth="200" prefHeight="10"/>
-        <Text fx:id="urlStatus"/>
-    </FlowPane>
+    <HBox fx:id="urlInput" alignment="CENTER" spacing="10" >
+<!--        <TextField fx:id="serviceUrlField" promptText="Enter URL of web service..."-->
+<!--                   prefWidth="200" prefHeight="10"/>-->
+<!--        <Text fx:id="urlStatus"/>-->
+    </HBox>
 
     <Line endX="1000"/>
 
     <Label text="Enter parameters for readme file:" textAlignment="CENTER" font="$LabelFont"/>
 
     <GridPane fx:id="form" hgap="10" vgap="10" alignment="CENTER">
+        <columnConstraints>
+            <ColumnConstraints hgrow="NEVER" prefWidth="150"/>
+            <ColumnConstraints hgrow="NEVER" prefWidth="200"/>
+            <ColumnConstraints hgrow="NEVER" prefWidth="50"/>
+        </columnConstraints>
         <Label GridPane.columnIndex="0" GridPane.rowIndex="0" text="Patch name:" font="$LabelFont" />
         <Label GridPane.columnIndex="0" GridPane.rowIndex="1" text="Date:" font="$LabelFont"/>
         <Label GridPane.columnIndex="0" GridPane.rowIndex="2" text="Update ID:" font="$LabelFont"/>

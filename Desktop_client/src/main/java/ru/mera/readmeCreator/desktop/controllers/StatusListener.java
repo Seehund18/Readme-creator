@@ -11,44 +11,37 @@ package ru.mera.readmeCreator.desktop.controllers;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
+import ru.mera.readmeCreator.desktop.interfaces.Validator;
 
 /**
- * Listener for webServiceUrl field
+ * Listener for fields
  */
-class UrlStatusListener implements ChangeListener<String> {
+class StatusListener implements ChangeListener<String> {
+
+    private ValidatedTextField field;
 
     /**
-     * Shows if is url in webServiceUrl field valid
+     * Validator for the field
      */
-    static boolean isUrlValid;
+    private Validator fieldValidator;
 
-    /**
-     * Text which will dynamically change showing validation status
-     */
-    private Text urlStatus;
-
-    /**
-     * Validator for the webServiceUrl field
-     */
-    private UrlFieldValidator urlFieldValidator = new UrlFieldValidator();
-
-    UrlStatusListener (Text urlStatus) {
-        this.urlStatus = urlStatus;
+    StatusListener(ValidatedTextField field, Validator validator) {
+        this.field = field;
+        this.fieldValidator = validator;
     }
 
     @Override
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        if (urlFieldValidator.isValid(newValue)) {
+        if (fieldValidator.isValid(newValue)) {
             //If validation was passed, "Valid URL" will be shown near the webServiceUrl field
-            isUrlValid = true;
-            urlStatus.setText("Valid URL");
-            urlStatus.setFill(Color.GREEN);
+            field.setValid(true);
+            field.getStatusText().setText("Valid");
+            field.getStatusText().setFill(Color.GREEN);
             return;
         }
         //If not, "Not valid URL" will be shown
-        isUrlValid = false;
-        urlStatus.setText("Not valid URL");
-        urlStatus.setFill(Color.RED);
+        field.setValid(false);
+        field.getStatusText().setText("Not valid");
+        field.getStatusText().setFill(Color.RED);
     }
 }

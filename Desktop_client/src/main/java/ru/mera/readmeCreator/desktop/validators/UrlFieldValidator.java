@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.controllers;
+package ru.mera.readmeCreator.desktop.validators;
 
 import org.apache.commons.validator.routines.UrlValidator;
 import ru.mera.readmeCreator.desktop.interfaces.Validator;
@@ -14,7 +14,7 @@ import ru.mera.readmeCreator.desktop.interfaces.Validator;
 /**
  * Validator for webServiceUrl field
  */
-class UrlFieldValidator implements Validator {
+public class UrlFieldValidator implements Validator {
 
     @Override
     public boolean isValid(String url) {
@@ -25,7 +25,7 @@ class UrlFieldValidator implements Validator {
             return false;
         }
 
-        //Using UrlFieldValidator class from apache.commons library to check the url
+        //Using UrlValidator class from apache.commons library to check the url
         UrlValidator urlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
         return urlValidator.isValid(url);
     }

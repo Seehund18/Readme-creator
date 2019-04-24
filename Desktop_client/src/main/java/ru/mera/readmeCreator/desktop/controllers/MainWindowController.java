@@ -10,23 +10,21 @@ package ru.mera.readmeCreator.desktop.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
-import ru.mera.readmeCreator.desktop.JiraInputDialog;
-import ru.mera.readmeCreator.desktop.JiraPair;
-import ru.mera.readmeCreator.desktop.PropertiesManager;
-import ru.mera.readmeCreator.desktop.UserData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.mera.readmeCreator.desktop.*;
 import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
+import ru.mera.readmeCreator.desktop.validators.UrlFieldValidator;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,16 +33,15 @@ import java.util.stream.Collectors;
  * Controller for MainWindow.fxml.
  */
 public class MainWindowController implements AlertSender {
-    @FXML
-    private TextField serviceUrlField;
+    private static final Logger log = LoggerFactory.getLogger(MainWindowController.class);
 
     @FXML
-    private Text urlStatus;
+    private HBox urlInput;
+    private ValidatedTextField urlField = new ValidatedTextField(new UrlFieldValidator());
 
     @FXML
     private GridPane form = new GridPane();
-    private ObservableMap<String, TextField> formElements = FXCollections.observableHashMap();
-    private ObservableMap<String, Text> formElemStatuses = FXCollections.observableHashMap();
+    private LinkedHashMap<String, ValidatedTextField> formTableRows = new LinkedHashMap<>();
 
     @FXML
     private TableView<JiraPair> jiraTable = new TableView<>();
@@ -54,15 +51,10 @@ public class MainWindowController implements AlertSender {
     private Button submitButton;
 
     {
-        formElements.put("patchName", new TextField());
-        formElements.put("date", new TextField());
-        formElements.put("updateId", new TextField());
-        formElements.put("releaseVer", new TextField());
-
-        formElemStatuses.put("patchNameStatus", new Text());
-        formElemStatuses.put("dateStatus", new Text());
-        formElemStatuses.put("updateIdStatus", new Text());
-        formElemStatuses.put("releaseVerStatus", new Text());
+        formTableRows.put("patchName", new ValidatedTextField());
+        formTableRows.put("date", new ValidatedTextField());
+        formTableRows.put("updateId", new ValidatedTextField());
+        formTableRows.put("releaseVer", new ValidatedTextField());
     }
 
     /**
@@ -70,21 +62,17 @@ public class MainWindowController implements AlertSender {
      * This method will be automatically called by FXMLLoader {@link Initializable}
      */
     public void initialize() {
-        serviceUrlField.setText(PropertiesManager.getPropertyValue("webServiceURL"));
+        urlField.getTextField().setText(PropertiesManager.getPropertyValue("webServiceURL"));
+        urlField.getTextField().setPromptText("Enter URL");
 
-        //Adding UrlStatusListener to serviceUrlField, which will validate it
-        //and show validation status to user by editing urlStatus text
-        serviceUrlField.textProperty().addListener(new UrlStatusListener(urlStatus));
-
-        formElemStatuses.values()
-                .forEach(statusText -> {
-                    statusText.setText("It's alright");
-                    statusText.setFill(Color.GREEN);
-                });
+        urlInput.getChildren().addAll(urlField.getTextField(), urlField.getStatusText());
 
         //Adding columns to table form
-        form.addColumn(1, formElements.values().toArray(new Node[0]));
-        form.addColumn(2, formElemStatuses.values().toArray(new Node[0]));
+        int rowIndex = 0;
+        for (ValidatedTextField row: formTableRows.values()) {
+            form.add(row.getTextField(), 1, rowIndex);
+            form.add(row.getStatusText(), 2, rowIndex++);
+        }
 
         //Configuring jiraTable
         TableColumn<JiraPair, String> jiraIdColumn = new TableColumn<>("Jira ID");
@@ -95,21 +83,41 @@ public class MainWindowController implements AlertSender {
         jiraTable.getColumns().addAll(jiraIdColumn, jiraDescripColumn);
         jiraTable.setItems(jiraList);
 
-        submitButton.addEventFilter(ActionEvent.ACTION, event -> {
-
-        });
-
         //Adding button handler for "Submit" button
         submitButton.setOnAction(new SubmitButtonHandler(this));
     }
 
-    public UserData retrieveUserData() {
-        if ()
-        URL serviceUrl = new URL()
-        Map<String, String> parameters = formElements.entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getText()));
+    /**
+     * Retrieves information from fields, validates it and packs into userData
+     * @return Optional userData. If everything is valid, UserData returned.
+     *         If something is invalid, null returned
+     * @throws MalformedURLException URL can't be created
+     */
+    public Optional<UserData> retrieveUserData() throws MalformedURLException {
+        log.info("Retrieving data entered by user");
 
-        return new UserData(parameters, jiraList);
+        System.out.println(checkFlags());
+//        URL serviceUrl;
+//        if (StatusListener.isValid) {
+//            serviceUrl = new URL(serviceUrlField.getText());
+//        } else {
+//            sendAlert("URL of web service is invalid", Alert.AlertType.WARNING);
+//            return Optional.empty();
+//        }
+//        Map<String, String> parameters = formTableRows.entrySet().stream()
+//                .collect(Collectors.toMap(Map.Entry::getKey,
+//                        entry -> entry.getValue().getTextField().getText()));
+
+//        return Optional.of(new UserData(serviceUrl, parameters, jiraList));
+        return Optional.empty();
+    }
+
+    private boolean checkFlags() {
+        if (urlField.isValid()) {
+            return formTableRows.values().stream()
+                    .allMatch(ValidatedTextField::isValid);
+        }
+        return false;
     }
 
     /**

@@ -9,15 +9,22 @@
 package ru.mera.readmeCreator.desktop.interfaces;
 
 /**
- * Interaface for validators
+ * Interface for validators
  */
 public interface Validator {
 
     /**
-     * Checks if value is valid
+     * Checks if value is valid. By default, checks if the value is null or an empty string
      * @param value value that need to be validated
      * @return true - value is valid;
      *         false - value isn't valid
      */
-    boolean isValid(String value);
+    default boolean isValid(String value) {
+        return (value != null) && (!value.trim().isEmpty());
+    }
+
+    /**
+     * Default validator which
+     */
+    class defaultValidator implements Validator {}
 }
