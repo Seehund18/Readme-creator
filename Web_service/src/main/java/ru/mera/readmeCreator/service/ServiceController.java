@@ -65,7 +65,7 @@ public class ServiceController {
 
         try {
             //Trying to addFile file with given name
-            repository.addFile(name, userData.getInfo());
+            repository.addFile(name, userData.toString());
         } catch (IOException ex) {
             //If some problems occurred, RepositoryException is thrown
             //which will be caught and handled by GeneratorExceptionAdvice
