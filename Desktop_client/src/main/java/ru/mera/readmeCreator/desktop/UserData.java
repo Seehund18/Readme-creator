@@ -24,17 +24,21 @@ import java.util.Map;
  * If there is a need to send UserData to service, it's serialized in JSON string format by toString() method
  */
 public class UserData {
+    private Logger log = LoggerFactory.getLogger(UserData.class);
 
     @JsonIgnore
     private URL webServiceUrl;
-
     private Map<String, String> parameters;
     private List<JiraPair> jiras;
+
     /**
      * Mapper to JSON format
      */
     private ObjectMapper mapper = new ObjectMapper();
-    private Logger log = LoggerFactory.getLogger(UserData.class);
+
+    public URL getWebServiceUrl() {
+        return webServiceUrl;
+    }
 
     @JsonAnyGetter
     public Map<String, String> getParameters() {

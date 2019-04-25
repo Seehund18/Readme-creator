@@ -6,18 +6,19 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.UI;
-
-import ru.mera.readmeCreator.desktop.interfaces.Validator;
+package ru.mera.readmeCreator.desktop.webService;
 
 /**
- * Validator for userInput field
+ * Represents all exceptions thrown from implementations of WebService abstract class.
+ * Exceptions from WebService are wrapped into this one.
  */
-class UserInputValidator implements Validator {
+public class WebServiceException extends Exception {
 
-    @Override
-    public boolean isValid(String value) {
-        //Value shouldn't be empty
-        return value != null && !value.equals("");
+    public WebServiceException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public WebServiceException(String message) {
+        super(message);
     }
 }

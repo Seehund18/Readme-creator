@@ -114,7 +114,7 @@ public class MainWindowController implements AlertSender {
 
         log.info("Retrieving entered parameters from fields...");
         URL serviceUrl = new URL(urlField.getTextField().getText());
-        //Constructing new parameters map from formTable
+        //Constructing new parameters map from formParameters
         Map<String, String> parameters = formParameters.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
                                           entry -> entry.getValue().getTextField().getText()));
