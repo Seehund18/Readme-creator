@@ -15,7 +15,7 @@ import ru.mera.readmeCreator.desktop.interfaces.Validator;
 public class ValidatedTextField {
     private TextField textField;
     private Text statusText;
-    private Boolean isValid;
+    private Boolean isValid = false;
 
     public ValidatedTextField(TextField textField, Text statusText, Validator validator) {
         this.textField = textField;
