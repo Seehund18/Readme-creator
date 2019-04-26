@@ -6,12 +6,16 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.controllers;
+package ru.mera.readmeCreator.desktop.entities;
 
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import ru.mera.readmeCreator.desktop.controllers.StatusListener;
 import ru.mera.readmeCreator.desktop.interfaces.Validator;
 
+/**
+ * Entity which represents text field with validation status text in the program view.
+ */
 public class ValidatedTextField {
     private TextField textField;
     private Text statusText;

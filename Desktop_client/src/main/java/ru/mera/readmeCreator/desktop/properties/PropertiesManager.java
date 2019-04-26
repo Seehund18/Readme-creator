@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop;
+package ru.mera.readmeCreator.desktop.properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,9 +20,10 @@ import java.util.Properties;
  * For this, method init() is used, which must be called only once.
  */
 public class PropertiesManager {
+    private static final Logger log = LoggerFactory.getLogger(PropertiesManager.class);
+
     private static final File propertiesFile = new File("conf/config.properties");
     private static Properties prop;
-    private static final Logger log = LoggerFactory.getLogger(PropertiesManager.class);
 
     /**
      * Initialize PropertyManager. Must be called first
@@ -36,7 +37,11 @@ public class PropertiesManager {
         }
 
         if (!propertiesFile.exists()) {
-            createPropertyFile();
+            try {
+                createPropertyFile();
+            } catch (IOException e) {
+                throw new PropertiesManagerException("Exception during first writing to property file", e);
+            }
         }
 
         prop = new Properties();
@@ -54,12 +59,10 @@ public class PropertiesManager {
     /**
      * Creates property file with needed properties
      */
-    private static void createPropertyFile() {
+    private static void createPropertyFile() throws IOException {
         new File("conf").mkdir();
         try (FileWriter out = new FileWriter(propertiesFile)) {
             out.write("webServiceURL");
-        } catch (IOException ex) {
-            log.error("Exception during first writing to property file", ex);
         }
     }
 
@@ -81,7 +84,7 @@ public class PropertiesManager {
      * Sets property value and saves it in the file
      * @param key property
      * @param value new value of the property
-     * @return true - new property value was successfully saved;
+     * @return true - new property value is successfully saved;
      *         false - new property value is equals to the old one
      * @throws UnsupportedOperationException PropertyManager wasn't initialized first
      * @throws PropertiesManagerException Exception occurred during saving the file

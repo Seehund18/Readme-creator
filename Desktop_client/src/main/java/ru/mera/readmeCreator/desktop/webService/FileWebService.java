@@ -34,6 +34,14 @@ public class FileWebService implements WebService {
      */
     private HttpURLConnection connection;
 
+    /**
+     * Constructs new FileWebService. It is assumed that webServiceUrl is correct URL
+     * @param webServiceUrl correct web service url
+     */
+    public FileWebService(URL webServiceUrl) {
+        this.url = webServiceUrl;
+    }
+
     public URL getUrl() {
         return this.url;
     }
@@ -44,14 +52,6 @@ public class FileWebService implements WebService {
 
     HttpURLConnection getConnection() {
         return connection;
-    }
-
-    /**
-     * Constructs new FileWebService. It is assumed that webServiceUrl is correct URL
-     * @param webServiceUrl correct web service url
-     */
-    public FileWebService(URL webServiceUrl) {
-        this.url = webServiceUrl;
     }
 
     @Override

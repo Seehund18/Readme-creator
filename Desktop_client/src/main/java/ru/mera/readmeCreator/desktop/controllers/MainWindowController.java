@@ -19,8 +19,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.mera.readmeCreator.desktop.*;
+import ru.mera.readmeCreator.desktop.entities.JiraPair;
+import ru.mera.readmeCreator.desktop.entities.UserData;
+import ru.mera.readmeCreator.desktop.entities.ValidatedTextField;
 import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
+import ru.mera.readmeCreator.desktop.properties.PropertiesManager;
 import ru.mera.readmeCreator.desktop.validators.UrlFieldValidator;
 
 import java.net.MalformedURLException;
@@ -171,10 +174,11 @@ public class MainWindowController implements AlertSender {
     @FXML
     private void removeJira(Event e) {
         int removeIndex = jiraTable.getFocusModel().getFocusedIndex();
-        if (removeIndex >= 0) {
+        if (removeIndex < 0) {
             //Table is empty. There is nothing to remove
-            jiraList.remove(removeIndex);
+            return;
         }
+        jiraList.remove(removeIndex);
     }
 
     /**
@@ -191,8 +195,8 @@ public class MainWindowController implements AlertSender {
         JiraPair editPair = jiraList.get(editIndex);
 
         JiraInputDialog jiraDialog = new JiraInputDialog(editPair.getJiraId(),
-                editPair.getJiraDescrip(),
-                JiraInputDialog.DialogType.EDIT);
+                                                         editPair.getJiraDescrip(),
+                                                         JiraInputDialog.DialogType.EDIT);
         Optional<JiraPair> jiraPair = jiraDialog.showAndWait();
         jiraPair.ifPresent(pair -> {
             //Alerting user if the jiraId already exists in the table

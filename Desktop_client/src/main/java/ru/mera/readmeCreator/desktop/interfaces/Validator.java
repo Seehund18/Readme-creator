@@ -24,7 +24,7 @@ public interface Validator {
     }
 
     /**
-     * Default validator which
+     * Default implementation of validator
      */
     class defaultValidator implements Validator {}
 }

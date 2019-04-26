@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop;
+package ru.mera.readmeCreator.desktop.properties;
 
 /**
  * Represents all exceptions thrown from PropertiesManager class.
@@ -14,11 +14,11 @@ package ru.mera.readmeCreator.desktop;
  */
 public class PropertiesManagerException extends Exception {
 
-    public PropertiesManagerException(String message, Throwable cause) {
+    PropertiesManagerException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public PropertiesManagerException(String message) {
+    PropertiesManagerException(String message) {
         super(message);
     }
 }

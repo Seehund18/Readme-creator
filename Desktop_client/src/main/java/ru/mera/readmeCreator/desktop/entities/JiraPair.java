@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop;
+package ru.mera.readmeCreator.desktop.entities;
 
 /**
  * Entity which represents jira id and jira description pair
@@ -36,11 +36,9 @@ public class JiraPair {
         this.jiraDescrip = jiraDescrip;
     }
 
-    @Override
-    public String toString() {
-        return super.toString();
-    }
-
+    /**
+     * JiraPairs are equal if they have similar jiraId
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

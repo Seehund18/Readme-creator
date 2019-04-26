@@ -19,12 +19,20 @@ import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
+import ru.mera.readmeCreator.desktop.properties.PropertiesManager;
+import ru.mera.readmeCreator.desktop.properties.PropertiesManagerException;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.IOException;
 
+/**
+ * Main class of the program
+ */
 public class MainApp extends Application implements AlertSender {
     private static final Logger log = LoggerFactory.getLogger(MainApp.class);
+
+    public static void main(String[] args) {
+        Application.launch(args);
+    }
 
     /**
      * Initialization of propertiesManager
@@ -41,9 +49,18 @@ public class MainApp extends Application implements AlertSender {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         propertiesInit();
-        VBox root = FXMLLoader.load(getClass().getResource("/fxml/MainWindow.fxml"));
+
+        //Loading of MainWindow.fxml
+        VBox root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/fxml/MainWindow.fxml"));
+        } catch (IOException ex) {
+            log.error("Can't load MainWindow.fxml file", ex);
+            sendAlert("Can't load MainWindow.fxml file", Alert.AlertType.ERROR);
+            return;
+        }
         Scene scene = new Scene(root);
 
         //Configuring stage
@@ -63,9 +80,5 @@ public class MainApp extends Application implements AlertSender {
         Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         stage.setX((primScreenBounds.getWidth() - stage.getWidth()) / 2);
         stage.setY((primScreenBounds.getHeight() - stage.getHeight()) / 2);
-    }
-
-    public static void main(String[] args) {
-        Application.launch(args);
     }
 }

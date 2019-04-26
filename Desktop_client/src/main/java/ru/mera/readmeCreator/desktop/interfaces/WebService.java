@@ -11,12 +11,12 @@ package ru.mera.readmeCreator.desktop.interfaces;
 import ru.mera.readmeCreator.desktop.webService.WebServiceException;
 
 /**
- * Interface for web services connector in this program.
- */
+ * Interface for web service
+ **/
 public interface WebService {
 
     /**
-     * Defines when this web service is available. For this, sending 'GET' request
+     * Defines when this web service is available. By default, sending 'GET' request
      * directly to service URL
      * @return true - service is available and false otherwise
      * @throws WebServiceException problems with sending request

@@ -11,12 +11,13 @@ package ru.mera.readmeCreator.desktop.controllers;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
+import ru.mera.readmeCreator.desktop.entities.ValidatedTextField;
 import ru.mera.readmeCreator.desktop.interfaces.Validator;
 
 /**
  * Listener for fields
  */
-class StatusListener implements ChangeListener<String> {
+public class StatusListener implements ChangeListener<String> {
 
     private ValidatedTextField field;
 
@@ -25,7 +26,7 @@ class StatusListener implements ChangeListener<String> {
      */
     private Validator fieldValidator;
 
-    StatusListener(ValidatedTextField field, Validator validator) {
+    public StatusListener(ValidatedTextField field, Validator validator) {
         this.field = field;
         this.fieldValidator = validator;
     }

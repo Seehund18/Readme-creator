@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop;
+package ru.mera.readmeCreator.desktop.entities;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -31,11 +31,11 @@ public class UserData {
     private Map<String, String> parameters;
     private List<JiraPair> jiras;
 
-    /**
-     * Mapper to JSON format
-     */
-    private ObjectMapper mapper = new ObjectMapper();
-
+    public UserData(URL webServiceUrl, Map<String, String > parameters, List<JiraPair> jiras) {
+        this.webServiceUrl = webServiceUrl;
+        this.parameters = parameters;
+        this.jiras = jiras;
+    }
     public URL getWebServiceUrl() {
         return webServiceUrl;
     }
@@ -49,15 +49,10 @@ public class UserData {
         return jiras;
     }
 
-    public UserData(URL webServiceUrl, Map<String, String > parameters, List<JiraPair> jiras) {
-        this.webServiceUrl = webServiceUrl;
-        this.parameters = parameters;
-        this.jiras = jiras;
-    }
-
     @Override
     public String toString() {
         try {
+            ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(this);
         } catch (JsonProcessingException ex) {
             log.error("Can't convert user data object to json string", ex);

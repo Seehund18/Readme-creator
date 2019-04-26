@@ -11,11 +11,15 @@ package ru.mera.readmeCreator.desktop.webService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.mera.readmeCreator.desktop.MainApp;
+import ru.mera.readmeCreator.desktop.interfaces.WebService;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * Manager of web service. All interactions with service are done via this class.
+ */
 public class WebServiceManager {
     private static final Logger log = LoggerFactory.getLogger(MainApp.class);
 
@@ -29,7 +33,7 @@ public class WebServiceManager {
      * creates new connector. Otherwise sets new URL in existed connector
      * @param serviceURL url of web service
      */
-    public static void setConnector(URL serviceURL) {
+    public static void setService(URL serviceURL) {
         if (fileWebService == null) {
             fileWebService = new FileWebService(serviceURL);
         } else {

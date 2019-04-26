@@ -16,8 +16,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.mera.readmeCreator.desktop.*;
+import ru.mera.readmeCreator.desktop.entities.UserData;
 import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
+import ru.mera.readmeCreator.desktop.properties.PropertiesManager;
+import ru.mera.readmeCreator.desktop.properties.PropertiesManagerException;
 import ru.mera.readmeCreator.desktop.webService.WebServiceException;
 import ru.mera.readmeCreator.desktop.webService.WebServiceManager;
 
@@ -42,7 +44,7 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
     private FileChooser saveAs = new FileChooser();
 
     {
-        //Configuring savAs
+        //Configuring saveAs
         saveAs.setTitle("Save file as");
         saveAs.getExtensionFilters()
                 .add(new FileChooser.ExtensionFilter("RTF", "*.rtf"));
@@ -74,7 +76,7 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
         }
 
         //Setting and checking web service url
-        WebServiceManager.setConnector(userData.getWebServiceUrl());
+        WebServiceManager.setService(userData.getWebServiceUrl());
         if (!WebServiceManager.checkWebService()) {
             log.info("Service is unavailable");
             sendAlert("Service is unavailable right now. Try again later", Alert.AlertType.WARNING);
@@ -89,7 +91,9 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
             //User decided where to save file
             try {
                 //Trying to download file
-                WebServiceManager.downloadFile("/files/User_data.rtf", userData.toString(), userDataFile);
+                String jsonData = userData.toString();
+                log.info("Sent data to service: {}", jsonData);
+                WebServiceManager.downloadFile("/files/User_data.rtf", jsonData, userDataFile);
                 sendAlert("Your file has been downloaded", Alert.AlertType.INFORMATION);
                 log.info("File has been downloaded");
 

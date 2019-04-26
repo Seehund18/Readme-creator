@@ -6,19 +6,20 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop;
+package ru.mera.readmeCreator.desktop.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import ru.mera.readmeCreator.desktop.entities.JiraPair;
 import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
 
 import java.util.Optional;
 
 /**
  * Dialog, which is shown when user pressed "+" or "Edit" button.
- * User can write Jira ID and jira description and when this pair will be added to the table
+ * User can write Jira ID and Jira description and when this pair will be added to the table
  * or he can cancel this dialog
  */
 public class JiraInputDialog implements AlertSender {
@@ -57,7 +58,7 @@ public class JiraInputDialog implements AlertSender {
     }
 
     private void init() {
-        //Depending on dialogType, choosing buttonType with text and setting title of the screen
+        //Depending on dialogType, choosing buttonType with text and setting title of the dialog
         ButtonType buttonType;
         if (dialogType == DialogType.EDIT) {
             buttonType = new ButtonType("Edit", ButtonBar.ButtonData.OK_DONE);
@@ -95,7 +96,7 @@ public class JiraInputDialog implements AlertSender {
         });
 
         //Catching the action event (user pushed "Add" or "Edit" button)
-        //If jira ID field is not valid, showing alert to user and return him to the dialog screen
+        //If jira ID field is not valid, showing alert to user and returning him to the dialog screen
         addButton.addEventFilter(ActionEvent.ACTION, event -> {
             if (!isIdValid) {
                 sendAlert("Enter Jira id, please", Alert.AlertType.WARNING);
@@ -117,7 +118,7 @@ public class JiraInputDialog implements AlertSender {
 
     /**
      * Shows dialog to user and waits for action
-     * @return JiraPair wrapped into Optional. JiraPair maybe null if user canceled the dialog
+     * @return JiraPair wrapped into Optional. JiraPair may be null if user canceled the dialog
      */
     public Optional<JiraPair> showAndWait() {
         return dialog.showAndWait();
