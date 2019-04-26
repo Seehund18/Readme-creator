@@ -89,11 +89,9 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
 
         if (userDataFile != null) {
             //User decided where to save file
-            try {
-                //Trying to download file
-                String jsonData = userData.toString();
-                log.info("Sent data to service: {}", jsonData);
-                WebServiceManager.downloadFile("/files/User_data.rtf", jsonData, userDataFile);
+            try {                //Trying to download file
+
+                WebServiceManager.downloadFile("/files/User_data.rtf", userData.toString(), userDataFile);
                 sendAlert("Your file has been downloaded", Alert.AlertType.INFORMATION);
                 log.info("File has been downloaded");
 

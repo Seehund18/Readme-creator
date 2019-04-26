@@ -28,6 +28,7 @@ public class UserData {
 
     @JsonIgnore
     private URL webServiceUrl;
+
     private Map<String, String> parameters;
     private List<JiraPair> jiras;
 
@@ -40,7 +41,6 @@ public class UserData {
         return webServiceUrl;
     }
 
-    @JsonAnyGetter
     public Map<String, String> getParameters() {
         return parameters;
     }
@@ -53,7 +53,7 @@ public class UserData {
     public String toString() {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(this);
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
         } catch (JsonProcessingException ex) {
             log.error("Can't convert user data object to json string", ex);
             return "";

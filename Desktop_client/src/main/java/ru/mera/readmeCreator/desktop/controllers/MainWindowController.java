@@ -17,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.mera.readmeCreator.desktop.entities.JiraPair;
@@ -24,6 +25,7 @@ import ru.mera.readmeCreator.desktop.entities.UserData;
 import ru.mera.readmeCreator.desktop.entities.ValidatedTextField;
 import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
 import ru.mera.readmeCreator.desktop.properties.PropertiesManager;
+import ru.mera.readmeCreator.desktop.validators.DateValidator;
 import ru.mera.readmeCreator.desktop.validators.UrlFieldValidator;
 
 import java.net.MalformedURLException;
@@ -63,7 +65,9 @@ public class MainWindowController implements AlertSender {
 
     {
         formParameters.put("patchName", new ValidatedTextField());
-        formParameters.put("date", new ValidatedTextField());
+        TextField date = new TextField();
+        date.setPromptText("dd/mm/yy");
+        formParameters.put("date", new ValidatedTextField(date, new Text(), new DateValidator()));
         formParameters.put("updateId", new ValidatedTextField());
         formParameters.put("releaseVersion", new ValidatedTextField());
     }

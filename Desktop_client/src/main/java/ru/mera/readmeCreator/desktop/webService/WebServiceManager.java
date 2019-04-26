@@ -21,7 +21,7 @@ import java.net.URL;
  * Manager of web service. All interactions with service are done via this class.
  */
 public class WebServiceManager {
-    private static final Logger log = LoggerFactory.getLogger(MainApp.class);
+    private static final Logger log = LoggerFactory.getLogger(WebServiceManager.class);
 
     /**
      * File connector to the web service
