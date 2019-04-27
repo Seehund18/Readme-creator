@@ -6,19 +6,25 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.web_client;
+package ru.mera.readme_creator.web_client;
+
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+import java.io.Serializable;
 
 /**
- * Represents all exceptions thrown from WebServiceConnector class.
- * Exceptions from WebServiceConnector are wrapped into this one.
+ * Holds error message, which error.xhtml page shows
  */
-public class WebServiceConnectorException extends Exception {
+@ManagedBean
+@SessionScoped
+public class Error implements Serializable {
+    private String message;
 
-    public WebServiceConnectorException(String message, Throwable cause) {
-        super(message, cause);
+    public String getMessage() {
+        return message;
     }
 
-    public WebServiceConnectorException(String message) {
-        super(message);
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

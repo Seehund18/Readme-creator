@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.web_client;
+package ru.mera.readme_creator.web_client;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.Cookie;

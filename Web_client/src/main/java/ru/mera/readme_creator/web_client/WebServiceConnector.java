@@ -1,4 +1,4 @@
-package ru.mera.readmeCreator.web_client;
+package ru.mera.readme_creator.web_client;
 
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;

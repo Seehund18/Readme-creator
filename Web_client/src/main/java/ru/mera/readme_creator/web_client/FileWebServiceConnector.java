@@ -1,4 +1,4 @@
-package ru.mera.readmeCreator.web_client;
+package ru.mera.readme_creator.web_client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

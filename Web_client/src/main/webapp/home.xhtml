@@ -4,12 +4,14 @@
 
 <html xmlns = "http://www.w3.org/1999/xhtml"
       xmlns:h = "http://java.sun.com/jsf/html"
-      xmlns:f = "http://java.sun.com/jsf/core">
-    <head>
+      xmlns:f = "http://java.sun.com/jsf/core"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
         <title>Readme generator</title>
-    </head>
+        <h:outputStylesheet library="css" name="styles.css"/>
+    </h:head>
 
-    <body>
+    <h:body>
         <h1>Readme generator</h1>
         <hr/>
         <h3>Please, enter a web service URL in an appropriate format</h3>
@@ -29,24 +31,49 @@
             </h:panelGrid>
             <hr/>
 
-            <h4>Hello world generator</h4>
+            <h4>Enter parameters for readme file:</h4>
 
-            <h:panelGrid id="panel2" columns="2" border="0" cellpadding = "10" cellspacing = "1">
-                <h:outputLabel value="Press to generate Hello_world.rtf file:"/>
-                <h:commandButton id="HelloWorldButton" action = "#{mainController.getHelloFile}"
-                                 value = "Generate HelloWorld file" />
+            <h:panelGrid id="panel2" columns="3" border="0" cellpadding = "10" cellspacing = "1">
+                <h:outputLabel value="Patch name:"/>
+                <h:inputText id="patchName" size="20" required="true"
+                             value="#{mainController.parameters.get('PatchName')}"/>
+                <h:message for="patchName" style = "color:red" />
+
+                <h:outputLabel value="Date:"/>
+                <h:inputText id="date" size="20" required="true" p:placeHolder="dd/MM/yyyy"
+                             value="#{mainController.parameters.get('date')}"/>
+                <h:message for="date" style = "color:red"/>
+
+                <h:outputLabel value="Update ID:"/>
+                <h:inputText id="updateId" size="20" required="true"
+                             value="#{mainController.parameters.get('updateId')}"/>
+                <h:message for="updateId" style = "color:red" />
+
+                <h:outputLabel value="Release version:"/>
+                <h:inputText id="releaseVersion" size="20" required="true"
+                             value="#{mainController.parameters.get('releaseVersion')}"/>
+                <h:message for="releaseVersion" style = "color:red" />
             </h:panelGrid>
+
+            <h:dataTable value="#{mainController.jiraPairs}" var="jira"
+                         styleClass="employeeTable"
+                         headerClass = "employeeTableHeader"
+                         rowClasses = "employeeTableOddRow,employeeTableEvenRow">
+                <h:column>
+                    <f:facet name = "header">Jira Id</f:facet>
+                    #{jira.jiraId}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Jira description</f:facet>
+                    #{jira.jiraDescrip}
+                </h:column>
+
+            </h:dataTable>
+
+            <h:commandButton id="Submit" value = "Submit" />
             <hr/>
 
-            <h4>User data generator</h4>
-
-            <h:panelGrid id="panel3" columns="3" border="0" cellpadding = "10" cellspacing = "10">
-                <h:outputLabel value="Enter some text:"/>
-                <h:inputTextarea id="userText" row="20" col="20" value="#{userData.info}"
-                                 required="#{param['form:HelloWorldButton']==null}"/>
-                <h:message for = "userText" style = "color:red" redisplay="false"/>
-            </h:panelGrid>
-            <h:commandButton action = "#{mainController.getUserDataFile}" value = "Submit" />
         </h:form>
-    </body>
+    </h:body>
 </html>

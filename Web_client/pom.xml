@@ -4,12 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ru.merann.readmeCreator</groupId>
+    <groupId>ru.merann.readme_creator</groupId>
     <artifactId>Web_client</artifactId>
     <version>0.1.0</version>
     <packaging>war</packaging>
 
     <build>
+        <finalName>web_client</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -29,7 +30,34 @@
                     <url>http://localhost:8081/manager/text</url>
                     <server>TomcatServer</server>
                     <path>/Web_client</path>
+                    <username>admin</username>
+                    <password>admin</password>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+
+                        <configuration>
+                            <outputDirectory>${basedir}/target/web_client/resources
+                            </outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/main/resources</directory>
+                                    <filtering>true</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
@@ -47,13 +75,11 @@
             <groupId>com.sun.faces</groupId>
             <artifactId>jsf-api</artifactId>
             <version>2.2.18</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.sun.faces</groupId>
             <artifactId>jsf-impl</artifactId>
             <version>2.2.18</version>
-            <scope>provided</scope>
         </dependency>
 
         <!--Servlet API for cookies -->
@@ -61,7 +87,6 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>4.0.1</version>
-            <scope>provided</scope>
         </dependency>
 
         <!--Apache commons validator-->
