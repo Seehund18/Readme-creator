@@ -61,7 +61,7 @@ public class WebServiceManager {
      * @throws WebServiceException some exceptions occurred during downloading of the file
      */
     public static void downloadFile(String mapping, File saveToFile) throws WebServiceException {
-        //Sending and reading response code and validating it
+        //Sending 'GET' request, reading response code and validating it
         int responseCode = fileWebService.sendGetRequest(mapping);
         log.info("Response code from the server after sending 'GET' request: {}", responseCode);
         if (responseCode >= 400) {
@@ -69,7 +69,7 @@ public class WebServiceManager {
         }
 
         //If response code is ok, reading response and closing connection
-        readResponseToFile(saveToFile);
+        fileWebService.readResponseToFile(saveToFile);
         fileWebService.disconnect();
     }
 
@@ -80,7 +80,8 @@ public class WebServiceManager {
      * @throws WebServiceException some exceptions occurred during downloading of the file
      */
     public static void downloadFile(String mapping, String info, File saveToFile) throws WebServiceException {
-        log.info("Sended info: {}", info);
+        log.info("Sent info: {}", info);
+
         //Sending 'POST' request, reading response code and validating it
         int responseCode = fileWebService.sendPostRequest(mapping, info);
         log.info("Response code from the service after sending 'POST' request: {}", responseCode);
@@ -90,26 +91,5 @@ public class WebServiceManager {
 
         //Sending 'GET' request to download generated file
         downloadFile(mapping, saveToFile);
-    }
-
-    /**
-     * Reads response from service
-     * @param saveToFile file to which save the response
-     * @throws WebServiceException problem with reading the response
-     */
-    private static void readResponseToFile(File saveToFile) throws WebServiceException {
-        String inputLine;
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(fileWebService.getConnection().getInputStream()));
-                FileWriter out = new FileWriter(saveToFile)) {
-
-            inputLine = in.readLine();
-            while (inputLine != null) {
-                out.write(inputLine + "\n");
-                inputLine = in.readLine();
-            }
-            out.flush();
-        } catch (IOException ex) {
-            throw new WebServiceException("There is a problem with reading the response", ex);
-        }
     }
 }

@@ -15,10 +15,9 @@ import ru.mera.readmeCreator.desktop.entities.ValidatedTextField;
 import ru.mera.readmeCreator.desktop.interfaces.Validator;
 
 /**
- * Listener for fields
+ * Listener for ValidatedTextField
  */
 public class StatusListener implements ChangeListener<String> {
-
     private ValidatedTextField field;
 
     /**

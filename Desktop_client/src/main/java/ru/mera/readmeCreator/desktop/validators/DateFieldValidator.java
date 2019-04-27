@@ -5,7 +5,7 @@ import ru.mera.readmeCreator.desktop.interfaces.Validator;
 /**
  * Validator for date field. It expects date in format dd/mm/yyyy
  */
-public class DateValidator implements Validator {
+public class DateFieldValidator implements Validator {
 
     @Override
     public boolean isValid(String value) {

@@ -36,6 +36,7 @@ public class PropertiesManager {
             return;
         }
 
+        //If file doesn't exist, creating it
         if (!propertiesFile.exists()) {
             try {
                 createPropertyFile();

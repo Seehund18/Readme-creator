@@ -35,7 +35,8 @@ public class FileWebService implements WebService {
     private HttpURLConnection connection;
 
     /**
-     * Constructs new FileWebService. It is assumed that webServiceUrl is correct URL
+     * Constructs new FileWebService. It is assumed that webServiceUrl is correct URL.
+     * Validation of URL must be performed before constructing.
      * @param webServiceUrl correct web service url
      */
     public FileWebService(URL webServiceUrl) {
@@ -48,10 +49,6 @@ public class FileWebService implements WebService {
 
     public void setUrl(URL url) {
         this.url = url;
-    }
-
-    HttpURLConnection getConnection() {
-        return connection;
     }
 
     @Override
@@ -72,7 +69,7 @@ public class FileWebService implements WebService {
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", "desktop");
 
-            //Trying to read response
+            //Trying to get response code
             int responseCode;
             try {
                 responseCode = connection.getResponseCode();
@@ -89,7 +86,7 @@ public class FileWebService implements WebService {
     }
 
     @Override
-    public int sendPostRequest(String postMapping, String info) throws WebServiceException {
+    public int sendPostRequest(String postMapping, String data) throws WebServiceException {
         //Constructing full URL from url and mapping
         URL fullURL;
         try {
@@ -98,7 +95,7 @@ public class FileWebService implements WebService {
             throw new WebServiceException("Can't generate full URL", ex);
         }
 
-        byte[] byteInfo = info.getBytes(StandardCharsets.UTF_8);
+        byte[] byteInfo = data.getBytes(StandardCharsets.UTF_8);
         try {
             log.info("Sending 'POST' request to URL: {}", fullURL);
 
@@ -115,7 +112,7 @@ public class FileWebService implements WebService {
                 os.write(byteInfo);
             }
 
-            //Trying to read response
+            //Trying to read response code
             int responseCode;
             try {
                 responseCode = connection.getResponseCode();
@@ -131,7 +128,28 @@ public class FileWebService implements WebService {
         }
     }
 
-    public void disconnect() {
+    /**
+     * Reads response from service
+     * @param saveToFile file to which save the response
+     * @throws WebServiceException problem with reading the response
+     */
+    void readResponseToFile(File saveToFile) throws WebServiceException {
+        String inputLine;
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+             FileWriter out = new FileWriter(saveToFile)) {
+
+            inputLine = in.readLine();
+            while (inputLine != null) {
+                out.write(inputLine + "\n");
+                inputLine = in.readLine();
+            }
+            out.flush();
+        } catch (IOException ex) {
+            throw new WebServiceException("There is a problem with reading the response", ex);
+        }
+    }
+
+    void disconnect() {
         connection.disconnect();
     }
 }

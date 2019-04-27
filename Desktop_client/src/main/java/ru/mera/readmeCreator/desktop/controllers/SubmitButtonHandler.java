@@ -83,14 +83,13 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
             return;
         }
 
-        //Invoking 'save as' dialog and choosing place to save file
-        saveAs.setInitialFileName("User_data.rtf");
+        //Invoking 'save as' dialog where user choose place where to save file
         File userDataFile = saveAs.showSaveDialog(stage);
 
         if (userDataFile != null) {
             //User decided where to save file
-            try {                //Trying to download file
-
+            try {
+                //Trying to download file
                 WebServiceManager.downloadFile("/files/User_data.rtf", userData.toString(), userDataFile);
                 sendAlert("Your file has been downloaded", Alert.AlertType.INFORMATION);
                 log.info("File has been downloaded");

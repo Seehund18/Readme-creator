@@ -12,7 +12,7 @@ import ru.mera.readmeCreator.desktop.webService.WebServiceException;
 
 /**
  * Interface for web service
- **/
+ */
 public interface WebService {
 
     /**
@@ -36,9 +36,10 @@ public interface WebService {
     /**
      * Method for sending 'POST' requests to web service
      * @param postMapping mapping for 'POST' request
-     * @param info information which must be sent to web service
+     * @param data string of data which must be sent to web service
      * @return response code or -1 if connection to server was refused
      * @throws WebServiceException problems with sending request
      */
-    int sendPostRequest(String postMapping, String info) throws WebServiceException;
+    int sendPostRequest(String postMapping, String data) throws WebServiceException;
+
 }

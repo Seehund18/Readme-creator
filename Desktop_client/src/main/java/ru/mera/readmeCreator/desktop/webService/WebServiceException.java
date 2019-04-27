@@ -9,7 +9,7 @@
 package ru.mera.readmeCreator.desktop.webService;
 
 /**
- * Represents all exceptions thrown from implementations of WebService abstract class.
+ * Represents all exceptions thrown from implementations of WebService interface.
  * Exceptions from WebService are wrapped into this one.
  */
 public class WebServiceException extends Exception {

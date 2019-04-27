@@ -8,7 +8,6 @@
 
 package ru.mera.readmeCreator.desktop.entities;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,10 +25,20 @@ import java.util.Map;
 public class UserData {
     private Logger log = LoggerFactory.getLogger(UserData.class);
 
+    /**
+     * URL of web service, entered by user. Not the part of JSON serialization
+     */
     @JsonIgnore
     private URL webServiceUrl;
 
+    /**
+     * Map of parameters, entered by user. Consists of patchName, date, updateId, releaseVersion
+     */
     private Map<String, String> parameters;
+
+    /**
+     * List of jira ID and jira description pairs from jiraTable
+     */
     private List<JiraPair> jiras;
 
     public UserData(URL webServiceUrl, Map<String, String > parameters, List<JiraPair> jiras) {
@@ -37,6 +46,7 @@ public class UserData {
         this.parameters = parameters;
         this.jiras = jiras;
     }
+
     public URL getWebServiceUrl() {
         return webServiceUrl;
     }
