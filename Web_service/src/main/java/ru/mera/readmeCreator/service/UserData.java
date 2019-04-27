@@ -23,14 +23,12 @@ import java.util.Map;
 public class UserData {
 
     private Map<String, String> parameters;
-    private String date;
     private List<JiraPair> jiras;
 
     public Map<String, String> getParameters() {
         return parameters;
     }
 
-    @JsonAnySetter
     public void setParameters(Map<String, String> parameters) {
         this.parameters = parameters;
     }
@@ -52,7 +50,7 @@ public class UserData {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
-        str.append("Parameters:\n").append("date: " + date).append(parameters).append("\n\n").append(jiras.toString()).append("\n");
+        str.append("Parameters:\n").append(parameters).append("\n\n").append(jiras.toString()).append("\n");
         return str.toString();
     }
 }
