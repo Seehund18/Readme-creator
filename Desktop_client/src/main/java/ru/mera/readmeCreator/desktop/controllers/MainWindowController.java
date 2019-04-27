@@ -66,7 +66,7 @@ public class MainWindowController implements AlertSender {
     {
         formParameters.put("patchName", new ValidatedTextField());
         TextField date = new TextField();
-        date.setPromptText("dd/mm/yy");
+        date.setPromptText("dd/mm/yyyy");
         formParameters.put("date", new ValidatedTextField(date, new Text(), new DateFieldValidator()));
         formParameters.put("updateId", new ValidatedTextField());
         formParameters.put("releaseVersion", new ValidatedTextField());
