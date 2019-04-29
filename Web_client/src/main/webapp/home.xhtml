@@ -5,7 +5,8 @@
 <html xmlns = "http://www.w3.org/1999/xhtml"
       xmlns:h = "http://java.sun.com/jsf/html"
       xmlns:f = "http://java.sun.com/jsf/core"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
     <h:head>
         <title>Readme generator</title>
         <h:outputStylesheet library="css" name="styles.css"/>
@@ -40,7 +41,7 @@
                 <h:message for="patchName" style = "color:red" />
 
                 <h:outputLabel value="Date:"/>
-                <h:inputText id="date" size="20" required="true" p:placeHolder="dd/MM/yyyy"
+                <h:inputText id="date" size="20" required="true" pt:placeHolder="dd/MM/yyyy"
                              value="#{mainController.parameters.get('date')}"/>
                 <h:message for="date" style = "color:red"/>
 
@@ -55,25 +56,55 @@
                 <h:message for="releaseVersion" style = "color:red" />
             </h:panelGrid>
 
-            <h:dataTable value="#{mainController.jiraPairs}" var="jira"
-                         styleClass="employeeTable"
-                         headerClass = "employeeTableHeader"
-                         rowClasses = "employeeTableOddRow,employeeTableEvenRow">
-                <h:column>
-                    <f:facet name = "header">Jira Id</f:facet>
-                    #{jira.jiraId}
-                </h:column>
+            <h:panelGrid id="tableGrid" columns="3" border="0" cellpadding = "1" cellspacing = "1">
+                <h:dataTable value="#{mainController.jiraPairs}" var="jira"
+                             styleClass="employeeTable"
+                             headerClass = "employeeTableHeader"
+                             rowClasses = "employeeTableOddRow,employeeTableEvenRow"
+                             columnClasses = "employeeTableColumn">
+                    <h:column>
+                        <f:facet name = "header">Jira Id</f:facet>
+                        #{jira.jiraId}
+                    </h:column>
 
-                <h:column>
-                    <f:facet name = "header">Jira description</f:facet>
-                    #{jira.jiraDescrip}
-                </h:column>
+                    <h:column>
+                        <f:facet name = "header">Jira description</f:facet>
+                        #{jira.jiraDescrip}
+                    </h:column>
 
-            </h:dataTable>
+                    <h:column>
+                        <f:facet name="header">Delete</f:facet>
+                        <h:commandButton value="Delete"
+                                         action="#{mainController.deleteJira(jira)}"
+                                         type="button" />
+                    </h:column>
+                </h:dataTable>
+
+                <h:panelGrid id="Buttons" columns="1" border="0" cellpadding="5" cellspacing="1">
+                    <input type="button" id="Add" value = "+"
+                           onclick="document.getElementById('contactForm').style.display = 'block';"/>
+                    <h:button id="Remove" value = "-" width="1"/>
+                </h:panelGrid>
+
+            </h:panelGrid>
 
             <h:commandButton id="Submit" value = "Submit" />
             <hr/>
-
         </h:form>
+
+        <div id="contactForm" class="contactForm">
+            <h1>Keep in touch!</h1>
+            <small>I'll get back to you as quickly as possible</small>
+
+            <form action="#">
+                <input placeholder="Name" type="text" />
+                <input placeholder="Email" type="email" />
+                <input placeholder="Subject" type="text" />
+
+                <input class="formBtn" type="submit" />
+                <input class="formBtn" type="reset" />
+            </form>
+        </div>
+
     </h:body>
 </html>

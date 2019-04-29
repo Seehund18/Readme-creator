@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -43,6 +44,10 @@ public class MainController implements Serializable {
 
     private ArrayList<JiraPair> jiraPairs = new ArrayList<>();
 
+    private String index;
+
+    private static Map<String, Object> radioButtons = new LinkedHashMap<>();
+
     {
         parameters.put("patchName", "");
         parameters.put("date", "");
@@ -50,6 +55,10 @@ public class MainController implements Serializable {
         parameters.put("releaseVersion", "");
 
         jiraPairs.add(new JiraPair("bgdb", "ghkj"));
+        jiraPairs.add(new JiraPair("lolol", "kjhlkjh"));
+
+        radioButtons.put("1","");
+        radioButtons.put("2","");
     }
 
     public void setUrl(String url) {
@@ -91,12 +100,33 @@ public class MainController implements Serializable {
         return jiraPairs;
     }
 
+    public Map<String, Object> getRadioButtons() {
+        return radioButtons;
+    }
+
+    public void setRadioButtons(Map<String, Object> radioButtons) {
+        this.radioButtons = radioButtons;
+    }
+
+    public String getIndex() {
+        return index;
+    }
+
+    public void setIndex(String index) {
+        this.index = index;
+    }
+
     /**
      * After constructing of this object, sets url field to value from URL cookie
      */
     @PostConstruct
     private void init() {
         url = CookieHelper.getCookieValue("URL");
+    }
+
+    public String deleteJira(JiraPair pair) {
+        jiraPairs.remove(pair);
+        return null;
     }
 
 //    /**

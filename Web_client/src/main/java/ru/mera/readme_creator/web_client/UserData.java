@@ -25,6 +25,8 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean(eager = true)
 @SessionScoped
 public class UserData implements Serializable {
+    private Logger log = LoggerFactory.getLogger(UserData.class);
+
     /**
      * Text entered in the userText area
      */
@@ -33,8 +35,8 @@ public class UserData implements Serializable {
     /**
      * Mapper to JSON format
      */
-    private ObjectMapper mapper = new ObjectMapper();
-    private Logger log = LoggerFactory.getLogger(UserData.class);
+
+
 
     public String getInfo() {
         return info;
@@ -47,7 +49,8 @@ public class UserData implements Serializable {
     @Override
     public String toString() {
         try {
-            return mapper.writeValueAsString(this);
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
         } catch (JsonProcessingException ex) {
             log.error("Can't convert user data object to json string", ex);
             return "";

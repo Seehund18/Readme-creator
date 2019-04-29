@@ -1,21 +1,43 @@
 .employeeTable {
     border-collapse:collapse;
     border:1px solid #000000;
+    width: 500px;
 }
 
 .employeeTableHeader {
     text-align:center;
     background:none repeat scroll 0 0 #B5B5B5;
-    border-bottom:1px solid #000000;
+    border:1px solid #000000;
     padding:2px;
 }
 
 .employeeTableOddRow {
     text-align:center;
     background:none repeat scroll 0 0 #FFFFFF;
+
 }
 
 .employeeTableEvenRow {
     text-align:center;
     background:none repeat scroll 0 0 #D3D3D3;
+    border:1px solid #000000;
+}
+
+.employeeTableColumn {
+    border:1px solid #000000;
+}
+
+.contactForm {
+    display: none;
+
+      border: 6px solid salmon;
+      padding: 2em;
+      width: 400px;
+      text-align: center;
+      background: #fff;
+      position: fixed;
+      top:50%;
+      left:50%;
+      transform: translate(-50%,-50%);
+      -webkit-transform: translate(-50%,-50%)
 }
