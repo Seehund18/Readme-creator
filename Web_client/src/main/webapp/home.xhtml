@@ -32,32 +32,33 @@
             </h:panelGrid>
             <hr/>
 
-            <h4>Enter parameters for readme file:</h4>
+            <h4>Enter parametersMap for readme file:</h4>
 
             <h:panelGrid id="panel2" columns="3" border="0" cellpadding = "10" cellspacing = "1">
                 <h:outputLabel value="Patch name:"/>
                 <h:inputText id="patchName" size="20" required="true"
-                             value="#{mainController.parameters.get('PatchName')}"/>
+                             value="#{mainController.parametersMap.get('PatchName')}"/>
                 <h:message for="patchName" style = "color:red" />
 
                 <h:outputLabel value="Date:"/>
                 <h:inputText id="date" size="20" required="true" pt:placeHolder="dd/MM/yyyy"
-                             value="#{mainController.parameters.get('date')}"/>
+                             value="#{mainController.parametersMap.get('date')}"/>
                 <h:message for="date" style = "color:red"/>
 
                 <h:outputLabel value="Update ID:"/>
                 <h:inputText id="updateId" size="20" required="true"
-                             value="#{mainController.parameters.get('updateId')}"/>
+                             value="#{mainController.parametersMap.get('updateId')}"/>
                 <h:message for="updateId" style = "color:red" />
 
                 <h:outputLabel value="Release version:"/>
                 <h:inputText id="releaseVersion" size="20" required="true"
-                             value="#{mainController.parameters.get('releaseVersion')}"/>
+                             value="#{mainController.parametersMap.get('releaseVersion')}"/>
                 <h:message for="releaseVersion" style = "color:red" />
             </h:panelGrid>
 
             <h:panelGrid id="tableGrid" columns="3" border="0" cellpadding = "1" cellspacing = "1">
-                <h:dataTable value="#{mainController.jiraPairs}" var="jira"
+                <h:dataTable id="table"
+                        value="#{mainController.jiraPairs}" var="jira"
                              styleClass="employeeTable"
                              headerClass = "employeeTableHeader"
                              rowClasses = "employeeTableOddRow,employeeTableEvenRow"
@@ -66,45 +67,68 @@
                         <f:facet name = "header">Jira Id</f:facet>
                         #{jira.jiraId}
                     </h:column>
-
                     <h:column>
                         <f:facet name = "header">Jira description</f:facet>
                         #{jira.jiraDescrip}
                     </h:column>
-
                     <h:column>
                         <f:facet name="header">Delete</f:facet>
                         <h:commandButton value="Delete"
-                                         action="#{mainController.deleteJira(jira)}"
-                                         type="button" />
+                                         actionListener="#{mainController.deleteJira(jira)}">
+                            <f:ajax render="form:table"/>
+                        </h:commandButton>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Edit</f:facet>
+                        <h:commandButton value="Edit" type="button"
+                                         action="#{mainController.setNewJira(jira)}"
+                                         onclick="document.getElementById('popupGroup').style.display = 'block';"  >
+                            <f:ajax render="popupForm"/>
+                        </h:commandButton>
+
                     </h:column>
                 </h:dataTable>
 
                 <h:panelGrid id="Buttons" columns="1" border="0" cellpadding="5" cellspacing="1">
-                    <input type="button" id="Add" value = "+"
-                           onclick="document.getElementById('contactForm').style.display = 'block';"/>
-                    <h:button id="Remove" value = "-" width="1"/>
+                    <h:commandButton type="button" id="Add" value = "+"
+                                     onclick="document.getElementById('popupGroup').style.display = 'block';">
+
+                    </h:commandButton>
                 </h:panelGrid>
-
             </h:panelGrid>
-
             <h:commandButton id="Submit" value = "Submit" />
             <hr/>
         </h:form>
 
-        <div id="contactForm" class="contactForm">
-            <h1>Keep in touch!</h1>
-            <small>I'll get back to you as quickly as possible</small>
+        <h:panelGroup id="popupGroup" styleClass="popup-panel-overlay" >
+            <div id="popup" class="popup-panel">
+                <h3>Enter jira ID and jira description</h3>
+                <h:form id="popupForm">
+                    <h:panelGrid columns="3" border="0" cellpadding="5" cellspasing="1">
+                        <h:outputLabel value="Jira ID:"/>
+                        <h:inputText id="JiraId" size="20" required="true" value="#{mainController.newJiraId}"
+                                     pt:placeHolder="Enter jira Id"/>
+                        <h:message id="jiraIdMessage" for="JiraId" style = "color:red"/>
 
-            <form action="#">
-                <input placeholder="Name" type="text" />
-                <input placeholder="Email" type="email" />
-                <input placeholder="Subject" type="text" />
+                        <h:outputLabel value="Jira decription:"/>
+                        <h:inputText id="JiraDesc" size="20" required="true"
+                                     value="#{mainController.newJiraDescrip}"
+                                     pt:placeHolder="Enter description"/>
+                        <h:message id="jiraDescMessage" for="JiraDesc" style = "color:red"/>
+                    </h:panelGrid>
 
-                <input class="formBtn" type="submit" />
-                <input class="formBtn" type="reset" />
-            </form>
-        </div>
+                    <h:commandButton value="Ok"
+                                     action="#{mainController.addJira}">
+                        <f:ajax execute="JiraId JiraDesc" render="form:table jiraIdMessage jiraDescMessage"/>
+                    </h:commandButton>
+                    <h:commandButton value="Cancel"
+                                     onclick="document.getElementById('popupGroup').style.display = 'none';">
+                        <f:ajax />
+                    </h:commandButton>
+                </h:form>
+            </div>
+        </h:panelGroup>
+
 
     </h:body>
 </html>

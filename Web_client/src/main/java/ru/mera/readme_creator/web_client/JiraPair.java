@@ -1,11 +1,18 @@
 package ru.mera.readme_creator.web_client;
 
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
+
 /**
  * Entity which represents jira id and jira description pair
  */
+@ManagedBean(eager = true)
+@SessionScoped
 public class JiraPair {
     private String jiraId;
     private String jiraDescrip;
+
+    public JiraPair() {}
 
     public JiraPair(String jiraId, String jiraDescrip) {
         this.jiraId = jiraId;
@@ -41,5 +48,10 @@ public class JiraPair {
             return this.jiraId.equals(pair.jiraId);
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Jira ID: " + jiraId + "Jira descrip: " + jiraDescrip + "\n";
     }
 }

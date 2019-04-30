@@ -4,15 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -40,26 +39,9 @@ public class MainController implements Serializable {
      */
     private String url;
 
-    private Map<String, String> parameters = new HashMap<>();
+    private Map<String, String> parametersMap = new HashMap<>();
 
     private ArrayList<JiraPair> jiraPairs = new ArrayList<>();
-
-    private String index;
-
-    private static Map<String, Object> radioButtons = new LinkedHashMap<>();
-
-    {
-        parameters.put("patchName", "");
-        parameters.put("date", "");
-        parameters.put("updateId", "");
-        parameters.put("releaseVersion", "");
-
-        jiraPairs.add(new JiraPair("bgdb", "ghkj"));
-        jiraPairs.add(new JiraPair("lolol", "kjhlkjh"));
-
-        radioButtons.put("1","");
-        radioButtons.put("2","");
-    }
 
     public void setUrl(String url) {
         this.url = url;
@@ -83,38 +65,26 @@ public class MainController implements Serializable {
         return userData;
     }
 
+    public Error getError() {
+        return error;
+    }
+
     public void setError(Error error) {
-        log.debug("Setting error object\n");
         this.error = error;
     }
 
-    public Map<String, String> getParameters() {
-        return parameters;
+    public Map<String, String> getParametersMap() {
+        return parametersMap;
     }
 
-    public void setParameters(Map<String, String> parameters) {
-        this.parameters = parameters;
+    public void setParametersMap(Map<String, String> parametersMap) {
+        this.parametersMap = parametersMap;
     }
 
     public ArrayList<JiraPair> getJiraPairs() {
         return jiraPairs;
     }
 
-    public Map<String, Object> getRadioButtons() {
-        return radioButtons;
-    }
-
-    public void setRadioButtons(Map<String, Object> radioButtons) {
-        this.radioButtons = radioButtons;
-    }
-
-    public String getIndex() {
-        return index;
-    }
-
-    public void setIndex(String index) {
-        this.index = index;
-    }
 
     /**
      * After constructing of this object, sets url field to value from URL cookie
@@ -122,11 +92,46 @@ public class MainController implements Serializable {
     @PostConstruct
     private void init() {
         url = CookieHelper.getCookieValue("URL");
+
+        parametersMap.put("patchName", "");
+        parametersMap.put("date", "");
+        parametersMap.put("updateId", "");
+        parametersMap.put("releaseVersion", "");
+
+        jiraPairs.add(new JiraPair("bgdb", "ghkj"));
+        jiraPairs.add(new JiraPair("lolol", "kjhlkjh"));
     }
 
-    public String deleteJira(JiraPair pair) {
+    public void addJira() {
+        JiraPair jira = new JiraPair(newJiraId, newJiraDescrip);
+        if (jiraPairs.contains(jira)) {
+            log.info("Jira existed");
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                    "Jira exists",
+                    "Such jira id already exists");
+            FacesContext
+                    .getCurrentInstance()
+                    .addMessage("popupForm:JiraId", msg);
+            return;
+        }
+        log.info("Adding new jira: {}", jira);
+        jiraPairs.add(jira);
+    }
+
+    public void deleteJira(JiraPair pair) {
         jiraPairs.remove(pair);
-        return null;
+    }
+
+
+
+    public void editJira(JiraPair pair) {
+        int index = jiraPairs.indexOf(pair);
+
+        newJiraId = pair.getJiraId();
+        newJiraDescrip = pair.getJiraDescrip();
+
+
+
     }
 
 //    /**
