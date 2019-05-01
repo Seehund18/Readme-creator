@@ -8,6 +8,7 @@
 
 package ru.mera.readme_creator.web_client;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -25,25 +26,61 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean(eager = true)
 @SessionScoped
 public class UserData implements Serializable {
-    private Logger log = LoggerFactory.getLogger(UserData.class);
+    private final Logger log = LoggerFactory.getLogger(UserData.class);
 
-    /**
-     * Text entered in the userText area
-     */
-    private String info;
+    @JsonIgnore
+    private String url;
 
-    /**
-     * Mapper to JSON format
-     */
+    private String patchName;
 
+    private String date;
 
+    private String updateId;
 
-    public String getInfo() {
-        return info;
+    private String releaseVer;
+
+    {
+        url = CookieHelper.getCookieValue("URL");
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getPatchName() {
+        return patchName;
+    }
+
+    public void setPatchName(String patchName) {
+        this.patchName = patchName;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getUpdateId() {
+        return updateId;
+    }
+
+    public void setUpdateId(String updateId) {
+        this.updateId = updateId;
+    }
+
+    public String getReleaseVer() {
+        return releaseVer;
+    }
+
+    public void setReleaseVer(String releaseVer) {
+        this.releaseVer = releaseVer;
     }
 
     @Override

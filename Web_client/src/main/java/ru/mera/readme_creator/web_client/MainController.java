@@ -4,15 +4,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -35,38 +34,20 @@ public class MainController implements Serializable {
     @ManagedProperty(value = "#{error}")
     private Error error;
 
-    /**
-     * Url entered in webServiceURL
-     */
-    private String url;
-
-    private Map<String, String> parameters = new HashMap<>();
+    @ManagedProperty(value="#{popupDialogController}")
+    private PopupDialogController popupDialogController;
 
     private ArrayList<JiraPair> jiraPairs = new ArrayList<>();
 
-    private String index;
+    private int editIndex;
 
-    private static Map<String, Object> radioButtons = new LinkedHashMap<>();
-
-    {
-        parameters.put("patchName", "");
-        parameters.put("date", "");
-        parameters.put("updateId", "");
-        parameters.put("releaseVersion", "");
-
+    /**
+     * After constructing of this object, sets url field to value from URL cookie
+     */
+    @PostConstruct
+    private void init() {
         jiraPairs.add(new JiraPair("bgdb", "ghkj"));
         jiraPairs.add(new JiraPair("lolol", "kjhlkjh"));
-
-        radioButtons.put("1","");
-        radioButtons.put("2","");
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getUrl() {
-        return url;
     }
 
     public void setConnector(WebServiceConnector webServiceConnector) {
@@ -88,46 +69,66 @@ public class MainController implements Serializable {
         this.error = error;
     }
 
-    public Map<String, String> getParameters() {
-        return parameters;
+    public PopupDialogController getPopupDialogController() {
+        return popupDialogController;
     }
 
-    public void setParameters(Map<String, String> parameters) {
-        this.parameters = parameters;
+    public void setPopupDialogController(PopupDialogController popupDialogController) {
+        this.popupDialogController = popupDialogController;
     }
 
     public ArrayList<JiraPair> getJiraPairs() {
         return jiraPairs;
     }
 
-    public Map<String, Object> getRadioButtons() {
-        return radioButtons;
+
+    public void addJira() {
+        JiraPair newPair = new JiraPair(popupDialogController.getJiraId(),
+                                        popupDialogController.getJiraDescrip());
+        if (jiraPairs.contains(newPair)) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                "Such id already exists",
+                                                "Such id already exists");
+            FacesContext.getCurrentInstance().addMessage("popupForm:jiraIdField", msg);
+            return;
+        }
+        log.info("Jira ID: {}, Jira descrip: {}",
+                 popupDialogController.getJiraId(),
+                 popupDialogController.getJiraDescrip());
+        jiraPairs.add(newPair);
     }
 
-    public void setRadioButtons(Map<String, Object> radioButtons) {
-        this.radioButtons = radioButtons;
-    }
-
-    public String getIndex() {
-        return index;
-    }
-
-    public void setIndex(String index) {
-        this.index = index;
-    }
-
-    /**
-     * After constructing of this object, sets url field to value from URL cookie
-     */
-    @PostConstruct
-    private void init() {
-        url = CookieHelper.getCookieValue("URL");
-    }
-
-    public String deleteJira(JiraPair pair) {
+    public void deleteJira(JiraPair pair) {
         jiraPairs.remove(pair);
-        return null;
     }
+
+    public void setJira(JiraPair pair) {
+        popupDialogController.setJiraId(pair.getJiraId());
+        popupDialogController.setJiraDescrip(pair.getJiraDescrip());
+
+        editIndex = jiraPairs.indexOf(pair);
+    }
+
+    public void editJira() {
+        JiraPair oldPair = jiraPairs.get(editIndex);
+        JiraPair newPair = new JiraPair(popupDialogController.getJiraId(),
+                                        popupDialogController.getJiraDescrip());
+
+        if (!oldPair.equals(newPair) && jiraPairs.contains(newPair) ) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                "Such id already exists",
+                                                "Such id already exists");
+            FacesContext.getCurrentInstance().addMessage("popupForm:jiraIdField", msg);
+            return;
+        }
+        jiraPairs.set(editIndex, newPair);
+    }
+
+    public void onSubmit() {
+        log.info("Parameters: {}", userData);
+    }
+
+
 
 //    /**
 //     * Gets "Hello_World.rtf" file from the web service

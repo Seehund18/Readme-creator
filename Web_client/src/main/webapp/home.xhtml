@@ -6,7 +6,8 @@
       xmlns:h = "http://java.sun.com/jsf/html"
       xmlns:f = "http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:ui = "http://java.sun.com/jsf/facelets">
     <h:head>
         <title>Readme generator</title>
         <h:outputStylesheet library="css" name="styles.css"/>
@@ -24,7 +25,7 @@
             <h:panelGrid id="panel1" columns="3" border="0" cellpadding = "10"
                          cellspacing = "1">
                 <h:outputLabel value="Enter URL:"/>
-                <h:inputText id="webServiceURL" value="#{mainController.url}" size="20"
+                <h:inputText id="webServiceURL" value="#{userData.url}" size="20"
                              required="true">
                     <f:validator validatorId="webServiceUrlValidator" />
                 </h:inputText>
@@ -37,27 +38,35 @@
             <h:panelGrid id="panel2" columns="3" border="0" cellpadding = "10" cellspacing = "1">
                 <h:outputLabel value="Patch name:"/>
                 <h:inputText id="patchName" size="20" required="true"
-                             value="#{mainController.parameters.get('PatchName')}"/>
+                             value="#{userData.patchName}"/>
                 <h:message for="patchName" style = "color:red" />
 
                 <h:outputLabel value="Date:"/>
                 <h:inputText id="date" size="20" required="true" pt:placeHolder="dd/MM/yyyy"
-                             value="#{mainController.parameters.get('date')}"/>
+                             value="#{userData.date}"/>
                 <h:message for="date" style = "color:red"/>
 
                 <h:outputLabel value="Update ID:"/>
                 <h:inputText id="updateId" size="20" required="true"
-                             value="#{mainController.parameters.get('updateId')}"/>
+                             value="#{userData.updateId}"/>
                 <h:message for="updateId" style = "color:red" />
 
                 <h:outputLabel value="Release version:"/>
                 <h:inputText id="releaseVersion" size="20" required="true"
-                             value="#{mainController.parameters.get('releaseVersion')}"/>
+                             value="#{userData.releaseVer}"/>
                 <h:message for="releaseVersion" style = "color:red" />
             </h:panelGrid>
 
-            <h:panelGrid id="tableGrid" columns="3" border="0" cellpadding = "1" cellspacing = "1">
-                <h:dataTable value="#{mainController.jiraPairs}" var="jira"
+
+
+            <div id="TableGroup" class="tableGroup">
+                <h:commandButton id="addJira" type="button" value="+" styleClass="addButton"
+                                 onclick="document.getElementById('popupPanelGroup').style.display = 'block';">
+                    <f:ajax event="focus" listener="#{popupDialogController.setDialogType('Add')}" render="popupForm"/>
+                </h:commandButton>
+
+                <h:dataTable id="jiraTable"
+                             value="#{mainController.jiraPairs}" var="jira"
                              styleClass="employeeTable"
                              headerClass = "employeeTableHeader"
                              rowClasses = "employeeTableOddRow,employeeTableEvenRow"
@@ -66,45 +75,36 @@
                         <f:facet name = "header">Jira Id</f:facet>
                         #{jira.jiraId}
                     </h:column>
-
                     <h:column>
                         <f:facet name = "header">Jira description</f:facet>
                         #{jira.jiraDescrip}
                     </h:column>
-
                     <h:column>
                         <f:facet name="header">Delete</f:facet>
                         <h:commandButton value="Delete"
                                          action="#{mainController.deleteJira(jira)}"
-                                         type="button" />
+                                         type="button" >
+                            <f:ajax render="form:jiraTable" />
+                        </h:commandButton>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Edit</f:facet>
+                        <h:commandButton value="Edit" type="button"
+                                         action="#{mainController.setJira(jira)}"
+                                         onclick="document.getElementById('popupPanelGroup').style.display = 'block';">
+                            <f:ajax event="focus" listener="#{popupDialogController.setDialogType('Edit')}" render="popupForm" />
+                        </h:commandButton>
                     </h:column>
                 </h:dataTable>
+            </div>
 
-                <h:panelGrid id="Buttons" columns="1" border="0" cellpadding="5" cellspacing="1">
-                    <input type="button" id="Add" value = "+"
-                           onclick="document.getElementById('contactForm').style.display = 'block';"/>
-                    <h:button id="Remove" value = "-" width="1"/>
-                </h:panelGrid>
-
-            </h:panelGrid>
-
-            <h:commandButton id="Submit" value = "Submit" />
+            <h:commandButton id="Submit" value = "Submit" action="#{mainController.onSubmit()}" styleClass="formSubmit" />
             <hr/>
         </h:form>
 
-        <div id="contactForm" class="contactForm">
-            <h1>Keep in touch!</h1>
-            <small>I'll get back to you as quickly as possible</small>
-
-            <form action="#">
-                <input placeholder="Name" type="text" />
-                <input placeholder="Email" type="email" />
-                <input placeholder="Subject" type="text" />
-
-                <input class="formBtn" type="submit" />
-                <input class="formBtn" type="reset" />
-            </form>
-        </div>
+        <ui:insert name = "dialog" >
+            <ui:include src = "/dialog.xhtml" />
+        </ui:insert>
 
     </h:body>
 </html>
