@@ -96,9 +96,12 @@
                         </h:commandButton>
                     </h:column>
                 </h:dataTable>
+
+                <h:message for="jiraTable" style="color:red"/>
             </div>
 
             <h:commandButton id="Submit" value = "Submit" action="#{mainController.onSubmit()}" styleClass="formSubmit" />
+
             <hr/>
         </h:form>
 

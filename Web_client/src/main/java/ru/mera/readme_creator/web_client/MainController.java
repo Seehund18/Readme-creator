@@ -125,6 +125,13 @@ public class MainController implements Serializable {
     }
 
     public void onSubmit() {
+        if (jiraPairs.isEmpty()) {
+            FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                                "",
+                                                "Jira table is empty");
+            FacesContext.getCurrentInstance().addMessage("form:jiraTable", msg);
+            return;
+        }
         log.info("Parameters: {}", userData);
     }
 
