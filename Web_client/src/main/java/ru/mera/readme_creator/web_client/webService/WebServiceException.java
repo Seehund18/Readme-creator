@@ -6,19 +6,19 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readme_creator.web_client;
+package ru.mera.readme_creator.web_client.webService;
 
 /**
- * Represents all exceptions thrown from WebServiceConnector class.
- * Exceptions from WebServiceConnector are wrapped into this one.
+ * Represents all exceptions thrown from WebService class.
+ * Exceptions from WebService are wrapped into this one.
  */
-public class WebServiceConnectorException extends Exception {
+public class WebServiceException extends Exception {
 
-    public WebServiceConnectorException(String message, Throwable cause) {
+    public WebServiceException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public WebServiceConnectorException(String message) {
+    public WebServiceException(String message) {
         super(message);
     }
 }

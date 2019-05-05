@@ -9,9 +9,9 @@
 
     <h:body>
         <ui:composition>
-            <h:commandButton value="Edit" action="#{mainController.editJira()}">
+            <h:commandButton value="Edit" styleClass="button popupButton" action="#{formController.editJira()}">
                 <f:ajax execute="jiraDescripField jiraIdField"
-                        render="form:jiraTable jiraIdFieldMsg jiraDescripFieldMsg"/>
+                        render="form:jiraTable jiraIdFieldMsg jiraDescripFieldMsg "/>
             </h:commandButton>
         </ui:composition>
     </h:body>

@@ -15,7 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
@@ -30,17 +34,43 @@ public class UserData implements Serializable {
 
     @JsonIgnore
     private String url;
-
+    @JsonIgnore
     private String patchName;
-
+    @JsonIgnore
     private String date;
-
+    @JsonIgnore
     private String updateId;
-
+    @JsonIgnore
     private String releaseVer;
 
-    {
+    private Map<String, String> parameters = new HashMap<>();
+    @JsonIgnore
+    private ArrayList<JiraPair> jiraPairList = new ArrayList<>();
+    private ArrayList<JiraPair> jiras = new ArrayList<>();
+
+    public void toMap() {
+        Map<String, String> map = new HashMap<>();
+
+        parameters.put("patchName", patchName);
+        parameters.put("date",date);
+        parameters.put("updateId", updateId);
+        parameters.put("releaseVersion", releaseVer);
+
+        jiras = jiraPairList;
+
+    }
+
+    @PostConstruct
+    public void init() {
         url = CookieHelper.getCookieValue("URL");
+    }
+
+    public Map<String, String> getParameters() {
+        return parameters;
+    }
+
+    public void setParameters(Map<String, String> parameters) {
+        this.parameters = parameters;
     }
 
     public String getUrl() {
@@ -83,9 +113,22 @@ public class UserData implements Serializable {
         this.releaseVer = releaseVer;
     }
 
+    public ArrayList<JiraPair> getJiraPairList() {
+        return jiraPairList;
+    }
+
+    public ArrayList<JiraPair> getJiras() {
+        return jiras;
+    }
+
+    public void setJiras(ArrayList<JiraPair> jiras) {
+        this.jiras = jiras;
+    }
+
     @Override
     public String toString() {
         try {
+            toMap();
             ObjectMapper mapper = new ObjectMapper();
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
         } catch (JsonProcessingException ex) {
