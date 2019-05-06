@@ -26,6 +26,7 @@ import ru.mera.readmeCreator.desktop.entities.ValidatedTextField;
 import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
 import ru.mera.readmeCreator.desktop.properties.PropertiesManager;
 import ru.mera.readmeCreator.desktop.validators.DateFieldValidator;
+import ru.mera.readmeCreator.desktop.validators.UpdateIdFieldValidator;
 import ru.mera.readmeCreator.desktop.validators.UrlFieldValidator;
 
 import java.net.MalformedURLException;
@@ -65,10 +66,15 @@ public class MainWindowController implements AlertSender {
 
     {
         formParameters.put("patchName", new ValidatedTextField());
+
         TextField date = new TextField();
         date.setPromptText("dd/mm/yyyy");
         formParameters.put("date", new ValidatedTextField(date, new Text(), new DateFieldValidator()));
-        formParameters.put("updateId", new ValidatedTextField());
+
+        TextField updateId = new TextField();
+        updateId.setPromptText("Example: 521002001");
+        formParameters.put("updateId", new ValidatedTextField(updateId, new Text(), new UpdateIdFieldValidator()));
+
         formParameters.put("releaseVersion", new ValidatedTextField());
     }
 
