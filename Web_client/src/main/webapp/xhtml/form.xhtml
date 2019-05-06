@@ -39,23 +39,36 @@
                 <h:panelGrid id="panel2" columns="3" border="0" cellpadding = "10" styleClass="inputPanelGrid"
                              columnClasses="columnLabel">
                     <h:outputLabel value="Patch name:" styleClass="inputFieldLabel"/>
-                    <h:inputText id="patchNameField" size="20" required="true" styleClass="inputField"
+                    <h:inputText id="patchNameField" size="20" required="true"
+                                 pt:placeHolder="Example: AvayaOceana_UAC_3.5.0.1.4"
+                                 styleClass="inputField"
                                  value="#{formController.userData.patchName}"/>
                     <h:message for="patchNameField" styleClass="errorMsg" />
 
                     <h:outputLabel value="Date:" styleClass="inputFieldLabel"/>
-                    <h:inputText id="dateField" size="20" required="true" pt:placeHolder="dd/mm/yyyy" styleClass="inputField"
-                                 value="#{formController.userData.date}"/>
+                    <h:inputText id="dateField" size="20" required="true"
+                                 pt:placeHolder="Date format: dd/mm/yyyy"
+                                 styleClass="inputField"
+                                 value="#{formController.userData.date}">
+                        <f:validator validatorId="dateFieldValidator" />
+                    </h:inputText>
                     <h:message for="dateField" styleClass="errorMsg"/>
 
                     <h:outputLabel value="Update ID:" styleClass="inputFieldLabel"/>
-                    <h:inputText id="updateIdField" size="20" required="true" styleClass="inputField"
-                                 value="#{formController.userData.updateId}"/>
+                    <h:inputText id="updateIdField" size="20" required="true"
+                                 pt:placeHolder="Example: 521002001"
+                                 styleClass="inputField"
+                                 value="#{formController.userData.updateId}">
+                        <f:validator validatorId="updateIdFieldValidator" />
+                    </h:inputText>
                     <h:message for="updateIdField" styleClass="errorMsg" />
 
                     <h:outputLabel value="Release version:" styleClass="inputFieldLabel"/>
                     <h:inputText id="releaseVersionField" size="20" required="true" styleClass="inputField"
-                                 value="#{formController.userData.releaseVer}"/>
+                                 pt:placeHolder="Example: 3.5.0.1"
+                                 value="#{formController.userData.releaseVer}">
+                        <f:validator validatorId="releaseVerFieldValidator"/>
+                    </h:inputText>
                     <h:message for="releaseVersionField" styleClass="errorMsg" />
                 </h:panelGrid>
             </div>
@@ -87,7 +100,7 @@
                     <h:column>
                         <f:facet name="header">Edit</f:facet>
                         <h:commandButton value="Edit" type="button"
-                                         action="#{formController.setJira(jira)}"
+                                         action="#{formController.setDialogJira(jira)}"
                                          onclick="document.getElementById('popupPanelGroup').style.display = 'block';">
                             <f:ajax event="focus" render="popupForm"
                                     listener="#{popupDialogController.setEditDialogType()}"/>
