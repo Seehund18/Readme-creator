@@ -11,7 +11,7 @@ package ru.mera.readmeCreator.desktop.validators;
 import ru.mera.readmeCreator.desktop.interfaces.Validator;
 
 /**
- * Validator for releaseVersionField. It expects version in format 5.6.7.3
+ * Validator for releaseVersionField. It expects version as a numbers, delimited by '.'
  */
 public class ReleaseVerFieldValidator implements Validator {
 

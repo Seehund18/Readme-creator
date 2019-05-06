@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,31 +33,44 @@ public class UserData {
     private URL webServiceUrl;
 
     /**
-     * Map of parameters, entered by user. Consists of patchName, date, updateId, releaseVersion
+     * Map of parameters, which will be sent to the service. Consists of patchName, date, updateId, releaseVersion
      */
-    private Map<String, String> parameters;
+    private Map<String, String> paramMap = new HashMap<>();
 
     /**
      * List of jira ID and jira description pairs from jiraTable
      */
-    private List<JiraPair> jiras;
+    private List<JiraPair> jiraList;
 
-    public UserData(URL webServiceUrl, Map<String, String > parameters, List<JiraPair> jiras) {
+    /**
+     * Constructs parameters map from parameters, entered by user
+     * @param webServiceUrl
+     * @param paramTextMap
+     * @param jiraList
+     */
+    public UserData(URL webServiceUrl, Map<String, String > paramTextMap, List<JiraPair> jiraList) {
+        String patchName = paramTextMap.get("patchName") +"_"+ paramTextMap.get("releaseVersion") +"."+ paramTextMap.get("issueNumber");
+        String updateId = patchName +"."+ paramTextMap.get("updateId");
+
+        paramMap.put("patchName", patchName);
+        paramMap.put("date", paramTextMap.get("date"));
+        paramMap.put("updateId", updateId);
+        paramMap.put("releaseVersion", paramTextMap.get("releaseVersion"));
+
         this.webServiceUrl = webServiceUrl;
-        this.parameters = parameters;
-        this.jiras = jiras;
+        this.jiraList = jiraList;
     }
 
     public URL getWebServiceUrl() {
         return webServiceUrl;
     }
 
-    public Map<String, String> getParameters() {
-        return parameters;
+    public Map<String, String> getParamMap() {
+        return paramMap;
     }
 
-    public List<JiraPair> getJiras() {
-        return jiras;
+    public List<JiraPair> getJiraList() {
+        return jiraList;
     }
 
     @Override

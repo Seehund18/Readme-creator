@@ -18,9 +18,9 @@ import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
 import java.util.Optional;
 
 /**
- * Dialog, which is shown when user pressed "+" or "Edit" button.
- * User can write Jira ID and Jira description and when this pair will be added to the table
- * or he can cancel this dialog
+ * Dialog, which is shown when user pressed "+" or "Edit" button,
+ * where user write down jiraId and jiraDescription.
+ * Difference between "Add" and "Edit" dialog type is that button and title differs
  */
 public class JiraInputDialog implements AlertSender {
 
@@ -32,7 +32,7 @@ public class JiraInputDialog implements AlertSender {
     /**
      * Flag indicated whether jira ID is valid or not
      */
-    private boolean isIdValid;
+    private boolean idValid;
 
     /**
      * Type of dialog for this dialog screen
@@ -43,7 +43,7 @@ public class JiraInputDialog implements AlertSender {
      * UI elements
      */
     private TextField jiraIdField = new TextField();
-    private TextField jiraDecripField = new TextField();
+    private TextField jiraDescripField = new TextField();
 
     public JiraInputDialog (DialogType dialogType) {
         this.dialogType = dialogType;
@@ -54,9 +54,12 @@ public class JiraInputDialog implements AlertSender {
         this.dialogType = dialogType;
         init();
         jiraIdField.setText(jiraId);
-        jiraDecripField.setText(jiraDescription);
+        jiraDescripField.setText(jiraDescription);
     }
 
+    /**
+     * Initialization of this dialog
+     */
     private void init() {
         //Depending on dialogType, choosing buttonType with text and setting title of the dialog
         ButtonType buttonType;
@@ -73,32 +76,32 @@ public class JiraInputDialog implements AlertSender {
         Button addButton = (Button) dialog.getDialogPane().lookupButton(buttonType);
 
         //Configuring gridPane
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-        grid.setPadding(new Insets(20, 150, 10, 10));
-        grid.add(new Label("Jira ID:"), 0, 0);
-        grid.add(jiraIdField, 1, 0);
-        grid.add(new Label("Jira description:"), 0, 1);
-        grid.add(jiraDecripField, 1, 1);
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(10);
+        gridPane.setPadding(new Insets(20, 150, 10, 10));
+        gridPane.add(new Label("Jira ID:"), 0, 0);
+        gridPane.add(jiraIdField, 1, 0);
+        gridPane.add(new Label("Jira description:"), 0, 1);
+        gridPane.add(jiraDescripField, 1, 1);
 
         //Configuring dialog
         dialog.setHeaderText(null);
-        dialog.getDialogPane().setContent(grid);
+        dialog.getDialogPane().setContent(gridPane);
 
         //Setting validator for jira ID field. If field is empty, ID is not valid
         jiraIdField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null || newValue.equals("")) {
-                isIdValid = false;
+                idValid = false;
                 return;
             }
-            isIdValid = true;
+            idValid = true;
         });
 
         //Catching the action event (user pushed "Add" or "Edit" button)
         //If jira ID field is not valid, showing alert to user and returning him to the dialog screen
         addButton.addEventFilter(ActionEvent.ACTION, event -> {
-            if (!isIdValid) {
+            if (!idValid) {
                 sendAlert("Enter Jira id, please", Alert.AlertType.WARNING);
                 event.consume();
             }
@@ -108,8 +111,8 @@ public class JiraInputDialog implements AlertSender {
         //(It will be wrapped into Optional)
         dialog.setResultConverter(dialogButton -> {
             if (dialogButton == buttonType) {
-                if (isIdValid) {
-                    return new JiraPair(jiraIdField.getText(), jiraDecripField.getText());
+                if (idValid) {
+                    return new JiraPair(jiraIdField.getText(), jiraDescripField.getText());
                 }
             }
             return null;

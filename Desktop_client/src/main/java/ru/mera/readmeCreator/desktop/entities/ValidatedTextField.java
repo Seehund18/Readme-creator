@@ -19,7 +19,7 @@ import ru.mera.readmeCreator.desktop.interfaces.Validator;
 public class ValidatedTextField {
     private TextField textField;
     private Text statusText;
-    private Boolean isValid = false;
+    private Boolean valid = false;
 
     public ValidatedTextField(TextField textField, Text statusText, Validator validator) {
         this.textField = textField;
@@ -52,10 +52,10 @@ public class ValidatedTextField {
     }
 
     public boolean isValid() {
-        return isValid;
+        return valid;
     }
 
     public void setValid(boolean valid) {
-        isValid = valid;
+        this.valid = valid;
     }
 }

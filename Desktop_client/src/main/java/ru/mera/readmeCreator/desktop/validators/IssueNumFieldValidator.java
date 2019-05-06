@@ -13,7 +13,7 @@ import ru.mera.readmeCreator.desktop.interfaces.Validator;
 /**
  * Validator for issueNumber field, which verifies that entered user data is a number
  */
-public class IssueNumberValidator implements Validator {
+public class IssueNumFieldValidator implements Validator {
 
     @Override
     public boolean isValid(String value) {

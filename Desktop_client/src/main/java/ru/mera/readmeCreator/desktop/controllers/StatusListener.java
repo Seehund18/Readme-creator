@@ -33,13 +33,13 @@ public class StatusListener implements ChangeListener<String> {
     @Override
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         if (fieldValidator.isValid(newValue)) {
-            //If validation was passed, "Valid URL" will be shown near the webServiceUrl field
+            //If validation was passed, "Valid" will be shown near the field
             field.setValid(true);
             field.getStatusText().setText("Valid");
             field.getStatusText().setFill(Color.GREEN);
             return;
         }
-        //If not, "Not valid URL" will be shown
+        //If not, "Not valid" will be shown
         field.setValid(false);
         field.getStatusText().setText("Not valid");
         field.getStatusText().setFill(Color.RED);

@@ -56,7 +56,7 @@ public class DateFieldValidator implements Validator {
     }
 
     /**
-     * Verifies that the year is leap
+     * Verifies that the year is a leap
      */
     private boolean isLeapYear(int year) {
         if (year % 4 == 0) {

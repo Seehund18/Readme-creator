@@ -50,40 +50,44 @@ public class MainWindowController implements AlertSender {
      */
     @FXML
     private GridPane formGridPane = new GridPane();
-    private LinkedHashMap<String, ValidatedTextField> formParametersMap = new LinkedHashMap<>();
+    private LinkedHashMap<String, ValidatedTextField> paramFieldMap = new LinkedHashMap<>();
 
     /**
-     * Section for jira table. Table is filled with jira pairs (Jira_ID and Jira_Description) from jiraList
+     * Section for jira table. Table is filled with jira pairs (Jira_ID and Jira_Description) from JiraList
      */
     @FXML
     private TableView<JiraPair> jiraTable = new TableView<>();
-    private ObservableList<JiraPair> jiraList = FXCollections.observableArrayList();
+    private ObservableList<JiraPair> observableJiraList = FXCollections.observableArrayList();
 
     @FXML
     private Button submitButton;
 
     {
-        formParametersMap.put("patchName", new ValidatedTextField());
+        //Filling paramFieldMap
+        TextField patchNameField = new TextField();
+        patchNameField.setPromptText("Example: AvayaOceana_UAC");
+        paramFieldMap.put("patchName",
+                new ValidatedTextField(patchNameField, new Text(), new PatchNameFieldValidator()));
 
-        TextField date = new TextField();
-        date.setPromptText("dd/mm/yyyy");
-        formParametersMap.put("date",
-                new ValidatedTextField(date, new Text(), new DateFieldValidator()));
+        TextField dateField = new TextField();
+        dateField.setPromptText("dd/mm/yyyy");
+        paramFieldMap.put("date",
+                new ValidatedTextField(dateField, new Text(), new DateFieldValidator()));
 
-        TextField updateId = new TextField();
-        updateId.setPromptText("Example: 521002001");
-        formParametersMap.put("updateId",
-                new ValidatedTextField(updateId, new Text(), new UpdateIdFieldValidator()));
+        TextField updateIdField = new TextField();
+        updateIdField.setPromptText("Example: 521002001");
+        paramFieldMap.put("updateId",
+                new ValidatedTextField(updateIdField, new Text(), new UpdateIdFieldValidator()));
 
         TextField releaseVerField = new TextField();
         releaseVerField.setPromptText("Example: 3.5.0.1");
-        formParametersMap.put("releaseVersion",
+        paramFieldMap.put("releaseVersion",
                 new ValidatedTextField(releaseVerField, new Text(), new ReleaseVerFieldValidator()));
 
-        TextField issueNumber = new TextField();
-        issueNumber.setPromptText("Example: 4");
-        formParametersMap.put("issueNumber",
-                new ValidatedTextField(issueNumber, new Text(), new IssueNumberValidator()));
+        TextField issueNumberField = new TextField();
+        issueNumberField.setPromptText("Example: 4");
+        paramFieldMap.put("issueNumber",
+                new ValidatedTextField(issueNumberField, new Text(), new IssueNumFieldValidator()));
     }
 
     /**
@@ -100,7 +104,7 @@ public class MainWindowController implements AlertSender {
 
         //Adding elements to formGridPane
         int rowIndex = 0;
-        for (ValidatedTextField row: formParametersMap.values()) {
+        for (ValidatedTextField row: paramFieldMap.values()) {
             formGridPane.add(row.getTextField(), 1, rowIndex);
             formGridPane.add(row.getStatusText(), 2, rowIndex++);
         }
@@ -112,7 +116,7 @@ public class MainWindowController implements AlertSender {
         jiraDescripColumn.setCellValueFactory(new PropertyValueFactory<>("jiraDescrip"));
         jiraTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         jiraTable.getColumns().addAll(jiraIdColumn, jiraDescripColumn);
-        jiraTable.setItems(jiraList);
+        jiraTable.setItems(observableJiraList);
 
         //Adding button handler for "Submit" button
         submitButton.setOnAction(new SubmitButtonHandler(this));
@@ -135,11 +139,12 @@ public class MainWindowController implements AlertSender {
 
         log.info("Retrieving entered parameters from fields...");
         URL serviceUrl = new URL(urlField.getTextField().getText());
-        //Constructing new parameters map
-        Map<String, String> parameters = formParametersMap.entrySet().stream()
+
+        //Constructing new map from the paramFieldMap, with the same keys, but the values are the text from the fields
+        Map<String, String> paramTextMap = paramFieldMap.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
                                           entry -> entry.getValue().getTextField().getText()));
-        return Optional.of(new UserData(serviceUrl, parameters, jiraList));
+        return Optional.of(new UserData(serviceUrl, paramTextMap, observableJiraList));
     }
 
     /**
@@ -152,10 +157,10 @@ public class MainWindowController implements AlertSender {
         if (!urlField.isValid()) {
             invalidParam.append("Url field\n");
         }
-        if (jiraList.isEmpty()) {
+        if (observableJiraList.isEmpty()) {
             invalidParam.append("Jira table is empty\n");
         }
-        formParametersMap.forEach((key, value) -> {
+        paramFieldMap.forEach((key, value) -> {
             if (!value.isValid()) {
                 invalidParam.append(key).append("\n");
             }
@@ -177,11 +182,11 @@ public class MainWindowController implements AlertSender {
         JiraInputDialog jiraDialog = new JiraInputDialog(JiraInputDialog.DialogType.ADD);
         Optional<JiraPair> jiraPair = jiraDialog.showAndWait();
         jiraPair.ifPresent(pair -> {
-            if (jiraList.contains(pair)) {
+            if (observableJiraList.contains(pair)) {
                 sendAlert("Such jira already exists", Alert.AlertType.WARNING);
                 return;
             }
-            jiraList.add(pair);
+            observableJiraList.add(pair);
         });
     }
 
@@ -196,7 +201,7 @@ public class MainWindowController implements AlertSender {
             //Table is empty. There is nothing to remove
             return;
         }
-        jiraList.remove(removeIndex);
+        observableJiraList.remove(removeIndex);
     }
 
     /**
@@ -210,19 +215,19 @@ public class MainWindowController implements AlertSender {
             //Table is empty. There is nothing to edit
             return;
         }
-        JiraPair editPair = jiraList.get(editIndex);
 
+        JiraPair editPair = observableJiraList.get(editIndex);
         JiraInputDialog jiraDialog = new JiraInputDialog(editPair.getJiraId(),
                                                          editPair.getJiraDescrip(),
                                                          JiraInputDialog.DialogType.EDIT);
         Optional<JiraPair> jiraPair = jiraDialog.showAndWait();
         jiraPair.ifPresent(pair -> {
             //Alerting user if the jiraId already exists in the table
-            if (!pair.equals(editPair) && jiraList.contains(pair)) {
+            if (!pair.equals(editPair) && observableJiraList.contains(pair)) {
                 sendAlert("Such jira already exists", Alert.AlertType.WARNING);
                 return;
             }
-            jiraList.set(editIndex, pair);
+            observableJiraList.set(editIndex, pair);
         });
     }
 }

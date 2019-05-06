@@ -23,7 +23,7 @@ public class PropertiesManager {
     private static final Logger log = LoggerFactory.getLogger(PropertiesManager.class);
 
     private static final File propertiesFile = new File("conf/config.properties");
-    private static Properties prop;
+    private static Properties properties;
 
     /**
      * Initialize PropertyManager. Must be called first
@@ -31,7 +31,7 @@ public class PropertiesManager {
      */
     public static void init() throws PropertiesManagerException {
         //If init() already been called, do nothing
-        if (prop != null) {
+        if (properties != null) {
             log.debug("PropertiesManager already been initialized");
             return;
         }
@@ -45,10 +45,10 @@ public class PropertiesManager {
             }
         }
 
-        prop = new Properties();
+        properties = new Properties();
         try {
             //Trying to load properties from file
-            prop.load(new FileReader(propertiesFile));
+            properties.load(new FileReader(propertiesFile));
         } catch (FileNotFoundException ex) {
             //File was not found (it may be deleted or moved by user)
             throw new PropertiesManagerException("No config file was found", ex);
@@ -74,11 +74,11 @@ public class PropertiesManager {
      * @throws UnsupportedOperationException PropertyManager wasn't initialized
      */
     public static String getPropertyValue(String key) {
-        if (prop == null) {
+        if (properties == null) {
             throw new UnsupportedOperationException("PropertiesManager isn't initialized."
                     + " Method init() must be called first");
         }
-        return prop.getProperty(key);
+        return properties.getProperty(key);
     }
 
     /**
@@ -91,15 +91,15 @@ public class PropertiesManager {
      * @throws PropertiesManagerException Exception occurred during saving the file
      */
     public static boolean setPropertyValue(String key, String value) throws PropertiesManagerException {
-        if (prop == null) {
+        if (properties == null) {
             throw new UnsupportedOperationException("PropertiesManager isn't initialized."
                     + " Method init() must be called first");
         }
-        if (prop.getProperty(key).equals(value)) {
+        if (properties.getProperty(key).equals(value)) {
             return false;
         }
 
-        prop.setProperty(key, value);
+        properties.setProperty(key, value);
         saveToFile();
         log.info("Value of property {} was set to {}", key, value);
         return true;
@@ -111,7 +111,7 @@ public class PropertiesManager {
      */
     private static void saveToFile() throws PropertiesManagerException {
         try (FileWriter out = new FileWriter(propertiesFile)) {
-            prop.store(out,"List of desktop client properties");
+            properties.store(out,"List of desktop client properties");
         } catch (IOException ex) {
             throw new PropertiesManagerException("Error while writing properties to file", ex);
         }
