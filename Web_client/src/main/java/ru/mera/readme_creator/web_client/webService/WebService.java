@@ -31,5 +31,4 @@ public interface WebService {
      * @throws WebServiceException problems with sending request
      */
     int sendPostRequest(String postMapping, String data) throws WebServiceException;
-
 }

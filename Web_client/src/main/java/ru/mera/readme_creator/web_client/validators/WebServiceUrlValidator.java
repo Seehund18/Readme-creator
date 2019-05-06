@@ -37,8 +37,7 @@ public class WebServiceUrlValidator implements Validator {
             return;
         }
         //If value is not valid, setting message to "Invalid URL format"
-        FacesMessage msg = new FacesMessage("URL validation failed","Invalid URL format");
-        msg.setSeverity(FacesMessage.SEVERITY_ERROR);
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"","Invalid URL format");
         throw new ValidatorException(msg);
     }
 }

@@ -51,7 +51,8 @@ public class WebServiceManager {
 
     public static void downloadFile(String fileName, String info) throws IOException, WebServiceException {
         fileWebService.sendPostRequest("/files/User_data.rtf", info);
-
+        fileWebService.disconnect();
         FacesContext.getCurrentInstance().getExternalContext().redirect(fileWebService.getUrl() + "/files/" + fileName);
+
     }
 }

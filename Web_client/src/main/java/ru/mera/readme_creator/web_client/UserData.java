@@ -42,22 +42,20 @@ public class UserData implements Serializable {
     private String updateId;
     @JsonIgnore
     private String releaseVer;
-
-    private Map<String, String> parameters = new HashMap<>();
     @JsonIgnore
-    private ArrayList<JiraPair> jiraPairList = new ArrayList<>();
-    private ArrayList<JiraPair> jiras = new ArrayList<>();
+    private String issueNumber;
 
-    public void toMap() {
-        Map<String, String> map = new HashMap<>();
+    private Map<String, String> paramMap = new HashMap<>();
+    private ArrayList<JiraPair> jiraList = new ArrayList<>();
 
-        parameters.put("patchName", patchName);
-        parameters.put("date",date);
-        parameters.put("updateId", updateId);
-        parameters.put("releaseVersion", releaseVer);
+    private void toMap() {
+        String patchName = this.patchName +"_"+ this.releaseVer +"."+ this.issueNumber;
+        String updateId = patchName +"."+ this.updateId;
 
-        jiras = jiraPairList;
-
+        paramMap.put("patchName", patchName);
+        paramMap.put("date", this.date);
+        paramMap.put("updateId", updateId);
+        paramMap.put("releaseVersion", this.releaseVer);
     }
 
     @PostConstruct
@@ -65,18 +63,9 @@ public class UserData implements Serializable {
         url = CookieHelper.getCookieValue("URL");
     }
 
-    public Map<String, String> getParameters() {
-        return parameters;
-    }
-
-    public void setParameters(Map<String, String> parameters) {
-        this.parameters = parameters;
-    }
-
     public String getUrl() {
         return url;
     }
-
     public void setUrl(String url) {
         this.url = url;
     }
@@ -84,7 +73,6 @@ public class UserData implements Serializable {
     public String getPatchName() {
         return patchName;
     }
-
     public void setPatchName(String patchName) {
         this.patchName = patchName;
     }
@@ -92,7 +80,6 @@ public class UserData implements Serializable {
     public String getDate() {
         return date;
     }
-
     public void setDate(String date) {
         this.date = date;
     }
@@ -100,7 +87,6 @@ public class UserData implements Serializable {
     public String getUpdateId() {
         return updateId;
     }
-
     public void setUpdateId(String updateId) {
         this.updateId = updateId;
     }
@@ -108,22 +94,31 @@ public class UserData implements Serializable {
     public String getReleaseVer() {
         return releaseVer;
     }
-
     public void setReleaseVer(String releaseVer) {
         this.releaseVer = releaseVer;
     }
 
-    public ArrayList<JiraPair> getJiraPairList() {
-        return jiraPairList;
+    public String getIssueNumber() {
+        return issueNumber;
+    }
+    public void setIssueNumber(String issueNumber) {
+        this.issueNumber = issueNumber;
     }
 
-    public ArrayList<JiraPair> getJiras() {
-        return jiras;
+    public Map<String, String> getParamMap() {
+        return paramMap;
+    }
+    public void setParamMap(Map<String, String> paramMap) {
+        this.paramMap = paramMap;
     }
 
-    public void setJiras(ArrayList<JiraPair> jiras) {
-        this.jiras = jiras;
+    public ArrayList<JiraPair> getJiraList() {
+        return jiraList;
     }
+    public void setJiraList(ArrayList<JiraPair> jiraList) {
+        this.jiraList = jiraList;
+    }
+
 
     @Override
     public String toString() {

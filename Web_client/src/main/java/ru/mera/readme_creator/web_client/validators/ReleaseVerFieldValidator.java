@@ -15,6 +15,9 @@ import javax.faces.validator.FacesValidator;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
 
+/**
+ * Validator for releaseVersionField. It expects version in format 5.6.7.3
+ */
 @FacesValidator("releaseVerFieldValidator")
 public class ReleaseVerFieldValidator implements Validator {
 

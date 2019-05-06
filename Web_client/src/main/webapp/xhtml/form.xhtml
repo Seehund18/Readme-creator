@@ -35,14 +35,16 @@
             <hr/>
 
             <div id="paramInputSegment">
-                <h:outputText value="Enter parameters for readme file:" styleClass="outputText"/>
+                <h:outputText value="Enter paramMap for readme file:" styleClass="outputText"/>
                 <h:panelGrid id="panel2" columns="3" border="0" cellpadding = "10" styleClass="inputPanelGrid"
                              columnClasses="columnLabel">
                     <h:outputLabel value="Patch name:" styleClass="inputFieldLabel"/>
                     <h:inputText id="patchNameField" size="20" required="true"
                                  pt:placeHolder="Example: AvayaOceana_UAC_3.5.0.1.4"
                                  styleClass="inputField"
-                                 value="#{formController.userData.patchName}"/>
+                                 value="#{formController.userData.patchName}">
+                        <f:validator validatorId="patchNameFieldValidator" />
+                    </h:inputText>
                     <h:message for="patchNameField" styleClass="errorMsg" />
 
                     <h:outputLabel value="Date:" styleClass="inputFieldLabel"/>
@@ -70,6 +72,14 @@
                         <f:validator validatorId="releaseVerFieldValidator"/>
                     </h:inputText>
                     <h:message for="releaseVersionField" styleClass="errorMsg" />
+
+                    <h:outputLabel value="Issue number:" styleClass="inputFieldLabel"/>
+                    <h:inputText id="issueNumberField" size="20" required="true" styleClass="inputField"
+                                 pt:placeHolder="Example: 4"
+                                 value="#{formController.userData.issueNumber}">
+                        <f:validator validatorId="issueNumFieldValidator"/>
+                    </h:inputText>
+                    <h:message for="issueNumberField" styleClass="errorMsg" />
                 </h:panelGrid>
             </div>
 
@@ -81,7 +91,7 @@
 
                 <h:dataTable id="jiraTable" styleClass="jiraTable"
                              headerClass = "jiraTableHeader" rowClasses = "jiraTableRow"
-                             value="#{formController.userData.jiraPairList}" var="jira">
+                             value="#{formController.userData.jiraList}" var="jira">
                     <h:column>
                         <f:facet name = "header">Jira Id</f:facet>
                         #{jira.jiraId}

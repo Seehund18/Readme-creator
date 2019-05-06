@@ -34,6 +34,7 @@ body {
 }
 
 .readmeForm {
+    display: table;
     margin-top: 50px;
     text-align: center;
     display: block;
@@ -41,7 +42,7 @@ body {
     margin-left: auto;
     margin-right: auto;
     background-color: white;
-    width: fit-content;
+    width: 600px;
     width: -moz-fit-content;
     padding: 20px 12px 10px 20px;
     font: 15px Arial, Helvetica, sans-serif;

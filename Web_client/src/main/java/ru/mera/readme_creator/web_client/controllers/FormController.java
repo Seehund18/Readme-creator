@@ -67,7 +67,7 @@ public class FormController implements Serializable {
      * Handler for 'AddJira' ('+') button. Adds jiraPair to jiraPairList of userInputData
      */
     public void addJira() {
-        ArrayList<JiraPair> jiraPairList = userData.getJiraPairList();
+        ArrayList<JiraPair> jiraPairList = userData.getJiraList();
         JiraPair newPair = new JiraPair(popupDialogController.getJiraId(),
                                         popupDialogController.getJiraDescrip());
 
@@ -89,7 +89,7 @@ public class FormController implements Serializable {
      */
     public void deleteJira(JiraPair pair) {
         log.info("Deleting jira pair from the table.\n {}", pair);
-        userData.getJiraPairList().remove(pair);
+        userData.getJiraList().remove(pair);
     }
 
     /**
@@ -99,14 +99,14 @@ public class FormController implements Serializable {
     public void setDialogJira(JiraPair pair) {
         popupDialogController.setJiraId(pair.getJiraId());
         popupDialogController.setJiraDescrip(pair.getJiraDescrip());
-        editIndex = userData.getJiraPairList().indexOf(pair);
+        editIndex = userData.getJiraList().indexOf(pair);
     }
 
     /**
      * Handler for 'Edit' button in popup dialog. Set jiraPair chosen by user to a new one
      */
     public void editJira() {
-        ArrayList<JiraPair> jiraPairList = userData.getJiraPairList();
+        ArrayList<JiraPair> jiraPairList = userData.getJiraList();
         JiraPair oldPair = jiraPairList.get(editIndex);
         JiraPair newPair = new JiraPair(popupDialogController.getJiraId(),
                                         popupDialogController.getJiraDescrip());
@@ -116,7 +116,7 @@ public class FormController implements Serializable {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                                                 "",
                                                 "Such jira already exists");
-            FacesContext.getCurrentInstance().addMessage("form:jiraTable", msg);
+            FacesContext.getCurrentInstance().addMessage("popupForm:jiraIdField", msg);
             return;
         }
         log.info("Editing jira pair.\n Old value: {}.\n New value: {}", oldPair, newPair);
@@ -127,7 +127,7 @@ public class FormController implements Serializable {
      * Handler for submit button
      */
     public void onSubmit() throws IOException, WebServiceException {
-        if (userData.getJiraPairList().isEmpty()) {
+        if (userData.getJiraList().isEmpty()) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                                                 "",
                                                 "Jira table is empty");
@@ -157,55 +157,4 @@ public class FormController implements Serializable {
             FacesContext.getCurrentInstance().getExternalContext().dispatch("error.xhtml");
         }
     }
-
-
-
-//    /**
-//     * Gets "Hello_World.rtf" file from the web service
-//     * @throws IOException can't generate url for web service or problems with redirecting
-//     * @throws WebServiceException problem in WebServiceConnector
-//     */
-//    public void downHelloFile() throws IOException, WebServiceException {
-//        //Getting url from the field and setting web service
-//        connector.setWebService(url);
-//
-//        if (connector.isServiceAvailable()) {
-//            //Adding cookie which lives for 2 days
-//            CookieHelper.addPermanentCookie("URL", url, 172_800);
-//            log.info("Service is available. Redirecting user...\n");
-//            FacesContext.getCurrentInstance().getExternalContext().redirect(url + "/files/Hello_world.rtf");
-//            log.info("User was redirected\n");
-//        } else {
-//            log.info("Service is unavailable\n");
-//            error.setMessage("Service is unavailable. Try again later");
-//            FacesContext.getCurrentInstance().getExternalContext().dispatch("error.xhtml");
-//        }
-//    }
-//
-//    /**
-//     * Gets "User_data.rtf" file from the web service
-//     * @throws IOException can't generate url for web service or problems with redirecting
-//     * @throws WebServiceException problem in WebServiceConnector
-//     */
-//    public void downUserDataFile() throws IOException, WebServiceException {
-//        //Getting url from the field and setting web service
-//        connector.setWebService(url);
-//
-//        if (connector.isServiceAvailable()) {
-//            //Adding cookie which lives for 2 days
-//            CookieHelper.addPermanentCookie("URL", url, 172_800);
-//
-//            //Sending POST request to service
-//            log.info("Service is available. Sending POST request to {}", url + "/files/User_data.rtf");
-//            connector.sendPostRequest("/files/User_data.rtf", userInputData.toString());
-//
-//            log.info("Redirecting user to {}", url + "/files/User_data.rtf");
-//            FacesContext.getCurrentInstance().getExternalContext().redirect(url + "/files/User_data.rtf");
-//            log.info("User was redirected\n");
-//        } else {
-//            log.info("Service is unavailable\n");
-//            error.setMessage("Service is unavailable. Try again later");
-//            FacesContext.getCurrentInstance().getExternalContext().dispatch("error.xhtml");
-//        }
-//    }
 }
