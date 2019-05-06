@@ -1,7 +1,8 @@
-package ru.mera.readme_creator.web_client;
+package ru.mera.readme_creator.web_client.webService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.mera.readme_creator.web_client.UserData;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
@@ -18,16 +19,43 @@ import java.nio.charset.StandardCharsets;
  **/
 @ManagedBean(eager = true)
 @SessionScoped
-public class FileWebServiceConnector extends WebServiceConnector implements Serializable {
+public class FileWebService implements WebService, Serializable {
     private static final Logger log = LoggerFactory.getLogger(UserData.class);
 
+    /**
+     * URL of web service
+     */
+    private URL url;
+
+    /**
+     * Connection to the web service
+     */
+    private HttpURLConnection connection;
+
+    /**
+     * Constructs new FileWebService. It is assumed that webServiceUrl is correct URL.
+     * Validation of URL must be performed before constructing.
+     * @param webServiceUrl correct web service url
+     */
+    public FileWebService(URL webServiceUrl) {
+        this.url = webServiceUrl;
+    }
+
+    public URL getUrl() {
+        return this.url;
+    }
+
+    public void setUrl(URL url) {
+        this.url = url;
+    }
+
     @Override
-    public int sendGetRequest(String getMapping) throws WebServiceConnectorException {
+    public int sendGetRequest(String getMapping) throws WebServiceException {
         URL fullURL;
         try {
-            fullURL = new URL(webService.toString() + getMapping);
+            fullURL = new URL(url.toString() + getMapping);
         } catch (IOException ex) {
-            throw new WebServiceConnectorException("Can't generate full URL", ex);
+            throw new WebServiceException("Can't generate full URL", ex);
         }
 
         try  {
@@ -49,18 +77,18 @@ public class FileWebServiceConnector extends WebServiceConnector implements Seri
             return responseCode;
         } catch (IOException ex) {
             connection.disconnect();
-            throw new WebServiceConnectorException("There is a problem with connection to the server", ex);
+            throw new WebServiceException("There is a problem with connection to the server", ex);
         }
     }
 
     @Override
-    public int sendPostRequest(String postMapping, String info) throws WebServiceConnectorException {
+    public int sendPostRequest(String postMapping, String info) throws WebServiceException {
         //Constructing full URL from webService url and mapping
         URL fullURL;
         try {
-            fullURL = new URL(webService.toString() + postMapping);
+            fullURL = new URL(url.toString() + postMapping);
         } catch (IOException ex) {
-            throw new WebServiceConnectorException("Can't generate full URL", ex);
+            throw new WebServiceException("Can't generate full URL", ex);
         }
 
         byte[] byteInfo = info.getBytes(StandardCharsets.UTF_8);
@@ -92,7 +120,11 @@ public class FileWebServiceConnector extends WebServiceConnector implements Seri
             return responseCode;
         } catch (IOException ex) {
             connection.disconnect();
-            throw new WebServiceConnectorException("There is a problem with connection to the server", ex);
+            throw new WebServiceException("There is a problem with connection to the server", ex);
         }
+    }
+
+    void disconnect() {
+        connection.disconnect();
     }
 }

@@ -49,9 +49,8 @@ public class JiraPair {
         }
         return false;
     }
-
-    @Override
-    public String toString() {
+	@Override
+	public String toString() {
         return "Jira ID: " + jiraId + "Jira descrip: " + jiraDescrip + "\n";
     }
 }

@@ -1,0 +1,110 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns = "http://www.w3.org/1999/xhtml"
+      xmlns:h = "http://java.sun.com/jsf/html"
+      xmlns:f = "http://java.sun.com/jsf/core"
+      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:ui = "http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>Readme generator</title>
+        <meta charset="UTF-8" />
+        <h:outputStylesheet library="css" name="styles.css"/>
+    </h:head>
+
+    <h:body>
+        <h:form id="form" styleClass="readmeForm">
+            <div id="urlInputSegment">
+                <h:outputText styleClass="outputText" escape="false"
+                              value="Please, enter a web service URL in an appropriate format.&lt;br/&gt;
+                                     Examples:&lt;br/&gt;
+                                     http://localhost:8080&lt;br/&gt;
+                                     http://myService.com" />
+
+                <h:panelGrid id="urlPanelGrid" columns="3" border="0" cellpadding = "10"
+                             styleClass="inputPanelGrid" columnClasses="columnLabel">
+                    <h:outputLabel for="serviceUrl" value="Enter url:" styleClass="inputFieldLabel"/>
+                    <h:inputText id="serviceUrl" size="20" required="true" styleClass="inputField"
+                                 value="#{formController.userData.url}">
+                        <f:validator validatorId="webServiceUrlValidator" />
+                    </h:inputText>
+                    <h:message for="serviceUrl" styleClass="errorMsg" />
+                </h:panelGrid>
+            </div>
+            <hr/>
+
+            <div id="paramInputSegment">
+                <h:outputText value="Enter parameters for readme file:" styleClass="outputText"/>
+                <h:panelGrid id="panel2" columns="3" border="0" cellpadding = "10" styleClass="inputPanelGrid"
+                             columnClasses="columnLabel">
+                    <h:outputLabel value="Patch name:" styleClass="inputFieldLabel"/>
+                    <h:inputText id="patchNameField" size="20" required="true" styleClass="inputField"
+                                 value="#{formController.userData.patchName}"/>
+                    <h:message for="patchNameField" styleClass="errorMsg" />
+
+                    <h:outputLabel value="Date:" styleClass="inputFieldLabel"/>
+                    <h:inputText id="dateField" size="20" required="true" pt:placeHolder="dd/mm/yyyy" styleClass="inputField"
+                                 value="#{formController.userData.date}"/>
+                    <h:message for="dateField" styleClass="errorMsg"/>
+
+                    <h:outputLabel value="Update ID:" styleClass="inputFieldLabel"/>
+                    <h:inputText id="updateIdField" size="20" required="true" styleClass="inputField"
+                                 value="#{formController.userData.updateId}"/>
+                    <h:message for="updateIdField" styleClass="errorMsg" />
+
+                    <h:outputLabel value="Release version:" styleClass="inputFieldLabel"/>
+                    <h:inputText id="releaseVersionField" size="20" required="true" styleClass="inputField"
+                                 value="#{formController.userData.releaseVer}"/>
+                    <h:message for="releaseVersionField" styleClass="errorMsg" />
+                </h:panelGrid>
+            </div>
+
+            <div id="tableSegment" class="tableGroup">
+                <h:commandButton id="addJira" type="button" value="+" styleClass="addJiraButton"
+                                 onclick="document.getElementById('popupPanelGroup').style.display = 'block';">
+                    <f:ajax event="focus" render="popupForm" listener="#{popupDialogController.setAddDialogType()}"/>
+                </h:commandButton>
+
+                <h:dataTable id="jiraTable" styleClass="jiraTable"
+                             headerClass = "jiraTableHeader" rowClasses = "jiraTableRow"
+                             value="#{formController.userData.jiraPairList}" var="jira">
+                    <h:column>
+                        <f:facet name = "header">Jira Id</f:facet>
+                        #{jira.jiraId}
+                    </h:column>
+                    <h:column>
+                        <f:facet name = "header">Jira description</f:facet>
+                        #{jira.jiraDescrip}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Delete</f:facet>
+                        <h:commandButton value="Delete" type="button"
+                                         action="#{formController.deleteJira(jira)}">
+                            <f:ajax render="form:jiraTable" />
+                        </h:commandButton>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Edit</f:facet>
+                        <h:commandButton value="Edit" type="button"
+                                         action="#{formController.setJira(jira)}"
+                                         onclick="document.getElementById('popupPanelGroup').style.display = 'block';">
+                            <f:ajax event="focus" render="popupForm"
+                                    listener="#{popupDialogController.setEditDialogType()}"/>
+                        </h:commandButton>
+                    </h:column>
+                </h:dataTable>
+
+                <h:message id="jiraTableMsg" for="jiraTable" styleClass="errorMsg"/>
+            </div>
+
+            <h:commandButton id="Submit" value = "Submit" styleClass="submitButton button"
+                             action="#{formController.onSubmit()}" />
+            <hr/>
+        </h:form>
+
+        <ui:insert name = "dialog" >
+            <ui:include src = "/xhtml/popupDialog.xhtml" />
+        </ui:insert>
+    </h:body>
+</html>

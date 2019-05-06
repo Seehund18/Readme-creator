@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readme_creator.web_client;
+package ru.mera.readme_creator.web_client.validators;
 
 import org.apache.commons.validator.routines.UrlValidator;
 
