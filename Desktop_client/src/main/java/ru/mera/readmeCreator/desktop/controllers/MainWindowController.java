@@ -25,9 +25,7 @@ import ru.mera.readmeCreator.desktop.entities.UserData;
 import ru.mera.readmeCreator.desktop.entities.ValidatedTextField;
 import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
 import ru.mera.readmeCreator.desktop.properties.PropertiesManager;
-import ru.mera.readmeCreator.desktop.validators.DateFieldValidator;
-import ru.mera.readmeCreator.desktop.validators.UpdateIdFieldValidator;
-import ru.mera.readmeCreator.desktop.validators.UrlFieldValidator;
+import ru.mera.readmeCreator.desktop.validators.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -44,15 +42,15 @@ public class MainWindowController implements AlertSender {
      * Section for url input. urlField is a part of it
      */
     @FXML
-    private HBox urlInput;
+    private HBox urlInputHBox;
     private ValidatedTextField urlField = new ValidatedTextField(new UrlFieldValidator());
 
     /**
-     * Section for parameters input form. formParameters consists of sequence of fields
+     * Section for parameters input
      */
     @FXML
-    private GridPane form = new GridPane();
-    private LinkedHashMap<String, ValidatedTextField> formParameters = new LinkedHashMap<>();
+    private GridPane formGridPane = new GridPane();
+    private LinkedHashMap<String, ValidatedTextField> formParametersMap = new LinkedHashMap<>();
 
     /**
      * Section for jira table. Table is filled with jira pairs (Jira_ID and Jira_Description) from jiraList
@@ -65,17 +63,27 @@ public class MainWindowController implements AlertSender {
     private Button submitButton;
 
     {
-        formParameters.put("patchName", new ValidatedTextField());
+        formParametersMap.put("patchName", new ValidatedTextField());
 
         TextField date = new TextField();
         date.setPromptText("dd/mm/yyyy");
-        formParameters.put("date", new ValidatedTextField(date, new Text(), new DateFieldValidator()));
+        formParametersMap.put("date",
+                new ValidatedTextField(date, new Text(), new DateFieldValidator()));
 
         TextField updateId = new TextField();
         updateId.setPromptText("Example: 521002001");
-        formParameters.put("updateId", new ValidatedTextField(updateId, new Text(), new UpdateIdFieldValidator()));
+        formParametersMap.put("updateId",
+                new ValidatedTextField(updateId, new Text(), new UpdateIdFieldValidator()));
 
-        formParameters.put("releaseVersion", new ValidatedTextField());
+        TextField releaseVerField = new TextField();
+        releaseVerField.setPromptText("Example: 3.5.0.1");
+        formParametersMap.put("releaseVersion",
+                new ValidatedTextField(releaseVerField, new Text(), new ReleaseVerFieldValidator()));
+
+        TextField issueNumber = new TextField();
+        issueNumber.setPromptText("Example: 4");
+        formParametersMap.put("issueNumber",
+                new ValidatedTextField(issueNumber, new Text(), new IssueNumberValidator()));
     }
 
     /**
@@ -87,14 +95,14 @@ public class MainWindowController implements AlertSender {
         urlField.getTextField().setText(PropertiesManager.getPropertyValue("webServiceURL"));
         urlField.getTextField().setPromptText("Enter URL");
 
-        //Filling urlInput
-        urlInput.getChildren().addAll(urlField.getTextField(), urlField.getStatusText());
+        //Filling urlInputHBox
+        urlInputHBox.getChildren().addAll(urlField.getTextField(), urlField.getStatusText());
 
-        //Adding elements to form
+        //Adding elements to formGridPane
         int rowIndex = 0;
-        for (ValidatedTextField row: formParameters.values()) {
-            form.add(row.getTextField(), 1, rowIndex);
-            form.add(row.getStatusText(), 2, rowIndex++);
+        for (ValidatedTextField row: formParametersMap.values()) {
+            formGridPane.add(row.getTextField(), 1, rowIndex);
+            formGridPane.add(row.getStatusText(), 2, rowIndex++);
         }
 
         //Initializing jiraTable
@@ -127,8 +135,8 @@ public class MainWindowController implements AlertSender {
 
         log.info("Retrieving entered parameters from fields...");
         URL serviceUrl = new URL(urlField.getTextField().getText());
-        //Constructing new parameters map from formParameters
-        Map<String, String> parameters = formParameters.entrySet().stream()
+        //Constructing new parameters map
+        Map<String, String> parameters = formParametersMap.entrySet().stream()
                 .collect(Collectors.toMap(Map.Entry::getKey,
                                           entry -> entry.getValue().getTextField().getText()));
         return Optional.of(new UserData(serviceUrl, parameters, jiraList));
@@ -147,7 +155,7 @@ public class MainWindowController implements AlertSender {
         if (jiraList.isEmpty()) {
             invalidParam.append("Jira table is empty\n");
         }
-        formParameters.forEach((key, value) -> {
+        formParametersMap.forEach((key, value) -> {
             if (!value.isValid()) {
                 invalidParam.append(key).append("\n");
             }
