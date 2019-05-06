@@ -8,12 +8,8 @@
 
 package ru.mera.readmeCreator.service;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
-import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -22,35 +18,35 @@ import java.util.Map;
  */
 public class UserData {
 
-    private Map<String, String> parameters;
-    private List<JiraPair> jiras;
+    private Map<String, String> paramMap;
+    private List<JiraPair> jiraList;
 
-    public Map<String, String> getParameters() {
-        return parameters;
+    public Map<String, String> getParamMap() {
+        return paramMap;
     }
 
-    public void setParameters(Map<String, String> parameters) {
-        this.parameters = parameters;
+    public void setParamMap(Map<String, String> paramMap) {
+        this.paramMap = paramMap;
     }
 
-    public List<JiraPair> getJiras() {
-        return jiras;
+    public List<JiraPair> getJiraList() {
+        return jiraList;
     }
 
-    public void setJiras(List<JiraPair> jiras) {
-        this.jiras = jiras;
+    public void setJiraList(List<JiraPair> jiraList) {
+        this.jiraList = jiraList;
     }
 
     @JsonCreator
-    public UserData(Map<String, String> parameters, List<JiraPair> jiras) {
-        this.parameters = parameters;
-        this.jiras = jiras;
+    public UserData(Map<String, String> paramMap, List<JiraPair> jiraList) {
+        this.paramMap = paramMap;
+        this.jiraList = jiraList;
     }
 
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
-        str.append("Parameters:\n").append(parameters).append("\n\n").append(jiras.toString()).append("\n");
+        str.append("Parameters:\n").append(paramMap).append("\n\n").append(jiraList.toString()).append("\n");
         return str.toString();
     }
 }
