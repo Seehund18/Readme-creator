@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
@@ -61,7 +61,7 @@ public class WebServiceManager {
     public static void downloadFile(String fileName, String info) throws IOException, WebServiceException {
         String fullFileName = "/files/" + fileName;
         int responseCode = fileWebService.sendPostRequest(fullFileName, info);
-        if (responseCode > HttpServletResponse.SC_BAD_REQUEST) {
+        if (responseCode > HttpURLConnection.HTTP_BAD_REQUEST) {
             //If responseCode is an error code (bigger or equal than 400)
             fileWebService.disconnect();
             throw new WebServiceException("Bad response code: " + responseCode);
