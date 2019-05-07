@@ -21,7 +21,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 /**
- * Controller of this app
+ * Controller for form.xhtml
  */
 @ManagedBean(eager = true)
 @SessionScoped
@@ -38,49 +38,47 @@ public class FormController implements Serializable {
     private PopupDialogController popupDialogController;
 
     /**
-     * Index of edited jiraPair in jiraPairsList of UserData. It is saved when user pushed 'Edit' button
+     * Index of edited jiraPair in jiraList of UserData.
+     * It is saved when user pushed 'Edit' button in the table
      */
     private int editIndex;
 
     public void setUserData(UserData userData) {
         this.userData = userData;
     }
-
     public UserData getUserData() {
         return userData;
     }
 
     public void setError(Error error) {
-        log.debug("Setting error object\n");
         this.error = error;
     }
 
     public PopupDialogController getPopupDialogController() {
         return popupDialogController;
     }
-
     public void setPopupDialogController(PopupDialogController popupDialogController) {
         this.popupDialogController = popupDialogController;
     }
 
     /**
-     * Handler for 'AddJira' ('+') button. Adds jiraPair to jiraPairList of userInputData
+     * Handler for 'AddJira' ('+') button. Adds jiraPair to jiraPairList of userData
      */
     public void addJira() {
-        ArrayList<JiraPair> jiraPairList = userData.getJiraList();
+        ArrayList<JiraPair> jiraList = userData.getJiraList();
         JiraPair newPair = new JiraPair(popupDialogController.getJiraId(),
                                         popupDialogController.getJiraDescrip());
 
-        if (jiraPairList.contains(newPair)) {
+        if (jiraList.contains(newPair)) {
             //List already have jiraPair with such jira id
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                                                "Such id already exists",
+                                                "",
                                                 "Such id already exists");
             FacesContext.getCurrentInstance().addMessage("popupForm:jiraIdField", msg);
             return;
         }
-        log.info("Adding new jiraPair to the table. {}", newPair);
-        jiraPairList.add(newPair);
+        log.info("Adding new jiraPair to the table. {}\n", newPair);
+        jiraList.add(newPair);
     }
 
     /**
@@ -88,7 +86,7 @@ public class FormController implements Serializable {
      * @param pair chosen jira pair in jiraTable
      */
     public void deleteJira(JiraPair pair) {
-        log.info("Deleting jira pair from the table.\n {}", pair);
+        log.info("Deleting jira pair from the table.\n {}\n", pair);
         userData.getJiraList().remove(pair);
     }
 
@@ -119,7 +117,7 @@ public class FormController implements Serializable {
             FacesContext.getCurrentInstance().addMessage("popupForm:jiraIdField", msg);
             return;
         }
-        log.info("Editing jira pair.\n Old value: {}.\n New value: {}", oldPair, newPair);
+        log.info("Editing jira pair.\n Old value: {}.\n New value: {}\n", oldPair, newPair);
         jiraPairList.set(editIndex, newPair);
     }
 
@@ -127,6 +125,7 @@ public class FormController implements Serializable {
      * Handler for submit button
      */
     public void onSubmit() throws IOException, WebServiceException {
+        //Checking if is jiraTable is empty
         if (userData.getJiraList().isEmpty()) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                                                 "",
@@ -134,22 +133,22 @@ public class FormController implements Serializable {
             FacesContext.getCurrentInstance().addMessage("form:jiraTable", msg);
             return;
         }
-        log.info("Parameters: {}", userData);
 
+        //Setting new URL
         URL serviceUrl;
         try {
             serviceUrl = new URL(userData.getUrl());
         } catch (MalformedURLException ex) {
-            log.error("Can't create URL of web service", ex);
+            log.error("Can't create URL of web service\n", ex);
             return;
         }
-        log.info("Service Url: {}", serviceUrl);
         WebServiceManager.setService(serviceUrl);
-        log.info("\n File service url: {}\n", WebServiceManager.getServiceUrl());
 
+        String fileName = userData.getParamMap().get("updateId");
+        // TODO Поменять захардкоженный User_data.rtf на fileName после того как будет сделан сервис
         if (WebServiceManager.checkWebService()) {
             CookieHelper.addPermanentCookie("URL", serviceUrl.toString(), 172_800);
-            log.info("Service is available. Redirecting user...\n");
+            log.info("Service is available. Trying to download file\n");
             WebServiceManager.downloadFile("User_data.rtf", userData.toString());
         } else {
             log.info("Service is unavailable\n");

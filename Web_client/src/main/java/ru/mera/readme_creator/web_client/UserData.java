@@ -48,16 +48,6 @@ public class UserData implements Serializable {
     private Map<String, String> paramMap = new HashMap<>();
     private ArrayList<JiraPair> jiraList = new ArrayList<>();
 
-    private void toMap() {
-        String patchName = this.patchName +"_"+ this.releaseVer +"."+ this.issueNumber;
-        String updateId = patchName +"."+ this.updateId;
-
-        paramMap.put("patchName", patchName);
-        paramMap.put("date", this.date);
-        paramMap.put("updateId", updateId);
-        paramMap.put("releaseVersion", this.releaseVer);
-    }
-
     @PostConstruct
     public void init() {
         url = CookieHelper.getCookieValue("URL");
@@ -106,6 +96,7 @@ public class UserData implements Serializable {
     }
 
     public Map<String, String> getParamMap() {
+        toMap();
         return paramMap;
     }
     public void setParamMap(Map<String, String> paramMap) {
@@ -119,16 +110,25 @@ public class UserData implements Serializable {
         this.jiraList = jiraList;
     }
 
-
     @Override
     public String toString() {
+        toMap();
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            toMap();
-            ObjectMapper mapper = new ObjectMapper();
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
         } catch (JsonProcessingException ex) {
             log.error("Can't convert user data object to json string", ex);
             return "";
         }
+    }
+
+    private void toMap() {
+        String patchName = this.patchName +"_"+ this.releaseVer +"."+ this.issueNumber;
+        String updateId = patchName +"."+ this.updateId;
+
+        paramMap.put("patchName", patchName);
+        paramMap.put("date", this.date);
+        paramMap.put("updateId", updateId);
+        paramMap.put("releaseVersion", this.releaseVer);
     }
 }
