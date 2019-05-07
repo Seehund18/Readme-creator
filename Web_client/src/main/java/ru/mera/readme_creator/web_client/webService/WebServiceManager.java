@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URL;
 
@@ -45,14 +46,31 @@ public class WebServiceManager {
         } catch (WebServiceException ex) {
             log.error(ex.getMessage(), ex);
             return false;
+        } finally {
+            fileWebService.disconnect();
         }
     }
 
-
+    /**
+     * Sends info to service, validates the response code and redirects user to file URL for downloading
+     * @param fileName  name of the file to create
+     * @param info info for the file
+     * @throws IOException exception while redirecting user
+     * @throws WebServiceException exception from web service
+     */
     public static void downloadFile(String fileName, String info) throws IOException, WebServiceException {
-        fileWebService.sendPostRequest("/files/User_data.rtf", info);
+        String fullFileName = "/files/" + fileName;
+        int responseCode = fileWebService.sendPostRequest(fullFileName, info);
+        if (responseCode > HttpServletResponse.SC_BAD_REQUEST) {
+            //If responseCode is an error code (bigger or equal than 400)
+            fileWebService.disconnect();
+            throw new WebServiceException("Bad response code: " + responseCode);
+        }
         fileWebService.disconnect();
-        FacesContext.getCurrentInstance().getExternalContext().redirect(fileWebService.getUrl() + "/files/" + fileName);
+
+        //Redirecting user to a file
+        FacesContext.getCurrentInstance().getExternalContext()
+                .redirect(fileWebService.getUrl() + "/files/" + fileName);
 
     }
 }

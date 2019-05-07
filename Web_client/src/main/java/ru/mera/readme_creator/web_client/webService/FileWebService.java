@@ -73,10 +73,10 @@ public class FileWebService implements WebService, Serializable {
                 log.debug("ConnectException was caught\n");
                 return -1;
             }
-            log.info("Response code: {}", responseCode);
+            log.info("Response code: {}\n", responseCode);
             return responseCode;
         } catch (IOException ex) {
-            connection.disconnect();
+            disconnect();
             throw new WebServiceException("There is a problem with connection to the server", ex);
         }
     }
@@ -94,6 +94,7 @@ public class FileWebService implements WebService, Serializable {
         byte[] byteInfo = info.getBytes(StandardCharsets.UTF_8);
         try {
             log.info("Sending 'POST' request to URL: {}", fullURL);
+            log.info("Sent information: {}", info);
 
             //Setting request headers
             connection = (HttpURLConnection) fullURL.openConnection();
@@ -106,6 +107,7 @@ public class FileWebService implements WebService, Serializable {
             //Sending info
             try (OutputStream os = connection.getOutputStream()) {
                 os.write(byteInfo);
+                os.flush();
             }
 
             //Trying to read response
@@ -117,9 +119,10 @@ public class FileWebService implements WebService, Serializable {
                 log.debug("ConnectException was caught");
                 return -1;
             }
+            log.info("Response code: {}\n", responseCode);
             return responseCode;
         } catch (IOException ex) {
-            connection.disconnect();
+            disconnect();
             throw new WebServiceException("There is a problem with connection to the server", ex);
         }
     }
