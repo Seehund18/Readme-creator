@@ -86,6 +86,8 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
         //Invoking 'save as' dialog where user choose place where to save file
         File userDataFile = saveAs.showSaveDialog(stage);
 
+        String fileName = userData.getParamMap().get("updateId");
+        // TODO Поменять захардкоженный User_data.rtf на fileName после того как будет сделан сервис
         if (userDataFile != null) {
             //User decided where to save file
             try {
