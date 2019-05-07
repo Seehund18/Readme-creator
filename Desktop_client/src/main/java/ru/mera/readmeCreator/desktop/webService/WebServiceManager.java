@@ -60,7 +60,6 @@ public class WebServiceManager {
     public static void downloadFile(String mapping, File saveToFile) throws WebServiceException {
         //Sending 'GET' request, reading response code and validating it
         int responseCode = fileWebService.sendGetRequest(mapping);
-        log.info("Response code from the server after sending 'GET' request: {}", responseCode);
         if (responseCode >= 400) {
             throw new WebServiceException("Bad response code: " + responseCode);
         }
@@ -77,11 +76,8 @@ public class WebServiceManager {
      * @throws WebServiceException some exceptions occurred during downloading of the file
      */
     public static void downloadFile(String mapping, String info, File saveToFile) throws WebServiceException {
-        log.info("Sent info: {}", info);
-
         //Sending 'POST' request, reading response code and validating it
         int responseCode = fileWebService.sendPostRequest(mapping, info);
-        log.info("Response code from the service after sending 'POST' request: {}", responseCode);
         if (responseCode >= 400) {
             throw new WebServiceException("Bad response code: " + responseCode);
         }

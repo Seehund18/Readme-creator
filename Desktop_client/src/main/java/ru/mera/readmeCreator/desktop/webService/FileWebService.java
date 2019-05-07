@@ -78,9 +78,10 @@ public class FileWebService implements WebService {
                 log.debug("ConnectException was caught");
                 return -1;
             }
+            log.info("Response code {}", responseCode);
             return responseCode;
         } catch (IOException ex) {
-            connection.disconnect();
+            disconnect();
             throw new WebServiceException("There is a problem with connection to the server", ex);
         }
     }
@@ -98,6 +99,7 @@ public class FileWebService implements WebService {
         byte[] byteInfo = data.getBytes(StandardCharsets.UTF_8);
         try {
             log.info("Sending 'POST' request to URL: {}", fullURL);
+            log.info("Sent information: {}", data);
 
             //Setting request headers
             connection = (HttpURLConnection) fullURL.openConnection();
@@ -110,6 +112,7 @@ public class FileWebService implements WebService {
             //Sending info
             try (OutputStream os = connection.getOutputStream()) {
                 os.write(byteInfo);
+                os.flush();
             }
 
             //Trying to read response code
@@ -121,6 +124,7 @@ public class FileWebService implements WebService {
                 log.debug("ConnectException was caught");
                 return -1;
             }
+            log.info("Response code {}", responseCode);
             return responseCode;
         } catch (IOException ex) {
             disconnect();
@@ -129,7 +133,7 @@ public class FileWebService implements WebService {
     }
 
     /**
-     * Reads response from service
+     * Reads response from service to file
      * @param saveToFile file to which save the response
      * @throws WebServiceException problem with reading the response
      */
