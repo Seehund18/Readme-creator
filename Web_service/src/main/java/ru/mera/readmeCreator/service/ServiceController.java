@@ -31,7 +31,7 @@ public class ServiceController {
      */
     @GetMapping("/files/{name}")
     public ResponseEntity<FileSystemResource> sendDocument(@PathVariable String name) {
-        log.info("Received 'GET' request to addFile {} file", name);
+        log.info("Received 'GET' request for sending {} file", name);
 
         File document;
         try {

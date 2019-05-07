@@ -27,7 +27,7 @@ public interface FileRepo {
     File getFile(String name) throws IOException;
 
     /**
-     * Delegates generating of file to fileGenerator
+     * Add file to repo
      * @param name name of the file
      * @param info information to print
      * @return generated file
