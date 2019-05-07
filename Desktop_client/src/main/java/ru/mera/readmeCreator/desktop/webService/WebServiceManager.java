@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
@@ -60,7 +61,8 @@ public class WebServiceManager {
     public static void downloadFile(String mapping, File saveToFile) throws WebServiceException {
         //Sending 'GET' request, reading response code and validating it
         int responseCode = fileWebService.sendGetRequest(mapping);
-        if (responseCode >= 400) {
+        if (responseCode >= HttpURLConnection.HTTP_BAD_REQUEST) {
+            //If responseCode is an error code (bigger or equal than 400)
             throw new WebServiceException("Bad response code: " + responseCode);
         }
 
@@ -78,7 +80,8 @@ public class WebServiceManager {
     public static void downloadFile(String mapping, String info, File saveToFile) throws WebServiceException {
         //Sending 'POST' request, reading response code and validating it
         int responseCode = fileWebService.sendPostRequest(mapping, info);
-        if (responseCode >= 400) {
+        if (responseCode >= HttpURLConnection.HTTP_BAD_REQUEST) {
+            //If responseCode is an error code (bigger or equal than 400)
             throw new WebServiceException("Bad response code: " + responseCode);
         }
 
