@@ -27,6 +27,7 @@ body {
     -moz-border-radius: 3px;
     padding: 7px;
     outline: none;
+    width: 230px;
 }
 
 .errorMsg {
@@ -58,7 +59,7 @@ body {
 }
 
 .readmeForm .inputPanelGrid {
-    width: 540px;
+    width: auto;
 }
 
 .readmeForm .inputPanelGrid .columnLabel {
@@ -70,7 +71,8 @@ body {
 }
 
 .readmeForm .tableGroup {
-    width: 540px;
+    width: auto;
+    display: -webkit-box;
 }
 
 .popupPanel .popupButton {
@@ -79,7 +81,7 @@ body {
 
 .readmeForm .tableGroup .jiraTable {
     border-collapse:collapse;
-    width: 500px;
+    width: 530px;
 }
 
 .readmeForm .tableGroup .jiraTable .jiraTableHeader {
@@ -131,8 +133,7 @@ body {
 }
 
 .readmeForm .tableGroup .addJiraButton {
-    display: inline;
-    float: right;
+    margin-left: 10px;
     border-radius: 5px;
     font-size: 15px;
 }
@@ -149,7 +150,7 @@ body {
 }
 
 .popupPanel{
-    width: 500px;
+    width: 600px;
     margin-left: auto;
     margin-right: auto;
     margin-top: 100px;

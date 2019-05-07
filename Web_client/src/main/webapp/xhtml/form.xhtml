@@ -5,8 +5,9 @@
 <html xmlns = "http://www.w3.org/1999/xhtml"
       xmlns:h = "http://java.sun.com/jsf/html"
       xmlns:f = "http://java.sun.com/jsf/core"
-      xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:pt = "http://xmlns.jcp.org/jsf/passthrough"
       xmlns:ui = "http://java.sun.com/jsf/facelets">
+
     <h:head>
         <title>Readme generator</title>
         <meta charset="UTF-8" />
@@ -35,12 +36,12 @@
             <hr/>
 
             <div id="paramInputSegment">
-                <h:outputText value="Enter paramMap for readme file:" styleClass="outputText"/>
+                <h:outputText value="Enter parameters for readme file:" styleClass="outputText"/>
                 <h:panelGrid id="panel2" columns="3" border="0" cellpadding = "10" styleClass="inputPanelGrid"
                              columnClasses="columnLabel">
                     <h:outputLabel value="Patch name:" styleClass="inputFieldLabel"/>
                     <h:inputText id="patchNameField" size="20" required="true"
-                                 pt:placeHolder="Example: AvayaOceana_UAC_3.5.0.1.4"
+                                 pt:placeHolder="Example: AvayaOceana_UAC"
                                  styleClass="inputField"
                                  value="#{formController.userData.patchName}">
                         <f:validator validatorId="patchNameFieldValidator" />
@@ -84,11 +85,6 @@
             </div>
 
             <div id="tableSegment" class="tableGroup">
-                <h:commandButton id="addJira" type="button" value="+" styleClass="addJiraButton"
-                                 onclick="document.getElementById('popupPanelGroup').style.display = 'block';">
-                    <f:ajax event="focus" render="popupForm" listener="#{popupDialogController.setAddDialogType()}"/>
-                </h:commandButton>
-
                 <h:dataTable id="jiraTable" styleClass="jiraTable"
                              headerClass = "jiraTableHeader" rowClasses = "jiraTableRow"
                              value="#{formController.userData.jiraList}" var="jira">
@@ -117,6 +113,11 @@
                         </h:commandButton>
                     </h:column>
                 </h:dataTable>
+
+                <h:commandButton id="addJira" type="button" value="+" styleClass="addJiraButton"
+                                 onclick="document.getElementById('popupPanelGroup').style.display = 'block';">
+                    <f:ajax event="focus" render="popupForm" listener="#{popupDialogController.setAddDialogType()}"/>
+                </h:commandButton>
 
                 <h:message id="jiraTableMsg" for="jiraTable" styleClass="errorMsg"/>
             </div>
