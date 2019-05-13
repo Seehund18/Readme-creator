@@ -37,6 +37,22 @@ public class UserData {
         this.jiraList = jiraList;
     }
 
+    public String getPatchName() {
+        return paramMap.get("patchName");
+    }
+
+    public String getDate() {
+        return paramMap.get("date");
+    }
+
+    public String getUpdateId() {
+        return paramMap.get("updateId");
+    }
+
+    public String getReleaseVer() {
+        return paramMap.get("releaseVer");
+    }
+
     @JsonCreator
     public UserData(Map<String, String> paramMap, List<JiraPair> jiraList) {
         this.paramMap = paramMap;

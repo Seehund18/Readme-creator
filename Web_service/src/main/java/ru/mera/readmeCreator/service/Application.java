@@ -15,8 +15,8 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean
-    FileRepo initFileRepo() {
-        return new LocalFileRepo(new RTFGenerator());
-    }
+//    @Bean
+//    FileRepo initFileRepo() {
+//        return new LocalFileRepo(new RTFGenerator());
+//    }
 }

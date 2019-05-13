@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 
 /**
  * Controller of service
@@ -64,11 +65,11 @@ public class ServiceController {
         log.info("Received data:\n{}", userData);
 
         try {
-            //Trying to addFile file with given name
-            repository.addFile(name, userData.toString());
-        } catch (IOException ex) {
-            //If some problems occurred, RepositoryException is thrown
-            //which will be caught and handled by GeneratorExceptionAdvice
+//            Trying to addFile file with given name
+            repository.addFile(name, userData);
+        } catch (IOException | SQLException ex) {
+//            If some problems occurred, RepositoryException is thrown
+//            which will be caught and handled by GeneratorExceptionAdvice
             throw new RepositoryException(ex.getMessage(), ex);
         }
         log.info("Document {} was generated", name);

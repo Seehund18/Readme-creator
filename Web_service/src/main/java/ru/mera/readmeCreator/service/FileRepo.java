@@ -11,6 +11,7 @@ package ru.mera.readmeCreator.service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
+import java.sql.SQLException;
 
 /**
  * Files repository
@@ -33,5 +34,5 @@ public interface FileRepo {
      * @return generated file
      * @throws IOException exception while generating file
      */
-    File addFile(String name, String info) throws IOException;
+    File addFile(String name, UserData userData) throws IOException, SQLException;
 }
