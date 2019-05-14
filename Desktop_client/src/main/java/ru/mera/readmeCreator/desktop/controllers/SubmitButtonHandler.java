@@ -86,13 +86,13 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
         //Invoking 'save as' dialog where user choose place where to save file
         File userDataFile = saveAs.showSaveDialog(stage);
 
-        String fileName = userData.getParamMap().get("updateId");
+        String fileName = userData.getParamMap().get("updateId") + "_Patch_Readme_file.rtf";
         // TODO Поменять захардкоженный User_data.rtf на fileName после того как будет сделан сервис
         if (userDataFile != null) {
             //User decided where to save file
             try {
                 //Trying to download file
-                WebServiceManager.downloadFile("/files/User_data.rtf", userData.toString(), userDataFile);
+                WebServiceManager.downloadFile("/files/" + fileName, userData.toString(), userDataFile);
                 sendAlert("Your file has been downloaded", Alert.AlertType.INFORMATION);
                 log.info("File has been downloaded");
 
