@@ -25,7 +25,7 @@ public interface FileRepo {
      * @throws NoSuchFileException server didn't find file in repo
      * @throws IOException problems with generating "Hello_world.rtf" file
      */
-    File getFile(String name) throws IOException;
+    byte[] getFile(String name) throws IOException;
 
     /**
      * Add file to repo
@@ -34,5 +34,5 @@ public interface FileRepo {
      * @return generated file
      * @throws IOException exception while generating file
      */
-    File addFile(String name, UserData userData) throws IOException, SQLException;
+    void addFile(String name, UserData userData) throws IOException, SQLException;
 }

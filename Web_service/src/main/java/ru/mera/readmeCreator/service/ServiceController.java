@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -19,10 +21,10 @@ public class ServiceController {
     private final Logger log = LoggerFactory.getLogger(ServiceController.class);
 
     @Autowired
-    private final FileRepo repository;
+    private final FileRepo fileRepo;
 
-    public ServiceController(FileRepo repository) {
-        this.repository = repository;
+    public ServiceController(FileRepo fileRepo) {
+        this.fileRepo = fileRepo;
     }
 
     /**
@@ -31,27 +33,28 @@ public class ServiceController {
      * @return http response with file
      */
     @GetMapping("/files/{name}")
-    public ResponseEntity<FileSystemResource> sendDocument(@PathVariable String name) {
+    public ResponseEntity sendDocument(@PathVariable String name) {
         log.info("Received 'GET' request for sending {} file", name);
 
         File document;
+        byte[] fileBytes;
         try {
-            //Trying to get file from repository
-            document = repository.getFile(name);
+            //Trying to get file from fileRepo
+             fileBytes = fileRepo.getFile(name);
         } catch (IOException ex) {
             //If some problems occurred, RepositoryException is thrown
             //which will be caught and handled by GeneratorExceptionAdvice
             throw new RepositoryException(ex.getMessage(), ex);
         }
-        log.info("Document {} was found. Sending to client", document.getName());
+        log.info("Document {} was found. Sending to client", name);
 
         //Setting Http response headers
         HttpHeaders responseHeader = new HttpHeaders();
         responseHeader.set(HttpHeaders.CONTENT_TYPE, "application/rtf; charset=utf-8");
-        responseHeader.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + document.getName());
-        responseHeader.set(HttpHeaders.CONTENT_LENGTH, String.valueOf(document.length()));
+        responseHeader.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + name);
+        responseHeader.set(HttpHeaders.CONTENT_LENGTH, String.valueOf(fileBytes.length));
 
-        return new ResponseEntity<>(new FileSystemResource(document), responseHeader, HttpStatus.OK);
+        return new ResponseEntity<>(fileBytes, responseHeader, HttpStatus.OK);
     }
 
     /**
@@ -65,13 +68,14 @@ public class ServiceController {
         log.info("Received data:\n{}", userData);
 
         try {
-//            Trying to addFile file with given name
-            repository.addFile(name, userData);
+            //Trying to addFile file with given name
+            fileRepo.addFile(name, userData);
         } catch (IOException | SQLException ex) {
-//            If some problems occurred, RepositoryException is thrown
-//            which will be caught and handled by GeneratorExceptionAdvice
+            //If some problems occurred, RepositoryException is thrown
+            //which will be caught and handled by GeneratorExceptionAdvice
             throw new RepositoryException(ex.getMessage(), ex);
         }
         log.info("Document {} was generated", name);
     }
+
 }

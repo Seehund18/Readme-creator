@@ -8,112 +8,84 @@
 
 package ru.mera.readmeCreator.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
+
 import java.io.*;
+import java.lang.reflect.Field;
 import java.sql.*;
+
 import java.util.*;
+import java.util.Date;
 
+@Repository
 public class DbFileRepo implements FileRepo {
-    private static String dbUrl = "jdbc:mysql://localhost:3306/service";
-    private static Properties properties = new Properties();
 
-    static {
-        try {
-            properties.load(new FileReader("src/main/resources/database.properties"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private FileGenerator fileGenerator;
+
+    private final String INSERT_SQL_FILE = "INSERT INTO files(file_name, extension, file) VALUES(?,?,?) " +
+                                           "ON DUPLICATE KEY UPDATE file=VALUES(file)";
+
+    private final String FETCH_SQL_FILE = "SELECT file_name, extension, file FROM files WHERE (file_name = ?)" +
+                                          "AND (extension = ?)";
+
+
+    @Override
+    public byte[] getFile(String fullFileName) {
+        int lastDotIndex = fullFileName.lastIndexOf(".");
+        String fileName = fullFileName.substring(0, lastDotIndex);
+        String extension = fullFileName.substring(lastDotIndex + 1);
+
+        return jdbcTemplate.queryForObject(FETCH_SQL_FILE, new FileMapper(), fileName, extension);
     }
 
-    private static Connection connection;
+    private class FileMapper implements RowMapper<byte[]> {
 
+        @Override
+        public byte[] mapRow(ResultSet rs, int rowNum) throws SQLException {
+            String fileName = rs.getString("file_name");
+            String extension = rs.getString("extension");
+            //            File dbFile = new File(fileName + "." + extension);
 
-    public static void main(String[] args) throws SQLException {
-
-        connection = DriverManager.getConnection(dbUrl, properties);
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT file_name FROM files WHERE file_name='Template'");
-
-        while (rs.next()) {
-            try (FileOutputStream os = new FileOutputStream(new File("Template.rtf"));
-                 InputStream is = rs.getBlob(1).getBinaryStream()){
-
+            byte[] out;
+            try (ByteArrayOutputStream os = new ByteArrayOutputStream();
+                 InputStream is = rs.getBlob("file").getBinaryStream()) {
                 int i;
-                while ( (i = is.read()) != -1) {
+                while ((i = is.read()) != -1) {
                     os.write(i);
                 }
-
+                os.flush();
+                out = os.toByteArray();
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new SQLException("Error while trying to create file", e);
             }
-
+            return out;
         }
     }
 
     @Override
-    public File getFile(String name) throws IOException {
+    public void addFile(String fullFileName, UserData userData) throws IOException, SQLException {
+        File patchFile = new File(fullFileName);
+        byte[] templateFileBytes = getFile("Template.rtf");
+
+        byte[] out;
         try {
-            connection = DriverManager.getConnection(dbUrl, properties);
-        } catch (SQLException e) {
-            throw new
+            out = fileGenerator.generateOnTemplate(patchFile, userData, templateFileBytes);
+        } catch (GeneratorException e) {
+            throw new RepositoryException(e.getMessage(), e);
         }
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT file FROM files WHERE file_name='Template'");
-    }
 
-    @Override
-    public File addFile(String name, UserData userData) throws IOException, SQLException {
-        connection = DriverManager.getConnection(dbUrl, properties);
+        int lastDotIndex = fullFileName.lastIndexOf(".");
+        String fileName = fullFileName.substring(0, lastDotIndex);
+        String extension = fullFileName.substring(lastDotIndex + 1);
 
-        try (BufferedReader is = getTemplate();
-            BufferedWriter out = new BufferedWriter(new FileWriter("Final_file.rtf"))) {
-
-            int a;
-            while ((a = is.read()) != -1) {
-                char letter = (char) a;
-                if (letter == '<') {
-                    StringBuilder str = new StringBuilder();
-                    while ( (letter = (char) is.read()) != '>') {
-                        str.append(letter);
-                    }
-                    switch (str.toString()) {
-                        case "Release_version":
-                            out.write(userData.getReleaseVer());
-                            break;
-                        case "Patch_name":
-                            out.write(userData.getPatchName());
-                            break;
-                        case "Date":
-                            out.write(userData.getDate());
-                            break;
-                        case "Update_id":
-                            out.write(userData.getUpdateId());
-                            break;
-                        case "Table_row":
-                            insertRows(out, userData.getJiraList());
-                            break;
-                        default:
-                            out.write("<" + str.toString() + ">");
-                    }
-                    continue;
-                }
-                out.write(a);
-            }
-            out.flush();
-        }
-    }
-
-    private static void insertRows(BufferedWriter out, List<JiraPair> jiras) throws IOException {
-        for (JiraPair jira: jiras) {
-            String row = TableRow.createTableRow(jira.getJiraId(), jira.getJiraDescrip());
-            out.write(row);
-        }
-    }
-
-    private BufferedReader getTemplate() throws SQLException {
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT file FROM files WHERE file_name='Template'");
-
-        rs.next();
-        return new BufferedReader(new InputStreamReader(rs.getBlob(1).getBinaryStream()));
+        jdbcTemplate.update(INSERT_SQL_FILE, fileName, extension, out);
     }
 }

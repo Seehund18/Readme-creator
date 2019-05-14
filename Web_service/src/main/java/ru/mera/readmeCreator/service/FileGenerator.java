@@ -2,6 +2,7 @@ package ru.mera.readmeCreator.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.NoSuchFileException;
 
 /**
@@ -18,4 +19,6 @@ public interface FileGenerator {
      * @throws IOException problem with creating the file
      */
     File generate(File generatedFile, String info) throws IOException;
+
+    byte[] generateOnTemplate(File generatedFile, Object data, byte[] templateFile) throws GeneratorException;
 }

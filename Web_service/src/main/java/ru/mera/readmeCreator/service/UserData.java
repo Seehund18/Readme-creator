@@ -50,7 +50,7 @@ public class UserData {
     }
 
     public String getReleaseVer() {
-        return paramMap.get("releaseVer");
+        return paramMap.get("releaseVersion");
     }
 
     @JsonCreator

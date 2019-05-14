@@ -8,9 +8,77 @@
 
 package ru.mera.readmeCreator.service;
 
-public class TableRow {
+import org.springframework.stereotype.Component;
 
-    static String createTableRow(String jiraId, String jiraDescription) {
+import java.io.*;
+import java.util.List;
+
+@Component
+public class ReadmePatchGenerator implements FileGenerator {
+
+    @Override
+    public File generate(File generatedFile, String info) throws IOException {
+        return null;
+    }
+
+    @Override
+    public byte[] generateOnTemplate(File generatedFile, Object data, byte[] templateFile) throws GeneratorException {
+        UserData userData = (UserData) data;
+
+        byte[] buff = new byte[templateFile.length];
+        ByteArrayOutputStream o = new ByteArrayOutputStream();
+        try (BufferedReader is = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(templateFile)));
+             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(o))) {
+
+            int a;
+            while ((a = is.read()) != -1) {
+                char letter = (char) a;
+                if (letter == '<') {
+                    StringBuilder str = new StringBuilder();
+                    while ( (letter = (char) is.read()) != '>') {
+                        str.append(letter);
+                    }
+                    switch (str.toString()) {
+                        case "Release_version":
+                            out.write(userData.getReleaseVer());
+                            break;
+                        case "Patch_name":
+                            out.write(userData.getPatchName());
+                            break;
+                        case "Date":
+                            out.write(userData.getDate());
+                            break;
+                        case "Update_id":
+                            out.write(userData.getUpdateId());
+                            break;
+                        case "Table_row":
+                            insertRows(out, userData.getJiraList());
+                            break;
+                        default:
+                            out.write("<" + str.toString() + ">");
+                    }
+                    continue;
+                }
+                out.write(a);
+            }
+
+            out.flush();
+        } catch (IOException e) {
+            throw new GeneratorException("Error while creating patch file", e);
+        }
+
+        return o.toByteArray();
+    }
+
+    private void insertRows(BufferedWriter out, List<JiraPair> jiras) throws IOException {
+        for (JiraPair jira: jiras) {
+            String row = createTableRow(jira.getJiraId(), jira.getJiraDescrip());
+            out.write(row);
+        }
+        out.flush();
+    }
+
+    private String createTableRow(String jiraId, String jiraDescription) {
         String templateRow = "\n\n\\pard\\plain\\ltrpar\\s65\\ql\\li0\\ri0\\widctlpar\\intbl\\wrapdefault"
                 + "\\hyphpar0\\faauto\\rin0\\lin0\\pararsid7218467 \\rtlch\\fcs1 \\af1\\afs20\\alang1025 "
                 + "\\ltrch\\fcs0 \\fs20\\lang1033\\langfe1033\\kerning1\\loch\\af1\\hich\\af39\\dbch\\af13\\cgrid"
