@@ -1,7 +1,7 @@
 package ru.mera.readmeCreator.service;
 
 /**
- * Exception in which all exceptions from repository are wrapped.
+ * Exception from {@link FileRepo}
  * This exception is handled by {@link RepositoryExceptionAdvice}
  */
 class RepositoryException extends Exception {

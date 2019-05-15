@@ -16,7 +16,7 @@ import java.io.*;
 import java.util.List;
 
 /**
- * Generator of patch readme data in rtf format
+ * Generator of patch readme file in rtf format
  */
 @Component
 public class PatchReadmeByteGenerator implements ByteDataGenerator {
@@ -83,7 +83,7 @@ public class PatchReadmeByteGenerator implements ByteDataGenerator {
      * Insert rows into table in patch readme rtf file.
      * @param out stream to write
      * @param jiraList list of jiras, which will be written to the table
-     * @throws IOException
+     * @throws IOException exception while writing to a file
      */
     private void insertRows(BufferedWriter out, List<JiraPair> jiraList) throws IOException {
         for (JiraPair jira: jiraList) {
@@ -94,7 +94,7 @@ public class PatchReadmeByteGenerator implements ByteDataGenerator {
     }
 
     /**
-     * Creates code for table row.
+     * Creates code for rtf table row.
      * @param jiraId id which inserted into row
      * @param jiraDescription description which inserted into row
      * @return rtf code for one table row with given information

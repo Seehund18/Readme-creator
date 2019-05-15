@@ -8,7 +8,7 @@ public interface ByteDataGenerator {
     /**
      * Generates byte array using template byte array and data
      * @param data data which is used in generating
-     * @param templateBytes template byte array
+     * @param templateBytes byte array of template file
      * @return byte array with generated data
      * @throws GeneratorException exception in generator occurred
      */

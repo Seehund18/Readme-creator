@@ -8,6 +8,9 @@
 
 package ru.mera.readmeCreator.service;
 
+/**
+ * Exception from {@link ByteDataGenerator}
+ */
 public class GeneratorException extends Exception {
 
     public GeneratorException(String message, Throwable cause) {

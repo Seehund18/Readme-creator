@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * Handler for RepositoryExceptions
+ * Handler for {@link RepositoryException}
  */
 @ControllerAdvice
 public class RepositoryExceptionAdvice {

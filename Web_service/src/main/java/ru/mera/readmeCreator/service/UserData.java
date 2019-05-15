@@ -14,27 +14,25 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Entity which represents data entered by user.
+ * Entity which represents user data from clients
  */
 public class UserData {
 
+    /**
+     * Map of parameters. Consists of patch name, date, update id, release version
+     */
     private Map<String, String> paramMap;
+
+    /**
+     * List of jiras
+     */
     private List<JiraPair> jiraList;
 
     public Map<String, String> getParamMap() {
         return paramMap;
     }
-
     public void setParamMap(Map<String, String> paramMap) {
         this.paramMap = paramMap;
-    }
-
-    public List<JiraPair> getJiraList() {
-        return jiraList;
-    }
-
-    public void setJiraList(List<JiraPair> jiraList) {
-        this.jiraList = jiraList;
     }
 
     public String getPatchName() {
@@ -53,6 +51,13 @@ public class UserData {
         return paramMap.get("releaseVersion");
     }
 
+    public List<JiraPair> getJiraList() {
+        return jiraList;
+    }
+    public void setJiraList(List<JiraPair> jiraList) {
+        this.jiraList = jiraList;
+    }
+
     @JsonCreator
     public UserData(Map<String, String> paramMap, List<JiraPair> jiraList) {
         this.paramMap = paramMap;
@@ -61,8 +66,6 @@ public class UserData {
 
     @Override
     public String toString() {
-        StringBuilder str = new StringBuilder();
-        str.append("Parameters:\n").append(paramMap).append("\n\n").append(jiraList.toString()).append("\n");
-        return str.toString();
+        return "Parameters:\n" + paramMap + "\n\n" + jiraList.toString() + "\n";
     }
 }

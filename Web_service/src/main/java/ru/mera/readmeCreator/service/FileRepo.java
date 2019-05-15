@@ -14,18 +14,18 @@ package ru.mera.readmeCreator.service;
 public interface FileRepo {
 
     /**
-     * Gets file from the repository
+     * Gets file's byte array from the repository
      * @param name name of the file
-     * @return file
-     * @throws RepositoryException
+     * @return bytes from the file
+     * @throws RepositoryException exception in repository occurred
      */
     byte[] getFile(String name) throws RepositoryException;
 
     /**
-     * Add file to repository     *
+     * Add file to repository
      * @param name name of the file
      * @param userData data from the clients
-     * @throws RepositoryException
+     * @throws RepositoryException exception in repository occurred
      */
     void addFile(String name, UserData userData) throws RepositoryException;
 }

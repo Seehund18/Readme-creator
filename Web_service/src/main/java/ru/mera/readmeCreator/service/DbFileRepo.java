@@ -8,34 +8,52 @@
 
 package ru.mera.readmeCreator.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 
+/**
+ * Database repository of files
+ */
 @Repository
 public class DbFileRepo implements FileRepo {
+    private final Logger log = LoggerFactory.getLogger(DbFileRepo.class);
 
+    /**
+     * Spring class which manages all database interactions
+     */
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    /**
+     * Generator of byte array for files
+     */
     @Autowired
     private ByteDataGenerator byteDataGenerator;
 
+    /**
+     * SQL request for inserting file's byte array into database.
+     * If file with such name and extension already exists, replace it.
+     */
     private final String INSERT_SQL_FILE = "INSERT INTO files(file_name, extension, file) VALUES(?,?,?) " +
-                                           "ON DUPLICATE KEY UPDATE file=VALUES(file)";
+                                           "ON DUPLICATE KEY UPDATE file = VALUES(file)";
 
+    /**
+     * SQL request for fetching file from the database
+     */
     private final String FETCH_SQL_FILE = "SELECT file_name, extension, file FROM files WHERE (file_name = ?)" +
                                           "AND (extension = ?)";
 
     @Override
     public void addFile(String fullFileName, UserData userData) throws RepositoryException {
-        File patchFile = new File(fullFileName);
         byte[] templateFileBytes = getFile("Template.rtf");
-
         byte[] out;
         try {
             out = byteDataGenerator.generateWithTemplate(userData, templateFileBytes);
@@ -43,42 +61,52 @@ public class DbFileRepo implements FileRepo {
             throw new RepositoryException("Exception while trying to generate file", e);
         }
 
-        int lastDotIndex = fullFileName.lastIndexOf(".");
-        String fileName = fullFileName.substring(0, lastDotIndex);
-        String extension = fullFileName.substring(lastDotIndex + 1);
-
-        jdbcTemplate.update(INSERT_SQL_FILE, fileName, extension, out);
+        String[] separFileName = separateFileName(fullFileName);
+        log.info("Adding new {} file to database...", fullFileName);
+        jdbcTemplate.update(INSERT_SQL_FILE, separFileName[0], separFileName[1], out);
     }
 
     @Override
     public byte[] getFile(String fullFileName) {
+        String[] separFileName = separateFileName(fullFileName);
+        log.info("Getting {} file from database...", fullFileName);
+        return jdbcTemplate.queryForObject(FETCH_SQL_FILE, new ByteArrayMapper(), separFileName[0], separFileName[1]);
+    }
+
+    /**
+     * Separates full file name into file name and its extension
+     * @return array in which the first element is a fileName and the second is extension
+     */
+    private String[] separateFileName(String fullFileName) {
         int lastDotIndex = fullFileName.lastIndexOf(".");
         String fileName = fullFileName.substring(0, lastDotIndex);
         String extension = fullFileName.substring(lastDotIndex + 1);
-
-        return jdbcTemplate.queryForObject(FETCH_SQL_FILE, new FileMapper(), fileName, extension);
+        return new String[] {fileName, extension};
     }
 
-    private class FileMapper implements RowMapper<byte[]> {
+    /**
+     * Mapper for database table rows, which writes file into byte array
+     */
+    private class ByteArrayMapper implements RowMapper<byte[]> {
 
         @Override
         public byte[] mapRow(ResultSet rs, int rowNum) throws SQLException {
-            String fileName = rs.getString("file_name");
-            String extension = rs.getString("extension");
+            byte[] resultBytes;
 
-            byte[] out;
-            try (ByteArrayOutputStream os = new ByteArrayOutputStream();
-                    InputStream is = rs.getBlob("file").getBinaryStream()) {
-                int i;
-                while ((i = is.read()) != -1) {
-                    os.write(i);
+            //Getting binary stream from 'file' column of database table and writing it to a byte array
+            InputStream byteIn = rs.getBlob("file").getBinaryStream();
+            try (ByteArrayOutputStream out = new ByteArrayOutputStream();
+                 BufferedReader in = new BufferedReader(new InputStreamReader(byteIn, StandardCharsets.UTF_8))) {
+                int symbolCode;
+                while ((symbolCode = in.read()) != -1) {
+                    out.write(symbolCode);
                 }
-                os.flush();
-                out = os.toByteArray();
+                out.flush();
+                resultBytes = out.toByteArray();
             } catch (IOException e) {
-                throw new SQLException("Error while trying to create file", e);
+                throw new SQLException("Error while trying to read file's byte array", e);
             }
-            return out;
+            return resultBytes;
         }
     }
 }
