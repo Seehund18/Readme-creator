@@ -8,35 +8,46 @@
 
 package ru.mera.readmeCreator.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.util.List;
 
+/**
+ * Generator of patch readme data in rtf format
+ */
 @Component
-public class ReadmePatchGenerator implements FileGenerator {
+public class PatchReadmeByteGenerator implements ByteDataGenerator {
+    private final Logger log = LoggerFactory.getLogger(PatchReadmeByteGenerator.class);
 
+    /**
+     * Generates patch readme byte array from template and user data which is sent from client
+     * @param data user data which was sent from clients
+     * @param templateCharBytes bytes from Template.rtf from database
+     * @return patch readme byte array
+     */
     @Override
-    public File generate(File generatedFile, String info) throws IOException {
-        return null;
-    }
-
-    @Override
-    public byte[] generateOnTemplate(File generatedFile, Object data, byte[] templateFile) throws GeneratorException {
+    public byte[] generateWithTemplate(Object data, byte[] templateCharBytes) throws GeneratorException {
+        log.info("Generating patch readme byte array ...");
         UserData userData = (UserData) data;
 
-        byte[] buff = new byte[templateFile.length];
-        ByteArrayOutputStream o = new ByteArrayOutputStream();
-        try (BufferedReader is = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(templateFile)));
-             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(o))) {
+        //Reading from template byte array and writing to patchOutStream which
+        //will be transformed into byte array
+        ByteArrayOutputStream patchOutStream = new ByteArrayOutputStream();
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new ByteArrayInputStream(templateCharBytes)));
+             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(patchOutStream))) {
 
-            int a;
-            while ((a = is.read()) != -1) {
-                char letter = (char) a;
-                if (letter == '<') {
+            int symbolCode;
+            while ((symbolCode = in.read()) != -1) {
+                char currentSymbol = (char) symbolCode;
+
+                //If symbol is '<', reading string until '>' occurred and then checking that string
+                if (currentSymbol == '<') {
                     StringBuilder str = new StringBuilder();
-                    while ( (letter = (char) is.read()) != '>') {
-                        str.append(letter);
+                    while ( (currentSymbol = (char) in.read()) != '>') {
+                        str.append(currentSymbol);
                     }
                     switch (str.toString()) {
                         case "Release_version":
@@ -59,25 +70,35 @@ public class ReadmePatchGenerator implements FileGenerator {
                     }
                     continue;
                 }
-                out.write(a);
+                out.write(symbolCode);
             }
-
             out.flush();
         } catch (IOException e) {
-            throw new GeneratorException("Error while creating patch file", e);
+            throw new GeneratorException("Error while creating readme patch file", e);
         }
-
-        return o.toByteArray();
+        return patchOutStream.toByteArray();
     }
 
-    private void insertRows(BufferedWriter out, List<JiraPair> jiras) throws IOException {
-        for (JiraPair jira: jiras) {
+    /**
+     * Insert rows into table in patch readme rtf file.
+     * @param out stream to write
+     * @param jiraList list of jiras, which will be written to the table
+     * @throws IOException
+     */
+    private void insertRows(BufferedWriter out, List<JiraPair> jiraList) throws IOException {
+        for (JiraPair jira: jiraList) {
             String row = createTableRow(jira.getJiraId(), jira.getJiraDescrip());
             out.write(row);
         }
         out.flush();
     }
 
+    /**
+     * Creates code for table row.
+     * @param jiraId id which inserted into row
+     * @param jiraDescription description which inserted into row
+     * @return rtf code for one table row with given information
+     */
     private String createTableRow(String jiraId, String jiraDescription) {
         String templateRow = "\n\n\\pard\\plain\\ltrpar\\s65\\ql\\li0\\ri0\\widctlpar\\intbl\\wrapdefault"
                 + "\\hyphpar0\\faauto\\rin0\\lin0\\pararsid7218467 \\rtlch\\fcs1 \\af1\\afs20\\alang1025 "
