@@ -43,12 +43,12 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
      */
     private FileChooser saveAs = new FileChooser();
 
+
     {
         //Configuring saveAs
         saveAs.setTitle("Save file as");
         saveAs.getExtensionFilters()
                 .add(new FileChooser.ExtensionFilter("RTF", "*.rtf"));
-        saveAs.setInitialFileName("User_data.rtf");
         saveAs.setInitialDirectory(new File(System.getProperty("user.home")));
     }
 
@@ -83,11 +83,11 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
             return;
         }
 
-        //Invoking 'save as' dialog where user choose place where to save file
+        //Constructing file name and invoking 'save as' dialog
+        String fileName = userData.getParamMap().get("updateId") + "_Patch_Readme_file.rtf";
+        saveAs.setInitialFileName(fileName);
         File userDataFile = saveAs.showSaveDialog(stage);
 
-        String fileName = userData.getParamMap().get("updateId") + "_Patch_Readme_file.rtf";
-        // TODO Поменять захардкоженный User_data.rtf на fileName после того как будет сделан сервис
         if (userDataFile != null) {
             //User decided where to save file
             try {
