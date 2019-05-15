@@ -1,4 +1,4 @@
-package ru.mera.readmeCreator.service;
+package ru.mera.readmeCreator.service.generator;
 
 /**
  * Interface which represents data generator in form of byte arrays

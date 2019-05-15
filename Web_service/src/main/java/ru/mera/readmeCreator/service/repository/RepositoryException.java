@@ -1,10 +1,10 @@
-package ru.mera.readmeCreator.service;
+package ru.mera.readmeCreator.service.repository;
 
 /**
  * Exception from {@link FileRepo}
  * This exception is handled by {@link RepositoryExceptionAdvice}
  */
-class RepositoryException extends Exception {
+public class RepositoryException extends Exception {
 
     RepositoryException(String message, Throwable cause) {
         super(message, cause);

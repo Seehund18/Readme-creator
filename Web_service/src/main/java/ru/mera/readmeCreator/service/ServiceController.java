@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import ru.mera.readmeCreator.service.repository.FileRepo;
+import ru.mera.readmeCreator.service.repository.RepositoryException;
 
 /**
  * Rest controller of service

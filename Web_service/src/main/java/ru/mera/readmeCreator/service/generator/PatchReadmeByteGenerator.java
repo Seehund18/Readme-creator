@@ -6,11 +6,13 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.service;
+package ru.mera.readmeCreator.service.generator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import ru.mera.readmeCreator.service.JiraPair;
+import ru.mera.readmeCreator.service.UserData;
 
 import java.io.*;
 import java.util.List;

@@ -6,7 +6,9 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.service;
+package ru.mera.readmeCreator.service.repository;
+
+import ru.mera.readmeCreator.service.UserData;
 
 /**
  * Files repository
