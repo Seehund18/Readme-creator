@@ -84,7 +84,7 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
         }
 
         //Constructing file name and invoking 'save as' dialog
-        String fileName = userData.getParamMap().get("updateId") + "_Patch_Readme_file.rtf";
+        String fileName = userData.getParamMap().get("updateId") + "_Patch_Readme.rtf";
         saveAs.setInitialFileName(fileName);
         File userDataFile = saveAs.showSaveDialog(stage);
 
