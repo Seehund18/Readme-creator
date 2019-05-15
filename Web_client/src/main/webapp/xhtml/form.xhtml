@@ -127,8 +127,12 @@
             <hr/>
         </h:form>
 
-        <ui:insert name = "dialog" >
+        <ui:insert name="dialog">
             <ui:include src = "/xhtml/popupDialog.xhtml" />
+        </ui:insert>
+
+        <ui:insert name="errorPopup">
+            <ui:include src = "/xhtml/error.xhtml" />
         </ui:insert>
     </h:body>
 </html>

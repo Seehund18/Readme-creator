@@ -3,17 +3,22 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns = "http://www.w3.org/1999/xhtml"
-      xmlns:h = "http://java.sun.com/jsf/html">
+      xmlns:h = "http://java.sun.com/jsf/html"
+      xmlns:ui = "http://java.sun.com/jsf/facelets"
+      xmlns:f = "http://java.sun.com/jsf/core">
 
-    <head>
-        <title>Error</title>
-    </head>
-
-    <body>
-        <h1>Error occurred</h1>
-        <h:outputText value = "#{error.message}"/>
-        <h:form>
-            <h:commandButton action = "form" value = "Return back" />
-        </h:form>
-    </body>
+    <h:body>
+        <ui:composition>
+            <h:panelGroup id="errorPopupPanel" styleClass="popupPanelOverlay"
+                          rendered="errorPopupController.render">
+                <div class="popupPanel">
+                    <h:outputText styleClass="outputText" value="#{error.message}"/>
+                    <h:commandButton value="Return back" styleClass="button" type="button"
+                                     onclick="document.getElementById('errorPopupPanel').style.display = 'none';">
+                        <f:ajax />
+                    </h:commandButton>
+                </div>
+            </h:panelGroup>
+        </ui:composition>
+    </h:body>
 </html>
