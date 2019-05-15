@@ -7,12 +7,6 @@ import org.springframework.http.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.sql.SQLException;
-
 /**
  * Controller of service
  */
@@ -30,22 +24,14 @@ public class ServiceController {
     /**
      * Handler method for 'GET' requests
      * @param name file name
+     * @throws RepositoryException
      * @return http response with file
      */
     @GetMapping("/files/{name}")
-    public ResponseEntity sendDocument(@PathVariable String name) {
+    public ResponseEntity sendDocument(@PathVariable String name) throws RepositoryException {
         log.info("Received 'GET' request for sending {} file", name);
 
-        File document;
-        byte[] fileBytes;
-        try {
-            //Trying to get file from fileRepo
-             fileBytes = fileRepo.getFile(name);
-        } catch (IOException ex) {
-            //If some problems occurred, RepositoryException is thrown
-            //which will be caught and handled by GeneratorExceptionAdvice
-            throw new RepositoryException(ex.getMessage(), ex);
-        }
+        byte[] fileBytes = fileRepo.getFile(name);
         log.info("Document {} was found. Sending to client", name);
 
         //Setting Http response headers
@@ -59,23 +45,18 @@ public class ServiceController {
 
     /**
      * Handler method for 'POST' requests
-     * @param name file name
+     * @param fileName name of the file which must be added to repository
+     * @throws RepositoryException
      */
-    @PostMapping("/files/{name}")
+    @PostMapping("/files/{fileName}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void sendDocument(@PathVariable String name, @RequestBody UserData userData) {
-        log.info("Received 'POST' request to addFile {} file", name);
+    public void sendDocument(@PathVariable String fileName, @RequestBody UserData userData) throws RepositoryException {
+        log.info("Received 'POST' request to addFile {} file", fileName);
         log.info("Received data:\n{}", userData);
 
-        try {
-            //Trying to addFile file with given name
-            fileRepo.addFile(name, userData);
-        } catch (IOException | SQLException ex) {
-            //If some problems occurred, RepositoryException is thrown
-            //which will be caught and handled by GeneratorExceptionAdvice
-            throw new RepositoryException(ex.getMessage(), ex);
-        }
-        log.info("Document {} was generated", name);
+        fileRepo.addFile(fileName, userData);
+
+        log.info("Document {} was generated", fileName);
     }
 
 }

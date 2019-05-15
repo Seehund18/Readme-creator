@@ -1,9 +1,10 @@
 package ru.mera.readmeCreator.service;
 
 /**
- * Exception in which all exceptions from repository are wrapped
+ * Exception in which all exceptions from repository are wrapped.
+ * This exception is handled by {@link RepositoryExceptionAdvice}
  */
-class RepositoryException extends RuntimeException {
+class RepositoryException extends Exception {
 
     RepositoryException(String message, Throwable cause) {
         super(message, cause);

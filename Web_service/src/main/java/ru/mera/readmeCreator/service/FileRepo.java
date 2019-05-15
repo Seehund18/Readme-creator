@@ -8,31 +8,24 @@
 
 package ru.mera.readmeCreator.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.NoSuchFileException;
-import java.sql.SQLException;
-
 /**
  * Files repository
  */
 public interface FileRepo {
 
     /**
-     * Gets file from repo
+     * Gets file from the repository
      * @param name name of the file
      * @return file
-     * @throws NoSuchFileException server didn't find file in repo
-     * @throws IOException problems with generating "Hello_world.rtf" file
+     * @throws RepositoryException
      */
-    byte[] getFile(String name) throws IOException;
+    byte[] getFile(String name) throws RepositoryException;
 
     /**
-     * Add file to repo
+     * Add file to repository     *
      * @param name name of the file
-     * @param info information to print
-     * @return generated file
-     * @throws IOException exception while generating file
+     * @param userData data from the clients
+     * @throws RepositoryException
      */
-    void addFile(String name, UserData userData) throws IOException, SQLException;
+    void addFile(String name, UserData userData) throws RepositoryException;
 }

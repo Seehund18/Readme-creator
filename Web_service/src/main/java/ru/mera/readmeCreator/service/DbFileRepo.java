@@ -11,15 +11,10 @@ package ru.mera.readmeCreator.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
-import java.lang.reflect.Field;
 import java.sql.*;
-
-import java.util.*;
-import java.util.Date;
 
 @Repository
 public class DbFileRepo implements FileRepo {
@@ -28,7 +23,7 @@ public class DbFileRepo implements FileRepo {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private FileGenerator fileGenerator;
+    private ByteDataGenerator byteDataGenerator;
 
     private final String INSERT_SQL_FILE = "INSERT INTO files(file_name, extension, file) VALUES(?,?,?) " +
                                            "ON DUPLICATE KEY UPDATE file=VALUES(file)";
@@ -36,6 +31,24 @@ public class DbFileRepo implements FileRepo {
     private final String FETCH_SQL_FILE = "SELECT file_name, extension, file FROM files WHERE (file_name = ?)" +
                                           "AND (extension = ?)";
 
+    @Override
+    public void addFile(String fullFileName, UserData userData) throws RepositoryException {
+        File patchFile = new File(fullFileName);
+        byte[] templateFileBytes = getFile("Template.rtf");
+
+        byte[] out;
+        try {
+            out = byteDataGenerator.generateWithTemplate(userData, templateFileBytes);
+        } catch (GeneratorException e) {
+            throw new RepositoryException("Exception while trying to generate file", e);
+        }
+
+        int lastDotIndex = fullFileName.lastIndexOf(".");
+        String fileName = fullFileName.substring(0, lastDotIndex);
+        String extension = fullFileName.substring(lastDotIndex + 1);
+
+        jdbcTemplate.update(INSERT_SQL_FILE, fileName, extension, out);
+    }
 
     @Override
     public byte[] getFile(String fullFileName) {
@@ -52,11 +65,10 @@ public class DbFileRepo implements FileRepo {
         public byte[] mapRow(ResultSet rs, int rowNum) throws SQLException {
             String fileName = rs.getString("file_name");
             String extension = rs.getString("extension");
-            //            File dbFile = new File(fileName + "." + extension);
 
             byte[] out;
             try (ByteArrayOutputStream os = new ByteArrayOutputStream();
-                 InputStream is = rs.getBlob("file").getBinaryStream()) {
+                    InputStream is = rs.getBlob("file").getBinaryStream()) {
                 int i;
                 while ((i = is.read()) != -1) {
                     os.write(i);
@@ -68,24 +80,5 @@ public class DbFileRepo implements FileRepo {
             }
             return out;
         }
-    }
-
-    @Override
-    public void addFile(String fullFileName, UserData userData) throws IOException, SQLException {
-        File patchFile = new File(fullFileName);
-        byte[] templateFileBytes = getFile("Template.rtf");
-
-        byte[] out;
-        try {
-            out = fileGenerator.generateOnTemplate(patchFile, userData, templateFileBytes);
-        } catch (GeneratorException e) {
-            throw new RepositoryException(e.getMessage(), e);
-        }
-
-        int lastDotIndex = fullFileName.lastIndexOf(".");
-        String fileName = fullFileName.substring(0, lastDotIndex);
-        String extension = fullFileName.substring(lastDotIndex + 1);
-
-        jdbcTemplate.update(INSERT_SQL_FILE, fileName, extension, out);
     }
 }
