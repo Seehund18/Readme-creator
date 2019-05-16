@@ -5,10 +5,11 @@ Thanks to Spring Boot, all that is needed is to package app into jar via Maven u
 
 
 Also to run web service you need MySQL database server with Template.rtf in it. Template is placed into 'additional' folder with 'serviceDB.sql' file which is MySQL 'service' database with 'files' table. You need to only import serviceDB into your database using this command (to use this command, path to mysql program should be specifed in the 'Path' system variable):
+
 mysql -u <username> -p <databasename> < <filename.sql>
 
 <h2>Scripts</h2>
-deploy.bat in this folder will create deployment directory with start.bat and 'conf' folder with 'application.property'. In 'application.property' you can set properties for MySQL connection such as: 
+deploy.bat in this folder will create deployment directory with start.bat and 'conf' folder with 'application.property'. In 'application.property' you can set properties for MySQL connection such as:
 * url of database; 
 * username;
 * password and etc.
