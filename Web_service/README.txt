@@ -1,3 +1,0 @@
-Thanks to Spring Boot, all that is needed is to package app into jar via Maven using "mvn clean package" and just run "Web_service-0.1.0.jar" (better to run jar via console to see all messages and control application). Note that Spring Boot starts Tomcat under the hood on "localhost:8080", so it's possible that some app is already running on your 8080 port and Tomcat will clashes with it.
-
-deploy.bat in this folder will create deployment directory with start.bat. You have to only run that script.
