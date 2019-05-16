@@ -34,8 +34,8 @@ public class DateFieldValidator implements Validator {
     }
 
     @Override
-    public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
-        String date = value.toString();
+    public void validate(FacesContext context, UIComponent component, Object dateObj) throws ValidatorException {
+        String date = dateObj.toString();
 
         //Checking dd/mm/yyyy format
         if (date.matches("\\d{2}/\\d{2}/\\d{4}")) {

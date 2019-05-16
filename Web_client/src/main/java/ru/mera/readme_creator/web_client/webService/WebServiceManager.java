@@ -32,10 +32,6 @@ public class WebServiceManager {
         }
     }
 
-    public static String getServiceUrl() {
-        return fileWebService.getUrl().toString();
-    }
-
     /**
      * Checks fileWebService availability
      * @return true if service is available and false otherwise

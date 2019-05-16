@@ -49,5 +49,4 @@ public class CookieHelper {
         }
         return cookie.getValue();
     }
-
 }

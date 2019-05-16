@@ -31,8 +31,8 @@ public class WebServiceUrlValidator implements Validator {
     UrlValidator webServiceUrlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
 
     @Override
-    public void validate(FacesContext context, UIComponent component, Object value) throws ValidatorException {
-        String url = value.toString();
+    public void validate(FacesContext context, UIComponent component, Object urlObj) throws ValidatorException {
+        String url = urlObj.toString();
         if(url.matches("^http://[^/]+$") && webServiceUrlValidator.isValid(url)) {
             return;
         }

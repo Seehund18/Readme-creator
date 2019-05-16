@@ -10,7 +10,7 @@
     <h:body>
         <ui:composition>
             <h:panelGroup id="errorPopupPanel" styleClass="popupPanelOverlay"
-                          rendered="#{errorPopupController.render}">
+                          rendered="#{errorPopupController.rendered}">
                 <div class="popupPanel">
                     <h:outputText styleClass="outputText" value="#{errorPopupController.errorMsg}"/>
                     <h:form>

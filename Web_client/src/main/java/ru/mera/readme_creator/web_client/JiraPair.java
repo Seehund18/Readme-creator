@@ -9,10 +9,9 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean(eager = true)
 @SessionScoped
 public class JiraPair {
+
     private String jiraId;
     private String jiraDescrip;
-
-    public JiraPair() {}
 
     public JiraPair(String jiraId, String jiraDescrip) {
         this.jiraId = jiraId;
@@ -22,7 +21,6 @@ public class JiraPair {
     public String getJiraId() {
         return jiraId;
     }
-
     public void setJiraId(String jiraId) {
         this.jiraId = jiraId;
     }
@@ -30,7 +28,6 @@ public class JiraPair {
     public String getJiraDescrip() {
         return jiraDescrip;
     }
-
     public void setJiraDescrip(String jiraDescrip) {
         this.jiraDescrip = jiraDescrip;
     }
@@ -49,8 +46,9 @@ public class JiraPair {
         }
         return false;
     }
-	@Override
-	public String toString() {
+
+    @Override
+    public String toString() {
         return "Jira ID: " + jiraId + "Jira descrip: " + jiraDescrip + "\n";
     }
 }

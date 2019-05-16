@@ -13,7 +13,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.print.DocFlavor;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -136,7 +135,7 @@ public class FormController implements Serializable {
             return;
         }
 
-        //Setting new URL
+        //Setting new URL to web service
         URL serviceUrl;
         try {
             serviceUrl = new URL(userData.getUrl());
@@ -146,11 +145,12 @@ public class FormController implements Serializable {
         }
         WebServiceManager.setService(serviceUrl);
 
+        //Checking web service availability and downloading file
         String fileName = userData.getParamMap().get("updateId") + "_Patch_Readme.rtf";
         if (WebServiceManager.checkWebService()) {
             //If service is available, creating cookie with service url for 2 days
             CookieHelper.addPermanentCookie("URL", serviceUrl.toString(), 172_800);
-            log.info("Service is available. Trying to download file\n");
+            log.info("Service is available. Trying to download file...\n");
             try {
                 WebServiceManager.downloadFile(fileName, userData.toString());
             } catch (WebServiceException e) {
@@ -158,6 +158,7 @@ public class FormController implements Serializable {
                 log.error(errorMsg, e);
                 errorPopupController.showError(errorMsg);
             }
+            log.info("File was successfully downloaded\n");
         } else {
             log.info("Service is unavailable\n");
             errorPopupController.showError("Service is unavailable. Try again later");

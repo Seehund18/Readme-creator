@@ -122,6 +122,9 @@ public class UserData implements Serializable {
         }
     }
 
+    /**
+     * Transforms string parameters of this class to a map
+     */
     private void toMap() {
         String patchName = this.patchName +"_"+ this.releaseVer +"."+ this.issueNumber;
         String updateId = patchName +"."+ this.updateId;

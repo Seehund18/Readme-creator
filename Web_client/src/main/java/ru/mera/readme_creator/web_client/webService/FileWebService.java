@@ -32,11 +32,6 @@ public class FileWebService implements WebService, Serializable {
      */
     private HttpURLConnection connection;
 
-    /**
-     * Constructs new FileWebService. It is assumed that webServiceUrl is correct URL.
-     * Validation of URL must be performed before constructing.
-     * @param webServiceUrl correct web service url
-     */
     public FileWebService(URL webServiceUrl) {
         this.url = webServiceUrl;
     }
@@ -44,7 +39,6 @@ public class FileWebService implements WebService, Serializable {
     public URL getUrl() {
         return this.url;
     }
-
     public void setUrl(URL url) {
         this.url = url;
     }
@@ -58,7 +52,7 @@ public class FileWebService implements WebService, Serializable {
             throw new WebServiceException("Can't generate full URL", ex);
         }
 
-        try  {
+        try {
             connection = (HttpURLConnection) fullURL.openConnection();
             connection.setRequestMethod("GET");
             connection.setRequestProperty("User-Agent", "web_client");

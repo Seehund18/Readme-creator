@@ -22,27 +22,34 @@ public class ErrorPopupController implements Serializable {
     /**
      * Flag which shows is error popup should be rendered or not
      */
-    private boolean render;
+    private boolean rendered;
 
     /**
      * Message which will be shown to the user
      */
     private String errorMsg;
 
-    public boolean isRender() {
-        return render;
-    }
-
-    public void showError(String errorMsg) {
-        this.errorMsg = errorMsg;
-        render = true;
-    }
-
-    public void hide() {
-        render = false;
+    public boolean isRendered() {
+        return rendered;
     }
 
     public String getErrorMsg() {
         return errorMsg;
+    }
+
+    /**
+     * Shows error popup to the user
+     * @param errorMsg message to show
+     */
+    public void showError(String errorMsg) {
+        this.errorMsg = errorMsg;
+        rendered = true;
+    }
+
+    /**
+     * Hides error popup
+     */
+    public void hide() {
+        rendered = false;
     }
 }

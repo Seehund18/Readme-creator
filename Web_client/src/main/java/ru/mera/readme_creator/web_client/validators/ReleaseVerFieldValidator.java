@@ -22,10 +22,10 @@ import javax.faces.validator.ValidatorException;
 public class ReleaseVerFieldValidator implements Validator {
 
     @Override
-    public void validate(FacesContext facesContext, UIComponent uiComponent, Object version) throws ValidatorException {
-        String versionStr = version.toString();
+    public void validate(FacesContext facesContext, UIComponent uiComponent, Object versionObj) throws ValidatorException {
+        String version = versionObj.toString();
 
-        if (versionStr.matches("(\\d\\.)*\\d$")) {
+        if (version.matches("(\\d\\.)*\\d$")) {
             return;
         }
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"","Invalid format");

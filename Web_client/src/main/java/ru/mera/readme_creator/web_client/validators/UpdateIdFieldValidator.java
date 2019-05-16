@@ -22,9 +22,9 @@ import javax.faces.validator.ValidatorException;
 public class UpdateIdFieldValidator implements Validator {
 
     @Override
-    public void validate(FacesContext facesContext, UIComponent uiComponent, Object id) throws ValidatorException {
-        String idNumber = id.toString();
-        if (idNumber.matches("\\d+")) {
+    public void validate(FacesContext facesContext, UIComponent uiComponent, Object idObj) throws ValidatorException {
+        String id = idObj.toString();
+        if (id.matches("\\d+")) {
             return;
         }
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"","Invalid Id");
