@@ -6,7 +6,7 @@
 
     <groupId>ru.mera.readmeCreator</groupId>
     <artifactId>Desktop_client</artifactId>
-    <version>0.1.0</version>
+    <version>1.0</version>
 
     <build>
         <plugins>
