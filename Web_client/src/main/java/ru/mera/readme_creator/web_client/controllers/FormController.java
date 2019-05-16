@@ -3,7 +3,6 @@ package ru.mera.readme_creator.web_client.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.mera.readme_creator.web_client.CookieHelper;
-import ru.mera.readme_creator.web_client.Error;
 import ru.mera.readme_creator.web_client.JiraPair;
 import ru.mera.readme_creator.web_client.UserData;
 import ru.mera.readme_creator.web_client.webService.WebServiceException;
@@ -14,7 +13,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import java.io.IOException;
+import javax.print.DocFlavor;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,11 +30,11 @@ public class FormController implements Serializable {
     @ManagedProperty(value = "#{userData}")
     private UserData userData;
 
-    @ManagedProperty(value = "#{error}")
-    private Error error;
-
     @ManagedProperty(value="#{popupDialogController}")
     private PopupDialogController popupDialogController;
+
+    @ManagedProperty(value="#{errorPopupController}")
+    private ErrorPopupController errorPopupController;
 
     /**
      * Index of edited jiraPair in jiraList of UserData.
@@ -50,15 +49,18 @@ public class FormController implements Serializable {
         return userData;
     }
 
-    public void setError(Error error) {
-        this.error = error;
-    }
-
     public PopupDialogController getPopupDialogController() {
         return popupDialogController;
     }
     public void setPopupDialogController(PopupDialogController popupDialogController) {
         this.popupDialogController = popupDialogController;
+    }
+
+    public ErrorPopupController getErrorPopupController() {
+        return errorPopupController;
+    }
+    public void setErrorPopupController(ErrorPopupController errorPopupController) {
+        this.errorPopupController = errorPopupController;
     }
 
     /**
@@ -124,7 +126,7 @@ public class FormController implements Serializable {
     /**
      * Handler for submit button
      */
-    public void onSubmit() throws IOException, WebServiceException {
+    public void onSubmit() {
         //Checking if is jiraTable is empty
         if (userData.getJiraList().isEmpty()) {
             FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,
@@ -149,11 +151,16 @@ public class FormController implements Serializable {
             //If service is available, creating cookie with service url for 2 days
             CookieHelper.addPermanentCookie("URL", serviceUrl.toString(), 172_800);
             log.info("Service is available. Trying to download file\n");
-            WebServiceManager.downloadFile(fileName, userData.toString());
+            try {
+                WebServiceManager.downloadFile(fileName, userData.toString());
+            } catch (WebServiceException e) {
+                String errorMsg = "There are problems with web service: " + e.getMessage();
+                log.error(errorMsg, e);
+                errorPopupController.showError(errorMsg);
+            }
         } else {
             log.info("Service is unavailable\n");
-            error.setMessage("Service is unavailable. Try again later");
-            FacesContext.getCurrentInstance().getExternalContext().dispatch("error.xhtml");
+            errorPopupController.showError("Service is unavailable. Try again later");
         }
     }
 }

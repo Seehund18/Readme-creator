@@ -9,14 +9,14 @@
 
     <h:body>
         <ui:composition>
-            <h:panelGroup id="errorPopupPanel" styleClass="popupPanelOverlay"
-                          rendered="errorPopupController.render">
+            <h:panelGroup id="errorPopupPanel" styleClass="popupErrorPanelOverlay"
+                          rendered="#{errorPopupController.render}">
                 <div class="popupPanel">
-                    <h:outputText styleClass="outputText" value="#{error.message}"/>
-                    <h:commandButton value="Return back" styleClass="button" type="button"
-                                     onclick="document.getElementById('errorPopupPanel').style.display = 'none';">
-                        <f:ajax />
-                    </h:commandButton>
+                    <h:outputText styleClass="outputText" value="#{errorPopupController.errorMsg}"/>
+                    <h:form>
+                        <h:commandButton value="Return back" styleClass="button"
+                                         action="#{errorPopupController.hide()}"/>
+                    </h:form>
                 </div>
             </h:panelGroup>
         </ui:composition>

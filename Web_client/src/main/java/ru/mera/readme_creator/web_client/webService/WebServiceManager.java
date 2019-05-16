@@ -55,10 +55,9 @@ public class WebServiceManager {
      * Sends info to service, validates the response code and redirects user to file URL for downloading
      * @param fileName  name of the file to create
      * @param info info for the file
-     * @throws IOException exception while redirecting user
      * @throws WebServiceException exception from web service
      */
-    public static void downloadFile(String fileName, String info) throws IOException, WebServiceException {
+    public static void downloadFile(String fileName, String info) throws WebServiceException {
         String fullFileName = "/files/" + fileName;
         int responseCode = fileWebService.sendPostRequest(fullFileName, info);
         if (responseCode > HttpURLConnection.HTTP_BAD_REQUEST) {
@@ -69,8 +68,11 @@ public class WebServiceManager {
         fileWebService.disconnect();
 
         //Redirecting user to a file
-        FacesContext.getCurrentInstance().getExternalContext()
-                .redirect(fileWebService.getUrl() + "/files/" + fileName);
-
+        try {
+            FacesContext.getCurrentInstance().getExternalContext()
+                    .redirect(fileWebService.getUrl() + fullFileName);
+        } catch (IOException e) {
+            throw new WebServiceException("Problem with redirecting user", e);
+        }
     }
 }
