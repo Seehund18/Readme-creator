@@ -1,5 +1,6 @@
 <h1>Web client</h1>
 
+<h2>How to run</h2>
 Running web client is a bit tricky. You need to run "mvn clean package" which will create target directory with .war file.
 Also you need to have one of the servlet containers (Tomcat, Glassfish or other) and deploy war file to it. I will describe how to do it with Tomcat:
 1) Install Tomcat from tomcat.apache.org to any directory;
@@ -15,6 +16,7 @@ Also you need to have one of the servlet containers (Tomcat, Glassfish or other)
 
 **NOTE**: all logs for this client are written to %CATALINA_HOME%/logs/Web_client directory.
 
+<h2>Scripts</h2>
 deploy.bat for web client only moves war file to deployment directory.
 
 startWithTomcat.bat will run Tomcat, deploy war file to it and start browser.
