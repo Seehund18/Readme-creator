@@ -23,11 +23,11 @@ import java.nio.charset.StandardCharsets;
 import java.sql.*;
 
 /**
- * Database repository of files
+ * MySQL database repository of files
  */
 @Repository
-public class DbFileRepo implements FileRepo {
-    private final Logger log = LoggerFactory.getLogger(DbFileRepo.class);
+public class MySQLFileRepo implements FileRepo {
+    private final Logger log = LoggerFactory.getLogger(MySQLFileRepo.class);
 
     /**
      * Spring class which manages all database interactions
