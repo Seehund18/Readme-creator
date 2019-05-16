@@ -84,6 +84,7 @@
                 </h:panelGrid>
             </div>
 
+            <h:message id="jiraTableMsg" for="jiraTable" styleClass="errorMsg"/>
             <div id="tableSegment" class="tableGroup">
                 <h:dataTable id="jiraTable" styleClass="jiraTable"
                              headerClass = "jiraTableHeader" rowClasses = "jiraTableRow"
@@ -118,8 +119,6 @@
                                  onclick="document.getElementById('popupPanelGroup').style.display = 'block';">
                     <f:ajax event="focus" render="popupForm" listener="#{popupDialogController.setAddDialogType()}"/>
                 </h:commandButton>
-
-                <h:message id="jiraTableMsg" for="jiraTable" styleClass="errorMsg"/>
             </div>
 
             <h:commandButton id="Submit" value = "Submit" styleClass="submitButton button"
