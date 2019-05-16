@@ -44,18 +44,18 @@ public class UserData {
 
     /**
      * Constructs parameters map from parameters, entered by user
-     * @param webServiceUrl
-     * @param paramTextMap
-     * @param jiraList
+     * @param webServiceUrl url of web service
+     * @param paramMap map of parameters
+     * @param jiraList list of jiras
      */
-    public UserData(URL webServiceUrl, Map<String, String > paramTextMap, List<JiraPair> jiraList) {
-        String patchName = paramTextMap.get("patchName") +"_"+ paramTextMap.get("releaseVersion") +"."+ paramTextMap.get("issueNumber");
-        String updateId = patchName +"."+ paramTextMap.get("updateId");
+    public UserData(URL webServiceUrl, Map<String, String > paramMap, List<JiraPair> jiraList) {
+        String patchName = paramMap.get("patchName") +"_"+ paramMap.get("releaseVersion") +"."+ paramMap.get("issueNumber");
+        String updateId = patchName +"."+ paramMap.get("updateId");
 
-        paramMap.put("patchName", patchName);
-        paramMap.put("date", paramTextMap.get("date"));
-        paramMap.put("updateId", updateId);
-        paramMap.put("releaseVersion", paramTextMap.get("releaseVersion"));
+        this.paramMap.put("patchName", patchName);
+        this.paramMap.put("date", paramMap.get("date"));
+        this.paramMap.put("updateId", updateId);
+        this.paramMap.put("releaseVersion", paramMap.get("releaseVersion"));
 
         this.webServiceUrl = webServiceUrl;
         this.jiraList = jiraList;

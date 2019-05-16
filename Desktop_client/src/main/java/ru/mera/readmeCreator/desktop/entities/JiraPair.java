@@ -23,7 +23,6 @@ public class JiraPair {
     public String getJiraId() {
         return jiraId;
     }
-
     public void setJiraId(String jiraId) {
         this.jiraId = jiraId;
     }
@@ -31,7 +30,6 @@ public class JiraPair {
     public String getJiraDescrip() {
         return jiraDescrip;
     }
-
     public void setJiraDescrip(String jiraDescrip) {
         this.jiraDescrip = jiraDescrip;
     }

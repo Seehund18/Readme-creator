@@ -6,23 +6,18 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.controllers;
+package ru.mera.readmeCreator.desktop.entities;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
-import ru.mera.readmeCreator.desktop.entities.ValidatedTextField;
 import ru.mera.readmeCreator.desktop.interfaces.Validator;
 
 /**
- * Listener for ValidatedTextField
+ * Listener for {@link ValidatedTextField}
  */
 public class StatusListener implements ChangeListener<String> {
     private ValidatedTextField field;
-
-    /**
-     * Validator for the field
-     */
     private Validator fieldValidator;
 
     public StatusListener(ValidatedTextField field, Validator validator) {

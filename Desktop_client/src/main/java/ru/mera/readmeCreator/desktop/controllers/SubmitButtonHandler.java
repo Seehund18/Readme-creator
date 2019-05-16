@@ -43,7 +43,6 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
      */
     private FileChooser saveAs = new FileChooser();
 
-
     {
         //Configuring saveAs
         saveAs.setTitle("Save file as");

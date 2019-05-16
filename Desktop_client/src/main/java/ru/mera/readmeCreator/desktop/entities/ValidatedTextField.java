@@ -10,11 +10,10 @@ package ru.mera.readmeCreator.desktop.entities;
 
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import ru.mera.readmeCreator.desktop.controllers.StatusListener;
 import ru.mera.readmeCreator.desktop.interfaces.Validator;
 
 /**
- * Entity which represents text field with validation status text in the program view.
+ * Entity which represents text field with validation status text and validation flag
  */
 public class ValidatedTextField {
     private TextField textField;
@@ -38,7 +37,6 @@ public class ValidatedTextField {
     public TextField getTextField() {
         return textField;
     }
-
     public void setTextField(TextField textField) {
         this.textField = textField;
     }
@@ -46,7 +44,6 @@ public class ValidatedTextField {
     public Text getStatusText() {
         return statusText;
     }
-
     public void setStatusText(Text statusText) {
         this.statusText = statusText;
     }
@@ -54,7 +51,6 @@ public class ValidatedTextField {
     public boolean isValid() {
         return valid;
     }
-
     public void setValid(boolean valid) {
         this.valid = valid;
     }
