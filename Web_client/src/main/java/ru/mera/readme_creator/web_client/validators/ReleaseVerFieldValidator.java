@@ -22,7 +22,7 @@ import javax.faces.validator.ValidatorException;
 public class ReleaseVerFieldValidator implements Validator {
 
     @Override
-    public void validate(FacesContext facesContext, UIComponent uiComponent, Object versionObj) throws ValidatorException {
+    public void validate(FacesContext facesContext, UIComponent uiComponent, Object versionObj) {
         String version = versionObj.toString();
 
         if (version.matches("(\\d\\.)*\\d$")) {

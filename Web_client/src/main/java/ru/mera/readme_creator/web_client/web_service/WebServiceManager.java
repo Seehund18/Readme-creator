@@ -1,4 +1,4 @@
-package ru.mera.readme_creator.web_client.webService;
+package ru.mera.readme_creator.web_client.web_service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,10 +9,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Manager of web service. All interactions with service are done via this class.
+ * Utility manager of web service. All interactions with service are done via this class.
  */
 public class WebServiceManager {
     private static final Logger log = LoggerFactory.getLogger(WebServiceManager.class);
+
+    //Hides the public constructor for utility static class
+    private WebServiceManager() {}
 
     /**
      * File connector to the web service

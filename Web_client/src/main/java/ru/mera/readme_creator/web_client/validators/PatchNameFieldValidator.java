@@ -23,8 +23,7 @@ import javax.faces.validator.ValidatorException;
 public class PatchNameFieldValidator implements Validator {
 
     @Override
-    public void validate(FacesContext facesContext, UIComponent uiComponent, Object patchNameObj)
-            throws ValidatorException {
+    public void validate(FacesContext facesContext, UIComponent uiComponent, Object patchNameObj) {
         String patchName = patchNameObj.toString();
         if (patchName.matches("[\\p{Alpha}_]+\\p{Alpha}$")) {
             return;

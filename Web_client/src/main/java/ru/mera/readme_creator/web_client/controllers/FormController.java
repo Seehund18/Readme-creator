@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import ru.mera.readme_creator.web_client.CookieHelper;
 import ru.mera.readme_creator.web_client.JiraPair;
 import ru.mera.readme_creator.web_client.UserData;
-import ru.mera.readme_creator.web_client.webService.WebServiceException;
-import ru.mera.readme_creator.web_client.webService.WebServiceManager;
+import ru.mera.readme_creator.web_client.web_service.WebServiceException;
+import ru.mera.readme_creator.web_client.web_service.WebServiceManager;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -16,7 +16,7 @@ import javax.faces.context.FacesContext;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Controller for form.xhtml
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 @ManagedBean(eager = true)
 @SessionScoped
 public class FormController implements Serializable {
-    private final Logger log = LoggerFactory.getLogger(FormController.class);
+    private final transient Logger log = LoggerFactory.getLogger(FormController.class);
 
     @ManagedProperty(value = "#{userData}")
     private UserData userData;
@@ -66,7 +66,7 @@ public class FormController implements Serializable {
      * Handler for 'AddJira' ('+') button. Adds jiraPair to jiraPairList of userData
      */
     public void addJira() {
-        ArrayList<JiraPair> jiraList = userData.getJiraList();
+        List<JiraPair> jiraList = userData.getJiraList();
         JiraPair newPair = new JiraPair(popupDialogController.getJiraId(),
                                         popupDialogController.getJiraDescrip());
 
@@ -105,7 +105,7 @@ public class FormController implements Serializable {
      * Handler for 'Edit' button in popup dialog. Set jiraPair chosen by user to a new one
      */
     public void editJira() {
-        ArrayList<JiraPair> jiraPairList = userData.getJiraList();
+        List<JiraPair> jiraPairList = userData.getJiraList();
         JiraPair oldPair = jiraPairList.get(editIndex);
         JiraPair newPair = new JiraPair(popupDialogController.getJiraId(),
                                         popupDialogController.getJiraDescrip());

@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readme_creator.web_client.webService;
+package ru.mera.readme_creator.web_client.web_service;
 
 /**
  * Represents all exceptions thrown from WebService class.

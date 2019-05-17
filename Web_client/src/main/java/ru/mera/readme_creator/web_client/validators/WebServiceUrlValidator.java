@@ -28,12 +28,12 @@ import javax.faces.validator.ValidatorException;
 @FacesValidator("webServiceUrlValidator")
 public class WebServiceUrlValidator implements Validator {
     //from apache.commons library
-    UrlValidator webServiceUrlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
+    private UrlValidator urlValidator = new UrlValidator(UrlValidator.ALLOW_LOCAL_URLS);
 
     @Override
-    public void validate(FacesContext context, UIComponent component, Object urlObj) throws ValidatorException {
+    public void validate(FacesContext context, UIComponent component, Object urlObj) {
         String url = urlObj.toString();
-        if(url.matches("^http://[^/]+$") && webServiceUrlValidator.isValid(url)) {
+        if(url.matches("^http://[^/]+$") && urlValidator.isValid(url)) {
             return;
         }
         //If value is not valid, setting message to "Invalid URL format"

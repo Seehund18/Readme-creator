@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Validator for date field. It expects date in format dd/MM/yyyy.
+ * Validator for Gregorian date field. It expects date in format dd/MM/yyyy.
  */
 @FacesValidator("dateFieldValidator")
 public class DateFieldValidator implements Validator {
@@ -29,12 +29,12 @@ public class DateFieldValidator implements Validator {
      */
     private Set<Integer> longMonths = new HashSet<>();
 
-    {
+    public DateFieldValidator() {
         Collections.addAll(longMonths, 1, 3, 5, 7, 8, 10, 12);
     }
 
     @Override
-    public void validate(FacesContext context, UIComponent component, Object dateObj) throws ValidatorException {
+    public void validate(FacesContext context, UIComponent component, Object dateObj) {
         String date = dateObj.toString();
 
         //Checking dd/mm/yyyy format
@@ -52,9 +52,7 @@ public class DateFieldValidator implements Validator {
                 }
 
                 //Checking day of month
-                if (longMonths.contains(month) && day <= 31) {
-                    return;
-                } else if (day <= 30) {
+                if ((longMonths.contains(month) && day <= 31) || (day <= 30)) {
                     return;
                 }
             }
@@ -67,11 +65,10 @@ public class DateFieldValidator implements Validator {
      * Validates February
      */
     private void checkFebruary(int year, int day) {
-        if (isLeapYear(year) && day <= 29) {
-            return;
-        } else if (day <= 28) {
+        if ((isLeapYear(year) && day <= 29) || (day <= 28)) {
             return;
         }
+
         FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"","Invalid date format");
         throw new ValidatorException(msg);
     }
@@ -81,7 +78,9 @@ public class DateFieldValidator implements Validator {
      */
     private boolean isLeapYear(int year) {
         if (year % 4 == 0) {
+            //Leap year occurs once in 4 years
             if ((year % 100 == 0) && (year % 400 != 0)) {
+                //2100, 2200, 2300, 2500, 2600, 2700, 2900 for example are not leap years
                 return false;
             }
             return true;

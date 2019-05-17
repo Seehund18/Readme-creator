@@ -14,9 +14,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Class which simplify working with cookies in the program
+ * Utility class which simplifies working with cookies in the program
  */
 public class CookieHelper {
+
+    //Hides the public constructor for utility static class
+    private CookieHelper() {}
 
     /**
      * Adds permanent cookies.

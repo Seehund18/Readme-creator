@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -30,7 +31,7 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean(eager = true)
 @SessionScoped
 public class UserData implements Serializable {
-    private final Logger log = LoggerFactory.getLogger(UserData.class);
+    private final transient Logger log = LoggerFactory.getLogger(UserData.class);
 
     @JsonIgnore
     private String url;
@@ -46,7 +47,7 @@ public class UserData implements Serializable {
     private String issueNumber;
 
     private Map<String, String> paramMap = new HashMap<>();
-    private ArrayList<JiraPair> jiraList = new ArrayList<>();
+    private List<JiraPair> jiraList = new ArrayList<>();
 
     @PostConstruct
     public void init() {
@@ -103,10 +104,10 @@ public class UserData implements Serializable {
         this.paramMap = paramMap;
     }
 
-    public ArrayList<JiraPair> getJiraList() {
+    public List<JiraPair> getJiraList() {
         return jiraList;
     }
-    public void setJiraList(ArrayList<JiraPair> jiraList) {
+    public void setJiraList(List<JiraPair> jiraList) {
         this.jiraList = jiraList;
     }
 
@@ -126,12 +127,12 @@ public class UserData implements Serializable {
      * Transforms string parameters of this class to a map
      */
     private void toMap() {
-        String patchName = this.patchName +"_"+ this.releaseVer +"."+ this.issueNumber;
-        String updateId = patchName +"."+ this.updateId;
+        String fullPatchName = this.patchName +"_"+ this.releaseVer +"."+ this.issueNumber;
+        String fullUpdateId = fullPatchName +"."+ this.updateId;
 
-        paramMap.put("patchName", patchName);
+        paramMap.put("patchName", fullPatchName);
         paramMap.put("date", this.date);
-        paramMap.put("updateId", updateId);
+        paramMap.put("updateId", fullUpdateId);
         paramMap.put("releaseVersion", this.releaseVer);
     }
 }

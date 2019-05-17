@@ -22,7 +22,7 @@ import javax.faces.validator.ValidatorException;
 public class UpdateIdFieldValidator implements Validator {
 
     @Override
-    public void validate(FacesContext facesContext, UIComponent uiComponent, Object idObj) throws ValidatorException {
+    public void validate(FacesContext facesContext, UIComponent uiComponent, Object idObj) {
         String id = idObj.toString();
         if (id.matches("\\d+")) {
             return;

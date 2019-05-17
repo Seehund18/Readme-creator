@@ -1,4 +1,4 @@
-package ru.mera.readme_creator.web_client.webService;
+package ru.mera.readme_creator.web_client.web_service;
 
 /**
  * Interface for web service
@@ -12,13 +12,13 @@ public interface WebService {
      * @throws WebServiceException problems with sending request
      */
     default boolean isServiceAvailable() throws WebServiceException {
-        return sendGetRequest("") != -1;
+        return sendGetRequest("") != -2;
     }
 
     /**
      * Method for sending 'GET' requests to web service
      * @param getMapping mapping for 'GET' request
-     * @return response code or -1 if connection to server was refused
+     * @return response code or -2 if connection to server was refused
      * @throws WebServiceException problems with sending request
      */
     int sendGetRequest(String getMapping) throws WebServiceException;
@@ -27,7 +27,7 @@ public interface WebService {
      * Method for sending 'POST' requests to web service
      * @param postMapping mapping for 'POST' request
      * @param data string of data which must be sent to web service
-     * @return response code or -1 if connection to server was refused
+     * @return response code or -2 if connection to server was refused
      * @throws WebServiceException problems with sending request
      */
     int sendPostRequest(String postMapping, String data) throws WebServiceException;

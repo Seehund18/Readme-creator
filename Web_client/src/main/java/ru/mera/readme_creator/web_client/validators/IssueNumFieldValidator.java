@@ -22,8 +22,7 @@ import javax.faces.validator.ValidatorException;
 public class IssueNumFieldValidator implements Validator {
 
     @Override
-    public void validate(FacesContext facesContext, UIComponent uiComponent, Object issueNumberObj)
-            throws ValidatorException {
+    public void validate(FacesContext facesContext, UIComponent uiComponent, Object issueNumberObj) {
         String issueNumber = issueNumberObj.toString();
         if (issueNumber.matches("\\d+")) {
             return;

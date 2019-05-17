@@ -1,8 +1,5 @@
 package ru.mera.readme_creator.web_client.controllers;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
@@ -16,7 +13,6 @@ import java.io.Serializable;
 @ManagedBean
 @SessionScoped
 public class PopupDialogController implements Serializable {
-    private final Logger log = LoggerFactory.getLogger(FormController.class);
 
     /**
      * Jira pair, entered by user
@@ -62,5 +58,4 @@ public class PopupDialogController implements Serializable {
     public void setEditDialogType() {
         filePath = "/xhtml/buttons/editButton.xhtml";
     }
-
 }

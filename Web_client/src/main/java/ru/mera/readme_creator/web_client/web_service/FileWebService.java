@@ -1,4 +1,4 @@
-package ru.mera.readme_creator.web_client.webService;
+package ru.mera.readme_creator.web_client.web_service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +30,7 @@ public class FileWebService implements WebService, Serializable {
     /**
      * Connection to the web service
      */
-    private HttpURLConnection connection;
+    private transient HttpURLConnection connection;
 
     public FileWebService(URL webServiceUrl) {
         this.url = webServiceUrl;
@@ -58,15 +58,7 @@ public class FileWebService implements WebService, Serializable {
             connection.setRequestProperty("User-Agent", "web_client");
 
             log.info("Sending 'GET' request to URL: {}", fullURL);
-            int responseCode;
-            try {
-                responseCode = connection.getResponseCode();
-            } catch (ConnectException ex) {
-                //Service refused connection
-                connection.disconnect();
-                log.debug("ConnectException was caught\n");
-                return -1;
-            }
+            int responseCode = getResponse();
             log.info("Response code: {}\n", responseCode);
             return responseCode;
         } catch (IOException ex) {
@@ -77,7 +69,7 @@ public class FileWebService implements WebService, Serializable {
 
     @Override
     public int sendPostRequest(String postMapping, String info) throws WebServiceException {
-        //Constructing full URL from webService url and mapping
+        //Constructing full URL from web_service url and mapping
         URL fullURL;
         try {
             fullURL = new URL(url.toString() + postMapping);
@@ -105,19 +97,28 @@ public class FileWebService implements WebService, Serializable {
             }
 
             //Trying to read response
-            int responseCode;
-            try {
-                responseCode = connection.getResponseCode();
-            } catch (ConnectException ex) {
-                connection.disconnect();
-                log.debug("ConnectException was caught");
-                return -1;
-            }
+            int responseCode = getResponse();
             log.info("Response code: {}\n", responseCode);
             return responseCode;
         } catch (IOException ex) {
             disconnect();
             throw new WebServiceException("There is a problem with connection to the server", ex);
+        }
+    }
+
+    /**
+     * Gets response code from service
+     * @return return value of connection.getResponseCode() method or -2 if connection was refused
+     * @throws IOException if an error occurred connecting to the server
+     */
+    private int getResponse() throws IOException {
+        try {
+            return connection.getResponseCode();
+        } catch (ConnectException ex) {
+            //Service refused connection
+            connection.disconnect();
+            log.debug("ConnectException was caught\n");
+            return -2;
         }
     }
 
