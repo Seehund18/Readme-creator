@@ -31,7 +31,7 @@ public class ServiceController {
      * @throws RepositoryException exception while working with repo
      */
     @GetMapping("/files/{fileName}")
-    public ResponseEntity sendDocument(@PathVariable String fileName) throws RepositoryException {
+    public ResponseEntity getDocument(@PathVariable String fileName) throws RepositoryException {
         log.info("Received 'GET' request for sending {} file", fileName);
 
         byte[] fileBytes = fileRepo.getFile(fileName);
@@ -53,7 +53,7 @@ public class ServiceController {
      */
     @PostMapping("/files/{fileName}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void sendDocument(@PathVariable String fileName, @RequestBody UserData userData) throws RepositoryException {
+    public void addDocument(@PathVariable String fileName, @RequestBody UserData userData) throws RepositoryException {
         log.info("Received 'POST' request to addFile {} file", fileName);
         log.info("Received data:\n{}", userData);
 
