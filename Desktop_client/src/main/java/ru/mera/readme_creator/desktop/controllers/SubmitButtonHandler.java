@@ -52,7 +52,7 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
     }
 
     SubmitButtonHandler(MainWindowController controller) {
-        super();
+        this();
         this.controller = controller;
     }
 
