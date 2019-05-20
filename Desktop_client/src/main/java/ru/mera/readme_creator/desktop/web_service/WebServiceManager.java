@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.webService;
+package ru.mera.readme_creator.desktop.web_service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +25,9 @@ public class WebServiceManager {
      * File connector to the web service
      */
     private static FileWebService fileWebService;
+
+    //Hides the public constructor for utility static class
+    private WebServiceManager() {}
 
     /**
      * Sets connector. If fileWebService is not instantiated yet,

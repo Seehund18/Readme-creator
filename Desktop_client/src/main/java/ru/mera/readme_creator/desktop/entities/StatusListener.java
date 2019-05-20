@@ -6,12 +6,12 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.entities;
+package ru.mera.readme_creator.desktop.entities;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
-import ru.mera.readmeCreator.desktop.interfaces.Validator;
+import ru.mera.readme_creator.desktop.interfaces.Validator;
 
 /**
  * Listener for {@link ValidatedTextField}

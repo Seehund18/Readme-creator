@@ -6,7 +6,9 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.entities;
+package ru.mera.readme_creator.desktop.entities;
+
+import java.util.Objects;
 
 /**
  * Entity which represents jira id and jira description pair
@@ -47,5 +49,15 @@ public class JiraPair {
             return this.jiraId.equals(pair.jiraId);
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(jiraId, jiraDescrip);
+    }
+
+    @Override
+    public String toString() {
+        return "Jira ID: " + jiraId + "Jira descrip: " + jiraDescrip + "\n";
     }
 }

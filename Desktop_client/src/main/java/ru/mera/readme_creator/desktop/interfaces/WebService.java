@@ -6,9 +6,9 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.interfaces;
+package ru.mera.readme_creator.desktop.interfaces;
 
-import ru.mera.readmeCreator.desktop.webService.WebServiceException;
+import ru.mera.readme_creator.desktop.web_service.WebServiceException;
 
 /**
  * Interface for web service
@@ -22,7 +22,7 @@ public interface WebService {
      * @throws WebServiceException problems with sending request
      */
     default boolean isServiceAvailable() throws WebServiceException {
-        return sendGetRequest("") != -1;
+        return sendGetRequest("") != -2;
     }
 
     /**

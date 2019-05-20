@@ -6,14 +6,14 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.controllers;
+package ru.mera.readme_creator.desktop.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
-import ru.mera.readmeCreator.desktop.entities.JiraPair;
-import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
+import ru.mera.readme_creator.desktop.entities.JiraPair;
+import ru.mera.readme_creator.desktop.interfaces.AlertSender;
 
 import java.util.Optional;
 
@@ -110,10 +110,8 @@ public class JiraInputDialog implements AlertSender {
         //If jira ID field is valid, creating new JiraPair object and returning it
         //(It will be wrapped into Optional)
         dialog.setResultConverter(dialogButton -> {
-            if (dialogButton == buttonType) {
-                if (idValid) {
-                    return new JiraPair(jiraIdField.getText(), jiraDescripField.getText());
-                }
+            if (dialogButton == buttonType && idValid) {
+                return new JiraPair(jiraIdField.getText(), jiraDescripField.getText());
             }
             return null;
         });

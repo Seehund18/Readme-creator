@@ -6,19 +6,17 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.properties;
+package ru.mera.readme_creator.desktop.validators;
+
+import ru.mera.readme_creator.desktop.interfaces.Validator;
 
 /**
- * Represents all exceptions thrown from PropertiesManager class.
- * Exceptions from PropertiesManager are wrapped into this one.
+ * Validator for updateId field. Field must consists only digits
  */
-public class PropertiesManagerException extends Exception {
+public class UpdateIdFieldValidator implements Validator {
 
-    PropertiesManagerException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    PropertiesManagerException(String message) {
-        super(message);
+    @Override
+    public boolean isValid(String idNumber) {
+        return idNumber.matches("\\d+");
     }
 }

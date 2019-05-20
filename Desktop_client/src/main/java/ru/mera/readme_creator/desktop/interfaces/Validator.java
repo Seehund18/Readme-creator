@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.interfaces;
+package ru.mera.readme_creator.desktop.interfaces;
 
 /**
  * Interface for validators
@@ -26,5 +26,5 @@ public interface Validator {
     /**
      * Default implementation of validator
      */
-    class defaultValidator implements Validator {}
+    class DefaultValidator implements Validator {}
 }

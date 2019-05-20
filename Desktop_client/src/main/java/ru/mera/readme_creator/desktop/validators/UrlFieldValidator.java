@@ -6,10 +6,10 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.validators;
+package ru.mera.readme_creator.desktop.validators;
 
 import org.apache.commons.validator.routines.UrlValidator;
-import ru.mera.readmeCreator.desktop.interfaces.Validator;
+import ru.mera.readme_creator.desktop.interfaces.Validator;
 
 /**
  * Validator for webServiceUrl field

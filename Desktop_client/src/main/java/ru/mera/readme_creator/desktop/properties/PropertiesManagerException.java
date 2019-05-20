@@ -6,17 +6,19 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.validators;
-
-import ru.mera.readmeCreator.desktop.interfaces.Validator;
+package ru.mera.readme_creator.desktop.properties;
 
 /**
- * Validator for releaseVersionField. It expects version as a numbers, delimited by '.'
+ * Represents all exceptions thrown from PropertiesManager class.
+ * Exceptions from PropertiesManager are wrapped into this one.
  */
-public class ReleaseVerFieldValidator implements Validator {
+public class PropertiesManagerException extends Exception {
 
-    @Override
-    public boolean isValid(String releaseVer) {
-        return (releaseVer.matches("(\\d\\.)*\\d$"));
+    PropertiesManagerException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    PropertiesManagerException(String message) {
+        super(message);
     }
 }

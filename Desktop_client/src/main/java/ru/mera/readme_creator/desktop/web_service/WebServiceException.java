@@ -6,17 +6,19 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.validators;
-
-import ru.mera.readmeCreator.desktop.interfaces.Validator;
+package ru.mera.readme_creator.desktop.web_service;
 
 /**
- * Validator for issueNumber field, which verifies that entered user data is a number
+ * Represents all exceptions thrown from implementations of WebService interface.
+ * Exceptions from WebService are wrapped into this one.
  */
-public class IssueNumFieldValidator implements Validator {
+public class WebServiceException extends Exception {
 
-    @Override
-    public boolean isValid(String value) {
-        return value.matches("\\d+");
+    public WebServiceException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public WebServiceException(String message) {
+        super(message);
     }
 }

@@ -6,19 +6,18 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.webService;
+package ru.mera.readme_creator.desktop.validators;
+
+import ru.mera.readme_creator.desktop.interfaces.Validator;
 
 /**
- * Represents all exceptions thrown from implementations of WebService interface.
- * Exceptions from WebService are wrapped into this one.
+ * Validator for patch name field.
+ * Checks that the field must consist only from alphabetic characters with '_' as a delimiter
  */
-public class WebServiceException extends Exception {
+public class PatchNameFieldValidator implements Validator {
 
-    public WebServiceException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public WebServiceException(String message) {
-        super(message);
+    @Override
+    public boolean isValid(String patchName) {
+        return patchName.matches("[\\p{Alpha}_]+\\p{Alpha}$");
     }
 }

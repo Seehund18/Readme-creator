@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.controllers;
+package ru.mera.readme_creator.desktop.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,12 +20,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.mera.readmeCreator.desktop.entities.JiraPair;
-import ru.mera.readmeCreator.desktop.entities.UserData;
-import ru.mera.readmeCreator.desktop.entities.ValidatedTextField;
-import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
-import ru.mera.readmeCreator.desktop.properties.PropertiesManager;
-import ru.mera.readmeCreator.desktop.validators.*;
+import ru.mera.readme_creator.desktop.entities.JiraPair;
+import ru.mera.readme_creator.desktop.entities.UserData;
+import ru.mera.readme_creator.desktop.entities.ValidatedTextField;
+import ru.mera.readme_creator.desktop.interfaces.AlertSender;
+import ru.mera.readme_creator.desktop.properties.PropertiesManager;
+import ru.mera.readme_creator.desktop.validators.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -62,7 +62,7 @@ public class MainWindowController implements AlertSender {
     @FXML
     private Button submitButton;
 
-    {
+    public MainWindowController() {
         //Filling paramFieldMap
         TextField patchNameField = new TextField();
         patchNameField.setPromptText("Example: AvayaOceana_UAC");
@@ -89,6 +89,7 @@ public class MainWindowController implements AlertSender {
         paramFieldMap.put("issueNumber",
                 new ValidatedTextField(issueNumberField, new Text(), new IssueNumFieldValidator()));
     }
+
 
     /**
      * Initializes elements, which can't be initialized in MainWindow.fxml file.

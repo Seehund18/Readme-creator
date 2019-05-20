@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.controllers;
+package ru.mera.readme_creator.desktop.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,12 +16,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.mera.readmeCreator.desktop.entities.UserData;
-import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
-import ru.mera.readmeCreator.desktop.properties.PropertiesManager;
-import ru.mera.readmeCreator.desktop.properties.PropertiesManagerException;
-import ru.mera.readmeCreator.desktop.webService.WebServiceException;
-import ru.mera.readmeCreator.desktop.webService.WebServiceManager;
+import ru.mera.readme_creator.desktop.entities.UserData;
+import ru.mera.readme_creator.desktop.interfaces.AlertSender;
+import ru.mera.readme_creator.desktop.properties.PropertiesManager;
+import ru.mera.readme_creator.desktop.properties.PropertiesManagerException;
+import ru.mera.readme_creator.desktop.web_service.WebServiceException;
+import ru.mera.readme_creator.desktop.web_service.WebServiceManager;
 
 import java.io.File;
 import java.net.MalformedURLException;
@@ -43,7 +43,7 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
      */
     private FileChooser saveAs = new FileChooser();
 
-    {
+    SubmitButtonHandler() {
         //Configuring saveAs
         saveAs.setTitle("Save file as");
         saveAs.getExtensionFilters()
@@ -52,6 +52,7 @@ class SubmitButtonHandler implements EventHandler<ActionEvent>, AlertSender {
     }
 
     SubmitButtonHandler(MainWindowController controller) {
+        super();
         this.controller = controller;
     }
 

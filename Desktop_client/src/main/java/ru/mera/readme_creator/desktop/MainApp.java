@@ -5,7 +5,7 @@
  * Inc., All Rights Reserved. Avaya - Confidential & Restricted. May not be distributed further without written
  * permission of the Avaya owner.
  */
-package ru.mera.readmeCreator.desktop;
+package ru.mera.readme_creator.desktop;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -18,9 +18,9 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.mera.readmeCreator.desktop.interfaces.AlertSender;
-import ru.mera.readmeCreator.desktop.properties.PropertiesManager;
-import ru.mera.readmeCreator.desktop.properties.PropertiesManagerException;
+import ru.mera.readme_creator.desktop.interfaces.AlertSender;
+import ru.mera.readme_creator.desktop.properties.PropertiesManager;
+import ru.mera.readme_creator.desktop.properties.PropertiesManagerException;
 
 import java.io.IOException;
 

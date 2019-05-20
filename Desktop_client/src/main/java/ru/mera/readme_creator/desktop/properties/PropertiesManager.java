@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.properties;
+package ru.mera.readme_creator.desktop.properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,7 @@ import java.io.*;
 import java.util.Properties;
 
 /**
- * Class through which properties of the application are controlled.
+ * Utility class through which properties of the application are controlled.
  * To use properties, class should be firstly initialized in the program.
  * For this, method init() is used, which must be called only once.
  */
@@ -24,6 +24,9 @@ public class PropertiesManager {
 
     private static final File propertiesFile = new File("conf/config.properties");
     private static Properties properties;
+
+    //Hides the public constructor for utility static class
+    private PropertiesManager() {}
 
     /**
      * Initialize PropertyManager. Must be called first

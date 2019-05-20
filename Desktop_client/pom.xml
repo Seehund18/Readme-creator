@@ -29,7 +29,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ru.mera.readmeCreator.desktop.MainApp</mainClass>
+                            <mainClass>ru.mera.readme_creator.desktop.MainApp</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

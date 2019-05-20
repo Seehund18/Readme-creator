@@ -6,11 +6,11 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.webService;
+package ru.mera.readme_creator.desktop.web_service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.mera.readmeCreator.desktop.interfaces.WebService;
+import ru.mera.readme_creator.desktop.interfaces.WebService;
 
 import java.io.*;
 import java.net.ConnectException;
@@ -70,14 +70,7 @@ public class FileWebService implements WebService {
             connection.setRequestProperty("User-Agent", "desktop");
 
             //Trying to get response code
-            int responseCode;
-            try {
-                responseCode = connection.getResponseCode();
-            } catch (ConnectException ex) {
-                connection.disconnect();
-                log.debug("ConnectException was caught");
-                return -1;
-            }
+            int responseCode = getResponse();
             log.info("Response code {}", responseCode);
             return responseCode;
         } catch (IOException ex) {
@@ -116,19 +109,28 @@ public class FileWebService implements WebService {
             }
 
             //Trying to read response code
-            int responseCode;
-            try {
-                responseCode = connection.getResponseCode();
-            } catch (ConnectException ex) {
-                connection.disconnect();
-                log.debug("ConnectException was caught");
-                return -1;
-            }
+            int responseCode = getResponse();
             log.info("Response code {}", responseCode);
             return responseCode;
         } catch (IOException ex) {
             disconnect();
             throw new WebServiceException("There is a problem with connection to the server", ex);
+        }
+    }
+
+    /**
+     * Gets response code from service
+     * @return return value of connection.getResponseCode() method or -2 if connection was refused
+     * @throws IOException if an error occurred connecting to the server
+     */
+    private int getResponse() throws IOException {
+        try {
+            return connection.getResponseCode();
+        } catch (ConnectException ex) {
+            //Service refused connection
+            connection.disconnect();
+            log.debug("ConnectException was caught\n");
+            return -2;
         }
     }
 

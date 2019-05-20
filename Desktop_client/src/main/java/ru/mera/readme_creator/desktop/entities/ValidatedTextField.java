@@ -6,11 +6,11 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.entities;
+package ru.mera.readme_creator.desktop.entities;
 
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
-import ru.mera.readmeCreator.desktop.interfaces.Validator;
+import ru.mera.readme_creator.desktop.interfaces.Validator;
 
 /**
  * Entity which represents text field with validation status text and validation flag
@@ -31,7 +31,7 @@ public class ValidatedTextField {
     }
 
     public ValidatedTextField() {
-        this(new Validator.defaultValidator());
+        this(new Validator.DefaultValidator());
     }
 
     public TextField getTextField() {

@@ -1,6 +1,6 @@
-package ru.mera.readmeCreator.desktop.validators;
+package ru.mera.readme_creator.desktop.validators;
 
-import ru.mera.readmeCreator.desktop.interfaces.Validator;
+import ru.mera.readme_creator.desktop.interfaces.Validator;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -15,7 +15,7 @@ public class DateFieldValidator implements Validator {
      */
     private Set<Integer> longMonths = new HashSet<>();
 
-    {
+    public DateFieldValidator() {
         Collections.addAll(longMonths, 1, 3, 5, 7, 8, 10, 12);
     }
 
@@ -60,7 +60,9 @@ public class DateFieldValidator implements Validator {
      */
     private boolean isLeapYear(int year) {
         if (year % 4 == 0) {
+            //Leap year occurs once in 4 years
             if ((year % 100 == 0) && (year % 400 != 0)) {
+                //2100, 2200, 2300, 2500, 2600, 2700, 2900 for example are not leap years
                 return false;
             }
             return true;

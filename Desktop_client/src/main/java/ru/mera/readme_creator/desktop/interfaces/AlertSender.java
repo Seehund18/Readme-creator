@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.interfaces;
+package ru.mera.readme_creator.desktop.interfaces;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;

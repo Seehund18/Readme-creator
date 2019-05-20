@@ -6,18 +6,17 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.validators;
+package ru.mera.readme_creator.desktop.validators;
 
-import ru.mera.readmeCreator.desktop.interfaces.Validator;
+import ru.mera.readme_creator.desktop.interfaces.Validator;
 
 /**
- * Validator for patch name field.
- * Checks that the field must consist only from alphabetic characters with '_' as a delimiter
+ * Validator for releaseVersionField. It expects version as a numbers, delimited by '.'
  */
-public class PatchNameFieldValidator implements Validator {
+public class ReleaseVerFieldValidator implements Validator {
 
     @Override
-    public boolean isValid(String patchName) {
-        return patchName.matches("[\\p{Alpha}_]+\\p{Alpha}$");
+    public boolean isValid(String releaseVer) {
+        return (releaseVer.matches("(\\d\\.)*\\d$"));
     }
 }

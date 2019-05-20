@@ -6,17 +6,17 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.desktop.validators;
+package ru.mera.readme_creator.desktop.validators;
 
-import ru.mera.readmeCreator.desktop.interfaces.Validator;
+import ru.mera.readme_creator.desktop.interfaces.Validator;
 
 /**
- * Validator for updateId field. Field must consists only digits
+ * Validator for issueNumber field, which verifies that entered user data is a number
  */
-public class UpdateIdFieldValidator implements Validator {
+public class IssueNumFieldValidator implements Validator {
 
     @Override
-    public boolean isValid(String idNumber) {
-        return idNumber.matches("\\d+");
+    public boolean isValid(String value) {
+        return value.matches("\\d+");
     }
 }
