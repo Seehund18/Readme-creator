@@ -1,4 +1,4 @@
-package ru.mera.readmeCreator.service.repository;
+package ru.mera.readme_creator.service.repository;
 
 /**
  * Exception from {@link FileRepo}

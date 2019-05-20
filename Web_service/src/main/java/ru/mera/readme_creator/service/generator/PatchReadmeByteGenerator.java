@@ -6,13 +6,13 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.service.generator;
+package ru.mera.readme_creator.service.generator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import ru.mera.readmeCreator.service.JiraPair;
-import ru.mera.readmeCreator.service.UserData;
+import ru.mera.readme_creator.service.JiraPair;
+import ru.mera.readme_creator.service.UserData;
 
 import java.io.*;
 import java.util.List;
@@ -102,7 +102,7 @@ public class PatchReadmeByteGenerator implements ByteDataGenerator {
      * @return rtf code for one table row with given information
      */
     private String createTableRow(String jiraId, String jiraDescription) {
-        String templateRow = "\n\n\\pard\\plain\\ltrpar\\s65\\ql\\li0\\ri0\\widctlpar\\intbl\\wrapdefault"
+        return "\n\n\\pard\\plain\\ltrpar\\s65\\ql\\li0\\ri0\\widctlpar\\intbl\\wrapdefault"
                 + "\\hyphpar0\\faauto\\rin0\\lin0\\pararsid7218467 \\rtlch\\fcs1 \\af1\\afs20\\alang1025 "
                 + "\\ltrch\\fcs0 \\fs20\\lang1033\\langfe1033\\kerning1\\loch\\af1\\hich\\af39\\dbch\\af13\\cgrid"
                 + "\\langnp1033\\langfenp1033 {\\rtlch\\fcs1 \\af0\\afs24\\ltrch\\fcs0 \\insrsid5141355"
@@ -124,6 +124,5 @@ public class PatchReadmeByteGenerator implements ByteDataGenerator {
                 + "\\brdrs\\brdrw5\\brdrcf20 \\clbrdrl\\brdrs\\brdrw5\\brdrcf20 \\clbrdrb\n"
                 + "\\brdrs\\brdrw5\\brdrcf20 \\clbrdrr\\brdrs\\brdrw5\\brdrcf20 \\clcbpat8\\cltxlrtb\\clftsWidth3"
                 + "\\clwWidth7593\\clpadt108\\clpadr108\\clpadft3\\clpadfr3\\clcbpatraw8 \\cellx9720\\row }\n\n";
-        return templateRow;
     }
 }

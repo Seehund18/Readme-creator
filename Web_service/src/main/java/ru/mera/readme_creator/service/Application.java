@@ -1,4 +1,4 @@
-package ru.mera.readmeCreator.service;
+package ru.mera.readme_creator.service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

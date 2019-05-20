@@ -6,9 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.service.generator;
-
-import ru.mera.readmeCreator.service.generator.ByteDataGenerator;
+package ru.mera.readme_creator.service.generator;
 
 /**
  * Exception from {@link ByteDataGenerator}

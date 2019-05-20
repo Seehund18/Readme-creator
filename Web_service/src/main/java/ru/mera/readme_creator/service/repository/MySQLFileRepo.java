@@ -6,7 +6,7 @@
  * permission of the Avaya owner.
  */
 
-package ru.mera.readmeCreator.service.repository;
+package ru.mera.readme_creator.service.repository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,9 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import ru.mera.readmeCreator.service.*;
-import ru.mera.readmeCreator.service.generator.ByteDataGenerator;
-import ru.mera.readmeCreator.service.generator.GeneratorException;
+import ru.mera.readme_creator.service.generator.ByteDataGenerator;
+import ru.mera.readme_creator.service.generator.GeneratorException;
+import ru.mera.readme_creator.service.UserData;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -45,13 +45,13 @@ public class MySQLFileRepo implements FileRepo {
      * SQL request for inserting file's byte array into database.
      * If file with such name and extension already exists, replace it.
      */
-    private final String INSERT_SQL_FILE = "INSERT INTO files(file_name, extension, file) VALUES(?,?,?) " +
+    private static final String INSERT_SQL_FILE = "INSERT INTO files(file_name, extension, file) VALUES(?,?,?) " +
                                            "ON DUPLICATE KEY UPDATE file = VALUES(file)";
 
     /**
      * SQL request for fetching file from the database
      */
-    private final String FETCH_SQL_FILE = "SELECT file_name, extension, file FROM files WHERE (file_name = ?)" +
+    private static final String FETCH_SQL_FILE = "SELECT file_name, extension, file FROM files WHERE (file_name = ?)" +
                                           "AND (extension = ?)";
 
     @Override
@@ -81,7 +81,7 @@ public class MySQLFileRepo implements FileRepo {
      * @return array in which the first element is a fileName and the second is extension
      */
     private String[] separateFileName(String fullFileName) {
-        int lastDotIndex = fullFileName.lastIndexOf(".");
+        int lastDotIndex = fullFileName.lastIndexOf('.');
         String fileName = fullFileName.substring(0, lastDotIndex);
         String extension = fullFileName.substring(lastDotIndex + 1);
         return new String[] {fileName, extension};

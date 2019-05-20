@@ -1,12 +1,12 @@
-package ru.mera.readmeCreator.service;
+package ru.mera.readme_creator.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.mera.readmeCreator.service.repository.FileRepo;
-import ru.mera.readmeCreator.service.repository.RepositoryException;
+import ru.mera.readme_creator.service.repository.FileRepo;
+import ru.mera.readme_creator.service.repository.RepositoryException;
 
 /**
  * Rest controller of service
