@@ -82,7 +82,7 @@ public class WebServiceManager {
      */
     public static void downloadFile(String mapping, String info, File saveToFile) throws WebServiceException {
         //Sending 'POST' request, reading response code and validating it
-        int responseCode = fileWebService.sendPostRequest(mapping, info);
+        int responseCode = fileWebService.sendPutRequest(mapping, info);
         if (responseCode >= HttpURLConnection.HTTP_BAD_REQUEST) {
             //If responseCode is an error code (bigger or equal than 400)
             throw new WebServiceException("Bad response code: " + responseCode);

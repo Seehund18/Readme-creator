@@ -51,10 +51,10 @@ public class ServiceController {
      * @param fileName name of the file which must be added to repository
      * @throws RepositoryException exception while working with repo
      */
-    @PostMapping("/files/{fileName}")
+    @PutMapping("/files/{fileName}")
     @ResponseStatus(HttpStatus.CREATED)
     public void addDocument(@PathVariable String fileName, @RequestBody UserData userData) throws RepositoryException {
-        log.info("Received 'POST' request to addFile {} file", fileName);
+        log.info("Received 'PUT' request to addFile {} file", fileName);
         log.info("Received data:\n{}", userData);
 
         fileRepo.addFile(fileName, userData);

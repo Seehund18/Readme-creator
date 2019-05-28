@@ -34,12 +34,12 @@ public interface WebService {
     int sendGetRequest(String getMapping) throws WebServiceException;
 
     /**
-     * Method for sending 'POST' requests to web service
-     * @param postMapping mapping for 'POST' request
+     * Method for sending 'PUT' requests to web service
+     * @param postMapping mapping for 'PUT' request
      * @param data string of data which must be sent to web service
      * @return response code or -1 if connection to server was refused
      * @throws WebServiceException problems with sending request
      */
-    int sendPostRequest(String postMapping, String data) throws WebServiceException;
+    int sendPutRequest(String postMapping, String data) throws WebServiceException;
 
 }

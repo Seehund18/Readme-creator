@@ -30,5 +30,5 @@ public interface WebService {
      * @return response code or -2 if connection to server was refused
      * @throws WebServiceException problems with sending request
      */
-    int sendPostRequest(String postMapping, String data) throws WebServiceException;
+    int sendPutRequest(String postMapping, String data) throws WebServiceException;
 }

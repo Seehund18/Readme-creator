@@ -58,7 +58,7 @@ public class WebServiceManager {
      */
     public static void downloadFile(String fileName, String info) throws WebServiceException {
         String fullFileName = "/files/" + fileName;
-        int responseCode = fileWebService.sendPostRequest(fullFileName, info);
+        int responseCode = fileWebService.sendPutRequest(fullFileName, info);
         if (responseCode > HttpURLConnection.HTTP_BAD_REQUEST) {
             //If responseCode is an error code (bigger or equal than 400)
             fileWebService.disconnect();

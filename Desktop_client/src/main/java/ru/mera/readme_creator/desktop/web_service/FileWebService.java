@@ -80,24 +80,24 @@ public class FileWebService implements WebService {
     }
 
     @Override
-    public int sendPostRequest(String postMapping, String data) throws WebServiceException {
+    public int sendPutRequest(String putMapping, String data) throws WebServiceException {
         //Constructing full URL from url and mapping
         URL fullURL;
         try {
-            fullURL = new URL(url.toString() + postMapping);
+            fullURL = new URL(url.toString() + putMapping);
         } catch (IOException ex) {
             throw new WebServiceException("Can't generate full URL", ex);
         }
 
         byte[] byteInfo = data.getBytes(StandardCharsets.UTF_8);
         try {
-            log.info("Sending 'POST' request to URL: {}", fullURL);
+            log.info("Sending 'PUT' request to URL: {}", fullURL);
             log.info("Sent information: {}", data);
 
             //Setting request headers
             connection = (HttpURLConnection) fullURL.openConnection();
             connection.setDoOutput(true);
-            connection.setRequestMethod("POST");
+            connection.setRequestMethod("PUT");
             connection.setRequestProperty("User-Agent", "desktop");
             connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             connection.setFixedLengthStreamingMode(byteInfo.length);
