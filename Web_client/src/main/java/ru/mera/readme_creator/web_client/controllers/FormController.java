@@ -146,19 +146,19 @@ public class FormController implements Serializable {
         WebServiceManager.setService(serviceUrl);
 
         //Checking web service availability and downloading file
-        String fileName = userData.getParamMap().get("updateId") + "_Patch_Readme.rtf";
+        String fileName = userData.getViewParamMap().get("updateId") + "_Patch_Readme.rtf";
         if (WebServiceManager.checkWebService()) {
             //If service is available, creating cookie with service url for 2 days
             CookieHelper.addPermanentCookie("URL", serviceUrl.toString(), 172_800);
             log.info("Service is available. Trying to download file...\n");
             try {
                 WebServiceManager.downloadFile(fileName, userData.toString());
+                log.info("File was successfully downloaded\n");
             } catch (WebServiceException e) {
                 String errorMsg = "There are problems with web service: " + e.getMessage();
                 log.error(errorMsg, e);
                 errorPopupController.showError(errorMsg);
             }
-            log.info("File was successfully downloaded\n");
         } else {
             log.info("Service is unavailable\n");
             errorPopupController.showError("Service is unavailable. Try again later");

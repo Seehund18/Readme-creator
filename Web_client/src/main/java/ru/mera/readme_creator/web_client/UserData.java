@@ -15,10 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -36,15 +34,7 @@ public class UserData implements Serializable {
     @JsonIgnore
     private String url;
     @JsonIgnore
-    private String patchName;
-    @JsonIgnore
-    private String date;
-    @JsonIgnore
-    private String updateId;
-    @JsonIgnore
-    private String releaseVer;
-    @JsonIgnore
-    private String issueNumber;
+    private Map<String, String> viewParamMap = new HashMap<>();
 
     private Map<String, String> paramMap = new HashMap<>();
     private List<JiraPair> jiraList = new ArrayList<>();
@@ -52,6 +42,12 @@ public class UserData implements Serializable {
     @PostConstruct
     public void init() {
         url = CookieHelper.getCookieValue("URL");
+
+        viewParamMap.put("patchName", "");
+        viewParamMap.put("date", "");
+        viewParamMap.put("updateId", "");
+        viewParamMap.put("releaseVersion", "");
+        viewParamMap.put("issueNum", "");
     }
 
     public String getUrl() {
@@ -61,47 +57,15 @@ public class UserData implements Serializable {
         this.url = url;
     }
 
-    public String getPatchName() {
-        return patchName;
+    public Map<String, String> getViewParamMap() {
+        return viewParamMap;
     }
-    public void setPatchName(String patchName) {
-        this.patchName = patchName;
-    }
-
-    public String getDate() {
-        return date;
-    }
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getUpdateId() {
-        return updateId;
-    }
-    public void setUpdateId(String updateId) {
-        this.updateId = updateId;
-    }
-
-    public String getReleaseVer() {
-        return releaseVer;
-    }
-    public void setReleaseVer(String releaseVer) {
-        this.releaseVer = releaseVer;
-    }
-
-    public String getIssueNumber() {
-        return issueNumber;
-    }
-    public void setIssueNumber(String issueNumber) {
-        this.issueNumber = issueNumber;
+    public void setViewParamMap(Map<String, String> viewParamMap) {
+        this.viewParamMap = viewParamMap;
     }
 
     public Map<String, String> getParamMap() {
-        toMap();
         return paramMap;
-    }
-    public void setParamMap(Map<String, String> paramMap) {
-        this.paramMap = paramMap;
     }
 
     public List<JiraPair> getJiraList() {
@@ -113,7 +77,7 @@ public class UserData implements Serializable {
 
     @Override
     public String toString() {
-        toMap();
+        fillParamMap();
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
@@ -126,13 +90,21 @@ public class UserData implements Serializable {
     /**
      * Transforms string parameters of this class to a map
      */
-    private void toMap() {
-        String fullPatchName = this.patchName +"_"+ this.releaseVer +"."+ this.issueNumber;
-        String fullUpdateId = fullPatchName +"."+ this.updateId;
+    private void fillParamMap() {
+        final String fullPatchName = viewParamMap.get("patchName") + "_" + viewParamMap.get("releaseVersion")
+                + "." + viewParamMap.get("issueNum");
+        final String fullUpdateId = fullPatchName +"."+ viewParamMap.get("updateId");
 
-        paramMap.put("patchName", fullPatchName);
-        paramMap.put("date", this.date);
-        paramMap.put("updateId", fullUpdateId);
-        paramMap.put("releaseVersion", this.releaseVer);
+        paramMap.putAll(viewParamMap);
+        paramMap.entrySet().stream()
+                .filter(entry -> !entry.getKey().equals("issueNum"))
+                .forEach(entry -> {
+                    if (entry.getKey().equals("patchName")) {
+                        entry.setValue(fullPatchName);
+                    } else if (entry.getKey().equals("updateId")) {
+                        entry.setValue(fullUpdateId);
+                    }
+                });
+        System.out.println(paramMap);
     }
 }
