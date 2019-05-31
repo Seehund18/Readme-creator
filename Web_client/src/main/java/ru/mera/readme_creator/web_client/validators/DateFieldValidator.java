@@ -69,7 +69,7 @@ public class DateFieldValidator implements Validator {
             return;
         }
 
-        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"","Invalid date format");
+        FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_ERROR,"","Invalid date");
         throw new ValidatorException(msg);
     }
 

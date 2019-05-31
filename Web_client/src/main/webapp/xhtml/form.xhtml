@@ -29,6 +29,7 @@
                     <h:inputText id="serviceUrl" size="20" required="true" styleClass="inputField"
                                  value="#{formController.userData.url}">
                         <f:validator validatorId="webServiceUrlValidator" />
+                        <f:ajax event="keyup" execute="serviceUrl" render="serviceUrlMsg" />
                     </h:inputText>
                     <h:message id="serviceUrlMsg" for="serviceUrl" styleClass="errorMsg" />
                 </h:panelGrid>
@@ -45,8 +46,9 @@
                                  styleClass="inputField"
                                  value="#{formController.userData.patchName}">
                         <f:validator validatorId="patchNameFieldValidator" />
+                        <f:ajax event="keyup" execute="patchNameField" render="patchNameFieldMsg" />
                     </h:inputText>
-                    <h:message for="patchNameField" styleClass="errorMsg" />
+                    <h:message id="patchNameFieldMsg" for="patchNameField" styleClass="errorMsg" />
 
                     <h:outputLabel value="Date:" styleClass="inputFieldLabel"/>
                     <h:inputText id="dateField" size="20" required="true"
@@ -54,8 +56,9 @@
                                  styleClass="inputField"
                                  value="#{formController.userData.date}">
                         <f:validator validatorId="dateFieldValidator" />
+                        <f:ajax event="keyup" execute="dateField" render="dateFieldMsg" />
                     </h:inputText>
-                    <h:message for="dateField" styleClass="errorMsg"/>
+                    <h:message id="dateFieldMsg" for="dateField" styleClass="errorMsg"/>
 
                     <h:outputLabel value="Update ID:" styleClass="inputFieldLabel"/>
                     <h:inputText id="updateIdField" size="20" required="true"
@@ -63,24 +66,27 @@
                                  styleClass="inputField"
                                  value="#{formController.userData.updateId}">
                         <f:validator validatorId="updateIdFieldValidator" />
+                        <f:ajax event="keyup" execute="updateIdField" render="updateIdFieldMsg" />
                     </h:inputText>
-                    <h:message for="updateIdField" styleClass="errorMsg" />
+                    <h:message id="updateIdFieldMsg" for="updateIdField" styleClass="errorMsg" />
 
                     <h:outputLabel value="Release version:" styleClass="inputFieldLabel"/>
-                    <h:inputText id="releaseVersionField" size="20" required="true" styleClass="inputField"
+                    <h:inputText id="releaseVerField" size="20" required="true" styleClass="inputField"
                                  pt:placeHolder="Example: 3.5.0.1"
                                  value="#{formController.userData.releaseVer}">
                         <f:validator validatorId="releaseVerFieldValidator"/>
+                        <f:ajax event="keyup" execute="releaseVerField" render="releaseVerFieldMsg" />
                     </h:inputText>
-                    <h:message for="releaseVersionField" styleClass="errorMsg" />
+                    <h:message id="releaseVerFieldMsg" for="releaseVerField" styleClass="errorMsg" />
 
                     <h:outputLabel value="Issue number:" styleClass="inputFieldLabel"/>
-                    <h:inputText id="issueNumberField" size="20" required="true" styleClass="inputField"
+                    <h:inputText id="issueNumField" size="20" required="true" styleClass="inputField"
                                  pt:placeHolder="Example: 4"
                                  value="#{formController.userData.issueNumber}">
                         <f:validator validatorId="issueNumFieldValidator"/>
+                        <f:ajax event="keyup" execute="issueNumField" render="issueNumFieldMsg" />
                     </h:inputText>
-                    <h:message for="issueNumberField" styleClass="errorMsg" />
+                    <h:message id="issueNumFieldMsg" for="issueNumField" styleClass="errorMsg" />
                 </h:panelGrid>
             </div>
 

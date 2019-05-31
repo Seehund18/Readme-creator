@@ -22,7 +22,7 @@
                 </configuration>
             </plugin>
 
-            <!--Plugin which allows to deploy war to Tomcat-->
+            <!--Plugin which allows deploying war to Tomcat-->
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
@@ -30,7 +30,7 @@
                 <configuration>
                     <url>http://localhost:8081/manager/text</url>
                     <server>TomcatServer</server>
-                    <path>/Web_client</path>
+                    <path>/web_client</path>
                     <username>admin</username>
                     <password>admin</password>
                 </configuration>
@@ -88,6 +88,7 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>4.0.1</version>
+            <scope>provided</scope>
         </dependency>
 
         <!--Apache commons validator-->
