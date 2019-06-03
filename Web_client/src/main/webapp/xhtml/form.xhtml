@@ -45,7 +45,7 @@
                     <h:inputText id="patchNameField" size="20" required="true"
                                  pt:placeHolder="Example: AvayaOceana_UAC"
                                  styleClass="inputField"
-                                 value="#{formController.userData.viewParamMap['patchName']}">
+                                 value="#{formController.userData.viewParamMap[Param.PATCH_NAME]}">
                         <f:validator validatorId="patchNameFieldValidator" />
                         <f:ajax event="keyup" execute="patchNameField" render="patchNameFieldMsg" />
                     </h:inputText>
@@ -55,7 +55,7 @@
                     <h:inputText id="dateField" size="20" required="true"
                                  pt:placeHolder="Date format: dd/mm/yyyy"
                                  styleClass="inputField"
-                                 value="#{formController.userData.viewParamMap['date']}">
+                                 value="#{formController.userData.viewParamMap[Param.DATE]}">
                         <f:validator validatorId="dateFieldValidator" />
                         <f:ajax event="keyup" execute="dateField" render="dateFieldMsg" />
                     </h:inputText>
@@ -65,7 +65,7 @@
                     <h:inputText id="updateIdField" size="20" required="true"
                                  pt:placeHolder="Example: 521002001"
                                  styleClass="inputField"
-                                 value="#{formController.userData.viewParamMap['updateId']}">
+                                 value="#{formController.userData.viewParamMap[Param.UPDATE_ID]}">
                         <f:validator validatorId="updateIdFieldValidator" />
                         <f:ajax event="keyup" execute="updateIdField" render="updateIdFieldMsg" />
                     </h:inputText>
@@ -74,7 +74,7 @@
                     <h:outputLabel value="Release version:" styleClass="inputFieldLabel"/>
                     <h:inputText id="releaseVerField" size="20" required="true" styleClass="inputField"
                                  pt:placeHolder="Example: 3.5.0.1"
-                                 value="#{formController.userData.viewParamMap['releaseVersion']}">
+                                 value="#{formController.userData.viewParamMap[Param.RELEASE_VER]}">
                         <f:validator validatorId="releaseVerFieldValidator"/>
                         <f:ajax event="keyup" execute="releaseVerField" render="releaseVerFieldMsg" />
                     </h:inputText>
@@ -83,7 +83,7 @@
                     <h:outputLabel value="Issue number:" styleClass="inputFieldLabel"/>
                     <h:inputText id="issueNumField" size="20" required="true" styleClass="inputField"
                                  pt:placeHolder="Example: 4"
-                                 value="#{formController.userData.viewParamMap['issueNum']}">
+                                 value="#{formController.userData.viewParamMap[Param.ISSUE_NUM]}">
                         <f:validator validatorId="issueNumFieldValidator"/>
                         <f:ajax event="keyup" execute="issueNumField" render="issueNumFieldMsg" />
                     </h:inputText>
