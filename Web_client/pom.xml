@@ -24,15 +24,14 @@
 
             <!--Plugin which allows deploying war to Tomcat-->
             <plugin>
-                <groupId>org.apache.tomcat.maven</groupId>
-                <artifactId>tomcat7-maven-plugin</artifactId>
-                <version>2.2</version>
+                <groupId>org.apache.openejb.maven</groupId>
+                <artifactId>tomee-maven-plugin</artifactId>
+                <version>1.7.1</version>
                 <configuration>
-                    <url>http://localhost:8081/manager/text</url>
-                    <server>TomcatServer</server>
-                    <path>/web_client</path>
-                    <username>admin</username>
-                    <password>admin</password>
+                    <tomeeVersion>1.7.1</tomeeVersion>
+                    <tomeeHost>localhost</tomeeHost>
+                    <tomeeHttpPort>8081</tomeeHttpPort>
+                    <path>${basedir}/target/web_client.war</path>
                 </configuration>
             </plugin>
 
@@ -64,6 +63,7 @@
     </build>
 
     <dependencies>
+
         <!--Jackson for JSON converting-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -72,24 +72,50 @@
         </dependency>
 
         <!--JSF-->
+        <!-- https://mvnrepository.com/artifact/org.apache.myfaces.core/myfaces-api -->
         <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-api</artifactId>
-            <version>2.2.19</version>
+            <groupId>org.apache.myfaces.core</groupId>
+            <artifactId>myfaces-api</artifactId>
+            <version>2.3.4</version>
+            <scope>provided</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.myfaces.core/myfaces-impl -->
         <dependency>
-            <groupId>com.sun.faces</groupId>
-            <artifactId>jsf-impl</artifactId>
-            <version>2.2.19</version>
+            <groupId>org.apache.myfaces.core</groupId>
+            <artifactId>myfaces-impl</artifactId>
+            <version>2.3.4</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.omnifaces</groupId>
+            <artifactId>omnifaces</artifactId>
+            <version>3.3</version>
         </dependency>
 
         <!--Servlet API for cookies -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>4.0.1</version>
+            <version>3.1.0</version>
             <scope>provided</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.enterprise/cdi-api -->
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <version>2.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.websocket/javax.websocket-api -->
+        <dependency>
+            <groupId>javax.websocket</groupId>
+            <artifactId>javax.websocket-api</artifactId>
+            <version>1.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+
 
         <!--Apache commons validator-->
         <dependency>

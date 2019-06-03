@@ -6,8 +6,9 @@
       xmlns:h = "http://java.sun.com/jsf/html"
       xmlns:f = "http://java.sun.com/jsf/core"
       xmlns:pt = "http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:ui = "http://java.sun.com/jsf/facelets">
-
+      xmlns:ui = "http://java.sun.com/jsf/facelets"
+      xmlns:o="http://omnifaces.org/ui">
+    <o:importConstants type="ru.mera.readme_creator.web_client.Parameters" var="Param" />
     <h:head>
         <title>Readme generator</title>
         <meta charset="UTF-8" />
@@ -27,7 +28,7 @@
                              styleClass="inputPanelGrid" columnClasses="columnLabel">
                     <h:outputLabel for="serviceUrl" value="Enter url:" styleClass="inputFieldLabel"/>
                     <h:inputText id="serviceUrl" size="20" required="true" styleClass="inputField"
-                                 value="#{formController.userData.url}">
+                                 value="#{formController.userData.viewParamMap[Param.URL]}">
                         <f:validator validatorId="webServiceUrlValidator" />
                         <f:ajax event="keyup" execute="serviceUrl" render="serviceUrlMsg" />
                     </h:inputText>

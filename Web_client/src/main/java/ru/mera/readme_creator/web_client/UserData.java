@@ -31,23 +31,30 @@ import javax.faces.bean.SessionScoped;
 public class UserData implements Serializable {
     private final transient Logger log = LoggerFactory.getLogger(UserData.class);
 
+    public static final String URL = "url";
+    public static final String PATCH_NAME = "patchName";
+    public static final String DATE = "date";
+    public static final String UPDATE_ID = "updateId";
+    public static final String RELEASE_VER = "releaseVersion";
+    public static final String ISSUE_NUM = "issueNum";
+
     @JsonIgnore
     private String url;
     @JsonIgnore
-    private Map<String, String> viewParamMap = new HashMap<>();
+    private Map<Parameters, String> viewParamMap = new HashMap<>();
 
     private Map<String, String> paramMap = new HashMap<>();
     private List<JiraPair> jiraList = new ArrayList<>();
 
     @PostConstruct
     public void init() {
-        url = CookieHelper.getCookieValue("URL");
 
-        viewParamMap.put("patchName", "");
-        viewParamMap.put("date", "");
-        viewParamMap.put("updateId", "");
-        viewParamMap.put("releaseVersion", "");
-        viewParamMap.put("issueNum", "");
+        for (Parameters param: Parameters.values()) {
+            if (param == Parameters.URL) {
+                viewParamMap.put(param, CookieHelper.getCookieValue("URL"));
+            }
+            viewParamMap.put(param, "");
+        }
     }
 
     public String getUrl() {
@@ -57,10 +64,10 @@ public class UserData implements Serializable {
         this.url = url;
     }
 
-    public Map<String, String> getViewParamMap() {
+    public Map<Parameters, String> getViewParamMap() {
         return viewParamMap;
     }
-    public void setViewParamMap(Map<String, String> viewParamMap) {
+    public void setViewParamMap(Map<Parameters, String> viewParamMap) {
         this.viewParamMap = viewParamMap;
     }
 
@@ -91,20 +98,20 @@ public class UserData implements Serializable {
      * Transforms string parameters of this class to a map
      */
     private void fillParamMap() {
-        final String fullPatchName = viewParamMap.get("patchName") + "_" + viewParamMap.get("releaseVersion")
-                + "." + viewParamMap.get("issueNum");
-        final String fullUpdateId = fullPatchName +"."+ viewParamMap.get("updateId");
+        final String fullPatchName = viewParamMap.get(Parameters.PATCH_NAME)
+                + "_" + viewParamMap.get(Parameters.RELEASE_VER)
+                + "." + viewParamMap.get(Parameters.ISSUE_NUM);
+        final String fullUpdateId = fullPatchName +"." + viewParamMap.get(Parameters.UPDATE_ID);
 
-        paramMap.putAll(viewParamMap);
-        paramMap.entrySet().stream()
-                .filter(entry -> !entry.getKey().equals("issueNum"))
-                .forEach(entry -> {
-                    if (entry.getKey().equals("patchName")) {
-                        entry.setValue(fullPatchName);
-                    } else if (entry.getKey().equals("updateId")) {
-                        entry.setValue(fullUpdateId);
-                    }
-                });
-        System.out.println(paramMap);
+//        paramMap.entrySet().stream()
+//                .filter(entry -> !entry.getKey().equals("issueNum"))
+//                .forEach(entry -> {
+//                    if (entry.getKey().equals("patchName")) {
+//                        entry.setValue(fullPatchName);
+//                    } else if (entry.getKey().equals("updateId")) {
+//                        entry.setValue(fullUpdateId);
+//                    }
+//                });
+        System.out.println(viewParamMap);
     }
 }
