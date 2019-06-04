@@ -8,17 +8,36 @@
 
 package ru.mera.readme_creator.web_client;
 
+//TODO Может использовать value как биндинг для ввода?
 public enum Parameters {
-    URL,
-    PATCH_NAME,
-    DATE,
-    UPDATE_ID,
-    RELEASE_VER,
-    ISSUE_NUM
+    URL("url", false),
+    PATCH_NAME("patchName", true),
+    DATE("date", true),
+    UPDATE_ID("updateId", true),
+    RELEASE_VER("releaseVersion", true),
+    ISSUE_NUM("issueNumber", false);
 
-//    private name;
-//
-//    Parameters(String name) {
-//        this.name = name;
-//    }
+    private String name;
+    private String value = "Test value";
+    private boolean sendToService;
+
+    Parameters(String name, boolean sendToService) {
+        this.name = name;
+        this.sendToService = sendToService;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isSendToService() {
+        return sendToService;
+    }
+
+    public String getValue() {
+        return value;
+    }
+    public void setValue(String value) {
+        this.value = value;
+    }
 }

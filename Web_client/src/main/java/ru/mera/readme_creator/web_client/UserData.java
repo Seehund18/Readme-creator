@@ -31,37 +31,21 @@ import javax.faces.bean.SessionScoped;
 public class UserData implements Serializable {
     private final transient Logger log = LoggerFactory.getLogger(UserData.class);
 
-    public static final String URL = "url";
-    public static final String PATCH_NAME = "patchName";
-    public static final String DATE = "date";
-    public static final String UPDATE_ID = "updateId";
-    public static final String RELEASE_VER = "releaseVersion";
-    public static final String ISSUE_NUM = "issueNum";
-
     @JsonIgnore
-    private String url;
-    @JsonIgnore
-    private Map<Parameters, String> viewParamMap = new HashMap<>();
+    private Map<Parameters, String> viewParamMap = new EnumMap<>(Parameters.class);
 
     private Map<String, String> paramMap = new HashMap<>();
     private List<JiraPair> jiraList = new ArrayList<>();
 
     @PostConstruct
     public void init() {
-
         for (Parameters param: Parameters.values()) {
             if (param == Parameters.URL) {
                 viewParamMap.put(param, CookieHelper.getCookieValue("URL"));
+                continue;
             }
             viewParamMap.put(param, "");
         }
-    }
-
-    public String getUrl() {
-        return url;
-    }
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public Map<Parameters, String> getViewParamMap() {
@@ -72,6 +56,7 @@ public class UserData implements Serializable {
     }
 
     public Map<String, String> getParamMap() {
+        fillParamMap();
         return paramMap;
     }
 
@@ -101,17 +86,22 @@ public class UserData implements Serializable {
         final String fullPatchName = viewParamMap.get(Parameters.PATCH_NAME)
                 + "_" + viewParamMap.get(Parameters.RELEASE_VER)
                 + "." + viewParamMap.get(Parameters.ISSUE_NUM);
-        final String fullUpdateId = fullPatchName +"." + viewParamMap.get(Parameters.UPDATE_ID);
+        final String fullUpdateId = fullPatchName + "." + viewParamMap.get(Parameters.UPDATE_ID);
 
-//        paramMap.entrySet().stream()
-//                .filter(entry -> !entry.getKey().equals("issueNum"))
-//                .forEach(entry -> {
-//                    if (entry.getKey().equals("patchName")) {
-//                        entry.setValue(fullPatchName);
-//                    } else if (entry.getKey().equals("updateId")) {
-//                        entry.setValue(fullUpdateId);
-//                    }
-//                });
-        System.out.println(viewParamMap);
+        paramMap = viewParamMap.entrySet()
+                .stream()
+                .filter(entry -> entry.getKey().isSendToService())
+                .map(entry -> {
+                    String value;
+                    if (entry.getKey() == Parameters.PATCH_NAME) {
+                        value = fullPatchName;
+                    } else if (entry.getKey() == Parameters.UPDATE_ID) {
+                        value = fullUpdateId;
+                    } else {
+                        value = entry.getValue();
+                    }
+                    return new AbstractMap.SimpleEntry<>(entry.getKey().getName(), value);
+                })
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.mera.readme_creator.web_client.CookieHelper;
 import ru.mera.readme_creator.web_client.JiraPair;
+import ru.mera.readme_creator.web_client.Parameters;
 import ru.mera.readme_creator.web_client.UserData;
 import ru.mera.readme_creator.web_client.web_service.WebServiceException;
 import ru.mera.readme_creator.web_client.web_service.WebServiceManager;
@@ -135,35 +136,33 @@ public class FormController implements Serializable {
             return;
         }
 
-        System.out.println(userData.toString());
+        //Setting new URL to web service
+        URL serviceUrl;
+        try {
+            serviceUrl = new URL(userData.getViewParamMap().get(Parameters.URL));
+        } catch (MalformedURLException ex) {
+            log.error("Can't create URL of web service\n", ex);
+            return;
+        }
+        WebServiceManager.setService(serviceUrl);
 
-//        //Setting new URL to web service
-//        URL serviceUrl;
-//        try {
-//            serviceUrl = new URL(userData.getUrl());
-//        } catch (MalformedURLException ex) {
-//            log.error("Can't create URL of web service\n", ex);
-//            return;
-//        }
-//        WebServiceManager.setService(serviceUrl);
-//
-//        //Checking web service availability and downloading file
-//        String fileName = userData.getViewParamMap().get("updateId") + "_Patch_Readme.rtf";
-//        if (WebServiceManager.checkWebService()) {
-//            //If service is available, creating cookie with service url for 2 days
-//            CookieHelper.addPermanentCookie("URL", serviceUrl.toString(), 172_800);
-//            log.info("Service is available. Trying to download file...\n");
-//            try {
-//                WebServiceManager.downloadFile(fileName, userData.toString());
-//                log.info("File was successfully downloaded\n");
-//            } catch (WebServiceException e) {
-//                String errorMsg = "There are problems with web service: " + e.getMessage();
-//                log.error(errorMsg, e);
-//                errorPopupController.showError(errorMsg);
-//            }
-//        } else {
-//            log.info("Service is unavailable\n");
-//            errorPopupController.showError("Service is unavailable. Try again later");
-//        }
+        //Checking web service availability and downloading file
+        String fileName = userData.getParamMap().get("updateId") + "_Patch_Readme.rtf";
+        if (WebServiceManager.checkWebService()) {
+            //If service is available, creating cookie with service url for 2 days
+            CookieHelper.addPermanentCookie("URL", serviceUrl.toString(), 172_800);
+            log.info("Service is available. Trying to download file...\n");
+            try {
+                WebServiceManager.downloadFile(fileName, userData.toString());
+                log.info("File was successfully downloaded\n");
+            } catch (WebServiceException e) {
+                String errorMsg = "There are problems with web service: " + e.getMessage();
+                log.error(errorMsg, e);
+                errorPopupController.showError(errorMsg);
+            }
+        } else {
+            log.info("Service is unavailable\n");
+            errorPopupController.showError("Service is unavailable. Try again later");
+        }
     }
 }
