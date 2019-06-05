@@ -8,8 +8,7 @@ import java.util.Objects;
 /**
  * Entity which represents jira id and jira description pair
  */
-@ManagedBean(eager = true)
-@SessionScoped
+
 public class JiraPair implements Serializable {
 
     private String jiraId;

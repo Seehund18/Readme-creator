@@ -1,7 +1,8 @@
 package ru.mera.readme_creator.web_client.controllers;
 
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.inject.Named;
 import java.io.Serializable;
 
 /**
@@ -10,7 +11,7 @@ import java.io.Serializable;
  * Add submit button defined in addButton.xhtml.
  * Edit submit button defined in editButton.xhtml.
  */
-@ManagedBean
+@Named
 @SessionScoped
 public class PopupDialogController implements Serializable {
 

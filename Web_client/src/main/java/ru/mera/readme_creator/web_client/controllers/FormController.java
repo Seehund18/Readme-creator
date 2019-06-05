@@ -9,11 +9,13 @@ import ru.mera.readme_creator.web_client.UserData;
 import ru.mera.readme_creator.web_client.web_service.WebServiceException;
 import ru.mera.readme_creator.web_client.web_service.WebServiceManager;
 
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -22,18 +24,18 @@ import java.util.List;
 /**
  * Controller for form.xhtml
  */
-@ManagedBean(eager = true)
+@Named
 @SessionScoped
 public class FormController implements Serializable {
     private final transient Logger log = LoggerFactory.getLogger(FormController.class);
 
-    @ManagedProperty(value = "#{userData}")
+    @Inject
     private UserData userData;
 
-    @ManagedProperty(value="#{popupDialogController}")
+    @Inject
     private PopupDialogController popupDialogController;
 
-    @ManagedProperty(value="#{errorPopupController}")
+    @Inject
     private ErrorPopupController errorPopupController;
 
     /**

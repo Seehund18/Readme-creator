@@ -4,8 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.mera.readme_creator.web_client.UserData;
 
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.inject.Named;
 import java.io.*;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
@@ -17,8 +18,6 @@ import java.nio.charset.StandardCharsets;
  * Represents connection to file generator service.
  * It's responsible for sending Http requests to web service, establishing connection with it.
  **/
-@ManagedBean(eager = true)
-@SessionScoped
 public class FileWebService implements WebService, Serializable {
     private static final Logger log = LoggerFactory.getLogger(UserData.class);
 

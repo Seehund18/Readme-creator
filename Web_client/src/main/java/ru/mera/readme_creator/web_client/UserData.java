@@ -19,14 +19,15 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.inject.Named;
 
 /**
  * Entity which represents data entered by user.
  * If there is a need to send UserData to service, it's serialized in JSON string format by toString() method
  */
-@ManagedBean(eager = true)
+@Named
 @SessionScoped
 public class UserData implements Serializable {
     private final transient Logger log = LoggerFactory.getLogger(UserData.class);
@@ -39,13 +40,7 @@ public class UserData implements Serializable {
 
     @PostConstruct
     public void init() {
-        for (Parameters param: Parameters.values()) {
-            if (param == Parameters.URL) {
-                viewParamMap.put(param, CookieHelper.getCookieValue("URL"));
-                continue;
-            }
-            viewParamMap.put(param, "");
-        }
+        viewParamMap.put(Parameters.URL, CookieHelper.getCookieValue("URL"));
     }
 
     public Map<Parameters, String> getViewParamMap() {

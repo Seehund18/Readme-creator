@@ -8,14 +8,15 @@
 
 package ru.mera.readme_creator.web_client.controllers;
 
+import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.inject.Named;
 import java.io.Serializable;
 
 /**
  * Controller for an error popup window
  */
-@ManagedBean
+@Named
 @SessionScoped
 public class ErrorPopupController implements Serializable {
 
