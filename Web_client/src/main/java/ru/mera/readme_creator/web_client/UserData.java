@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ManagedBean;
 import javax.inject.Named;
 
 /**
@@ -78,23 +77,12 @@ public class UserData implements Serializable {
      * Transforms string parameters of this class to a map
      */
     private void fillParamMap() {
-        final String fullPatchName = viewParamMap.get(Parameters.PATCH_NAME)
-                + "_" + viewParamMap.get(Parameters.RELEASE_VER)
-                + "." + viewParamMap.get(Parameters.ISSUE_NUM);
-        final String fullUpdateId = fullPatchName + "." + viewParamMap.get(Parameters.UPDATE_ID);
-
         paramMap = viewParamMap.entrySet()
                 .stream()
                 .filter(entry -> entry.getKey().isSendToService())
                 .map(entry -> {
-                    String value;
-                    if (entry.getKey() == Parameters.PATCH_NAME) {
-                        value = fullPatchName;
-                    } else if (entry.getKey() == Parameters.UPDATE_ID) {
-                        value = fullUpdateId;
-                    } else {
-                        value = entry.getValue();
-                    }
+                    Optional<String> optionalValue = entry.getKey().getFullConstructor().apply(viewParamMap);
+                    String value = optionalValue.orElseGet(entry::getValue);
                     return new AbstractMap.SimpleEntry<>(entry.getKey().getName(), value);
                 })
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
