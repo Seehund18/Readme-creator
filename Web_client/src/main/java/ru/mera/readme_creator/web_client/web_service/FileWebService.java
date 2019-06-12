@@ -4,9 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.mera.readme_creator.web_client.UserData;
 
-import javax.enterprise.context.SessionScoped;
-import javax.faces.bean.ManagedBean;
-import javax.inject.Named;
 import java.io.*;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;

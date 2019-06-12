@@ -1,7 +1,5 @@
 package ru.mera.readme_creator.web_client;
 
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import java.io.Serializable;
 import java.util.Objects;
 
