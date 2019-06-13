@@ -74,7 +74,7 @@
                     <h:outputLabel value="Release version:" styleClass="inputFieldLabel"/>
                     <h:inputText id="releaseVerField" size="20" required="true" styleClass="inputField"
                                  pt:placeHolder="Example: 3.5.0.1"
-                                 value="#{formController.userData.viewParamMap[Param.RELEASE_VER]}">
+                                 value="#{formController.userData.viewParamMap[Param.RELEASE_VERSION]}">
                         <f:validator validatorId="releaseVerFieldValidator"/>
                         <f:ajax event="keyup" execute="releaseVerField" render="releaseVerFieldMsg" />
                     </h:inputText>
@@ -83,7 +83,7 @@
                     <h:outputLabel value="Issue number:" styleClass="inputFieldLabel"/>
                     <h:inputText id="issueNumField" size="20" required="true" styleClass="inputField"
                                  pt:placeHolder="Example: 4"
-                                 value="#{formController.userData.viewParamMap[Param.ISSUE_NUM]}">
+                                 value="#{formController.userData.viewParamMap[Param.ISSUE_NUMBER]}">
                         <f:validator validatorId="issueNumFieldValidator"/>
                         <f:ajax event="keyup" execute="issueNumField" render="issueNumFieldMsg" />
                     </h:inputText>

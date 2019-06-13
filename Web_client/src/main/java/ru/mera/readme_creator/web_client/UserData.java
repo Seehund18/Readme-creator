@@ -82,8 +82,9 @@ public class UserData implements Serializable {
                 .filter(entry -> entry.getKey().isSendToService())
                 .map(entry -> {
                     Optional<String> optionalValue = entry.getKey().getFullConstructor().apply(viewParamMap);
-                    String value = optionalValue.orElseGet(entry::getValue);
-                    return new AbstractMap.SimpleEntry<>(entry.getKey().getName(), value);
+                    String paramValue = optionalValue.orElseGet(entry::getValue);
+                    String paramName = entry.getKey().constructName();
+                    return new AbstractMap.SimpleEntry<>(paramName, paramValue);
                 })
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
