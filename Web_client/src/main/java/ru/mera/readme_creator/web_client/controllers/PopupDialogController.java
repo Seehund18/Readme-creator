@@ -1,5 +1,7 @@
 package ru.mera.readme_creator.web_client.controllers;
 
+import ru.mera.readme_creator.web_client.JiraPair;
+
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
@@ -17,28 +19,18 @@ public class PopupDialogController implements Serializable {
     /**
      * Jira pair, entered by user
      */
-    private String jiraId;
-    private String jiraDescrip;
+    private JiraPair userJiraPair = new JiraPair();
 
     /**
      * File path for submit button type
      */
     private String filePath;
 
-    public String getJiraId() {
-        return jiraId;
+    public JiraPair getUserJiraPair() {
+        return userJiraPair;
     }
-
-    public void setJiraId(String jiraId) {
-        this.jiraId = jiraId;
-    }
-
-    public String getJiraDescrip() {
-        return jiraDescrip;
-    }
-
-    public void setJiraDescrip(String jiraDescrip) {
-        this.jiraDescrip = jiraDescrip;
+    public void setUserJiraPair(JiraPair userJiraPair) {
+        this.userJiraPair = userJiraPair;
     }
 
     public String getFilePath() {

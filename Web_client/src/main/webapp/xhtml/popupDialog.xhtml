@@ -17,12 +17,12 @@
                         <h:panelGrid columns="3" border="0" cellpadding = "10" cellspacing = "1">
                             <h:outputLabel for="jiraIdField" value="Jira Id:" styleClass="inputFieldLabel"/>
                             <h:inputText id="jiraIdField" size="20" required="true" styleClass="inputField"
-                                         value="#{popupDialogController.jiraId}"/>
+                                         value="#{popupDialogController.userJiraPair.jiraId}"/>
                             <h:message id="jiraIdFieldMsg" for="jiraIdField" styleClass="errorMsg" />
 
                             <h:outputLabel value="Jira description:" styleClass="inputFieldLabel"/>
                             <h:inputText id="jiraDescripField" size="20" required="true" styleClass="inputField"
-                                         value="#{popupDialogController.jiraDescrip}" />
+                                         value="#{popupDialogController.userJiraPair.jiraDescrip}" />
                             <h:message id="jiraDescripFieldMsg" for="jiraDescripField" styleClass="errorMsg" />
                         </h:panelGrid>
 

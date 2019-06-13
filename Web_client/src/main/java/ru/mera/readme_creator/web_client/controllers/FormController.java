@@ -42,11 +42,11 @@ public class FormController implements Serializable {
      */
     private int editIndex;
 
-    public void setUserData(UserData userData) {
-        this.userData = userData;
-    }
     public UserData getUserData() {
         return userData;
+    }
+    public void setUserData(UserData userData) {
+        this.userData = userData;
     }
 
     public PopupDialogController getPopupDialogController() {
@@ -68,8 +68,7 @@ public class FormController implements Serializable {
      */
     public void addJira() {
         List<JiraPair> jiraList = userData.getJiraList();
-        JiraPair newPair = new JiraPair(popupDialogController.getJiraId(),
-                                        popupDialogController.getJiraDescrip());
+        JiraPair newPair = new JiraPair(popupDialogController.getUserJiraPair());
 
         if (jiraList.contains(newPair)) {
             //List already have jiraPair with such jira id
@@ -97,8 +96,7 @@ public class FormController implements Serializable {
      * @param pair chosen jira pair in jiraTable
      */
     public void setDialogJira(JiraPair pair) {
-        popupDialogController.setJiraId(pair.getJiraId());
-        popupDialogController.setJiraDescrip(pair.getJiraDescrip());
+        popupDialogController.setUserJiraPair(pair);
         editIndex = userData.getJiraList().indexOf(pair);
     }
 
@@ -108,8 +106,7 @@ public class FormController implements Serializable {
     public void editJira() {
         List<JiraPair> jiraPairList = userData.getJiraList();
         JiraPair oldPair = jiraPairList.get(editIndex);
-        JiraPair newPair = new JiraPair(popupDialogController.getJiraId(),
-                                        popupDialogController.getJiraDescrip());
+        JiraPair newPair = new JiraPair(popupDialogController.getUserJiraPair());
 
         if (!oldPair.equals(newPair) && jiraPairList.contains(newPair) ) {
             //Jira id, entered by user, already exists in the jiraTable

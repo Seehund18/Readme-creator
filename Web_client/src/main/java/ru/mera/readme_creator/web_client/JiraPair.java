@@ -17,6 +17,14 @@ public class JiraPair implements Serializable {
         this.jiraDescrip = jiraDescrip;
     }
 
+    public JiraPair(JiraPair jiraPair) {
+        this(jiraPair.getJiraId(), jiraPair.jiraDescrip);
+    }
+
+    public JiraPair() {
+        this("", "");
+    }
+
     public String getJiraId() {
         return jiraId;
     }
